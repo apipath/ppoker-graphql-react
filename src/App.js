@@ -1,4 +1,3 @@
-// https://pitch.com/
 import React from 'react';
 
 import Header from './components/Header';
