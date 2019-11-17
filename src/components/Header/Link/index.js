@@ -1,2 +1,2 @@
-import HomeLink from './Link';
-export default HomeLink;
+import HeaderLink from './Link';
+export default HeaderLink;

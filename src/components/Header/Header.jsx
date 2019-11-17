@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import HomeLink from './Link';
+import HeaderLink from './Link';
 
 function Header() {
   return (
@@ -12,15 +12,15 @@ function Header() {
       <nav className="w-2/4 max-w-md">
         <ul className="flex justify-between">
           <li>
-            <HomeLink to="/" exact>
+            <HeaderLink to="/" exact>
               Home
-            </HomeLink>
+            </HeaderLink>
           </li>
           <li>
-            <HomeLink to="/about">About</HomeLink>
+            <HeaderLink to="/about">About</HeaderLink>
           </li>
           <li>
-            <HomeLink to="/contact">Contact</HomeLink>
+            <HeaderLink to="/contact">Contact</HeaderLink>
           </li>
         </ul>
       </nav>

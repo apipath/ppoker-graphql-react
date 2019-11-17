@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function HomeLink(props) {
+function HeaderLink(props) {
   return (
     <NavLink
       {...props}
@@ -13,4 +13,4 @@ function HomeLink(props) {
   );
 }
 
-export default HomeLink;
+export default HeaderLink;
