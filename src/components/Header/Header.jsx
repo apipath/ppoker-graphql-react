@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import HomeLink from './Link';
 
@@ -6,12 +7,12 @@ function Header() {
   return (
     <header className="flex px-8 py-10 items-center justify-between">
       <h1 className="text-gray-900 text-3xl">
-        <a href="/">ppoker</a>
+        <Link to="/">ppoker</Link>
       </h1>
       <nav className="w-2/4 max-w-md">
         <ul className="flex justify-between">
           <li>
-            <HomeLink to="/home" active>
+            <HomeLink to="/" exact>
               Home
             </HomeLink>
           </li>
