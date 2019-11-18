@@ -1,25 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import HomeLink from './Link';
+import HeaderLink from './Link';
 
 function Header() {
   return (
     <header className="flex px-8 py-10 items-center justify-between">
       <h1 className="text-gray-900 text-3xl">
-        <a href="/">ppoker</a>
+        <Link to="/">ppoker</Link>
       </h1>
       <nav className="w-2/4 max-w-md">
         <ul className="flex justify-between">
           <li>
-            <HomeLink to="/home" active>
+            <HeaderLink to="/" exact>
               Home
-            </HomeLink>
+            </HeaderLink>
           </li>
           <li>
-            <HomeLink to="/about">About</HomeLink>
+            <HeaderLink to="/about">About</HeaderLink>
           </li>
           <li>
-            <HomeLink to="/contact">Contact</HomeLink>
+            <HeaderLink to="/contact">Contact</HeaderLink>
           </li>
         </ul>
       </nav>

@@ -1,18 +1,16 @@
 import React from 'react';
-import cn from 'classnames';
+import { NavLink } from 'react-router-dom';
 
-function HomeLink({ children, to, active = false }) {
+function HeaderLink(props) {
   return (
-    <a
-      className={cn('py-1 text-gray-700 font-medium', {
-        'text-blue-700 font-bold border-blue-700 border-b-2': active,
-        'hover:text-gray-800': !active,
-      })}
-      href={to}
+    <NavLink
+      {...props}
+      className="py-1 text-gray-700 font-medium hover:text-gray-800"
+      activeClassName="text-blue-700 hover:text-blue-700 font-bold border-blue-700 border-b-2"
     >
-      {children}
-    </a>
+      {props.children}
+    </NavLink>
   );
 }
 
-export default HomeLink;
+export default HeaderLink;
