@@ -22,7 +22,7 @@ function About() {
         <div className="mt-4 flex justify-center">
           <ul className="flex justify-center flex-wrap">
             {members.map(({ name, login, location, blog, htmlUrl }) => (
-              <li className="flex my-4 justify-center w-full sm:flex sm:justify-center sm:w-1/2 md:w-5/12 lg:w-1/3">
+              <li className="flex sm:my-4 justify-center w-full sm:flex sm:justify-center sm:w-1/2 md:w-5/12 lg:w-1/3">
                 <AboutMember
                   name={name}
                   login={login}

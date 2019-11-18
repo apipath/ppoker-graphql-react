@@ -2,7 +2,7 @@ import React from 'react';
 
 function AboutMember({ name, login, location, htmlUrl }) {
   return (
-    <div className="p-5 flex flex-col justify-center items-center leading-normal sm:w-64 sm:rounded sm:border sm:border-gray-400 sm:shadow-md hover:shadow-lgflex">
+    <div className="px-2 py-6 flex flex-col justify-center items-center leading-normal sm:w-64 sm:rounded-lg sm:border sm:border-gray-400 sm:shadow-md hover:shadow-lgflex">
       <img
         className="w-40 rounded-full"
         src={`https://github.com/${login}.png`}
