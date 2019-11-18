@@ -2,6 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+[![Join the chat at https://gitter.im/apipath/ppoker-rest-react](https://badges.gitter.im/apipath/ppoker-rest-react.svg)](https://gitter.im/apipath/ppoker-rest-react?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 In the project directory, you can run:
 
 ### `yarn start`
