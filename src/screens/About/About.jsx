@@ -5,17 +5,17 @@ import AboutMember from './Member';
 function About() {
   return (
     <article>
-      <section className="text-center">
+      <section className="flex flex-col items-center text-center">
         <h2 className="tracking-wide font-semibold text-gray-800 text-4xl">
           About us
         </h2>
-        <p className="my-8 text-xl">
+        <p className="m-8 max-w-4xl text-xl">
           We are a group of passionate developers who met in time and decided to
           share what we have learned by building open source apps.
         </p>
       </section>
 
-      <section className="mt-12 text-center">
+      <section className="mt-4 text-center">
         <h2 className="tracking-wide font-semibold text-gray-800 text-4xl">
           Meet the team
         </h2>
