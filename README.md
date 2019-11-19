@@ -1,4 +1,4 @@
-# [ppoker ](https://react.apipath.io/) &middot; [![Netlify Status](https://api.netlify.com/api/v1/badges/8b8ea0aa-825c-4df1-adfa-2b4f45442c0d/deploy-status)](https://app.netlify.com/sites/react-apipath/deploys)
+# [ppoker ](https://react.apipath.io/) &middot; [![Netlify Status](https://api.netlify.com/api/v1/badges/8b8ea0aa-825c-4df1-adfa-2b4f45442c0d/deploy-status)](https://app.netlify.com/sites/react-apipath/deploys) &middot; [![Join the chat at https://gitter.im/apipath/ppoker-rest-react](https://badges.gitter.im/apipath/ppoker-rest-react.svg)](https://gitter.im/apipath/ppoker-rest-react?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
