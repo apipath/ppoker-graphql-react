@@ -17,7 +17,7 @@ function Footer() {
       <GitHubButton
         href={ORG_URL}
         data-size="large"
-        data-show-count="true"
+        data-show-count={true}
         aria-label="Follow @apipath on GitHub"
       >
         Follow @apipath

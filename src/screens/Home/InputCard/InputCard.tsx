@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HomeInputCard({ title, onClick, buttonLabel }) {
+function HomeInputCard({ title, onClick, buttonLabel }: any) {
   return (
     <div className="px-8 py-4 md:max-w-xl flex flex-col text-white text-center">
       <h2 className="mb-4 uppercase tracking-wide font-semibold text-gray-800">
