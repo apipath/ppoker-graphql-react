@@ -6,7 +6,7 @@ function HeaderLink(props: any) {
     <NavLink
       {...props}
       className="py-1 text-gray-700 font-medium hover:text-gray-800"
-      activeClassName="text-blue-700 hover:text-blue-700 font-bold border-blue-700 border-b-2"
+      activeClassName="text-blue-700 hover:text-blue-700 font-bold lg:border-blue-700 lg:border-b-2"
     >
       {props.children}
     </NavLink>
