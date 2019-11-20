@@ -1,6 +1,13 @@
 import React from 'react';
 
-function AboutMember({ name, login, location, htmlUrl }) {
+type Props = {
+  name: string;
+  login: string;
+  location?: string | null;
+  htmlUrl: string;
+};
+
+const AboutMember: React.FC<Props> = ({ name, login, location, htmlUrl }) => {
   return (
     <div className="px-2 py-6 flex flex-col justify-center items-center leading-normal sm:w-64 sm:rounded-lg sm:border sm:border-gray-400 sm:shadow-md hover:shadow-lgflex">
       <img
@@ -20,6 +27,6 @@ function AboutMember({ name, login, location, htmlUrl }) {
       <address className="text-sm text-gray-600">{location}</address>
     </div>
   );
-}
+};
 
 export default AboutMember;
