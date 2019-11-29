@@ -4,6 +4,9 @@ import classnames from 'classnames';
 
 import HeaderLink from './Link';
 
+import logoSmall from '../../img/logo_small.svg';
+import logoBig from '../../img/logo_big.svg';
+
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(val => !val);
@@ -12,11 +15,12 @@ function Header() {
   return (
     <nav className="flex items-center justify-between flex-wrap">
       <div className="p-6 w-full lg:w-auto flex items-center justify-between flex-wrap">
-        <h1 className="text-gray-900 text-3xl">
+        <div>
           <Link to="/" onClick={closeMenu}>
-            ppoker
+            <img className="lg:hidden w-16" src={logoSmall} />
+            <img className="hidden w-32 lg:block" src={logoBig} />
           </Link>
-        </h1>
+        </div>
         <div className="block lg:hidden">
           <button
             type="button"
