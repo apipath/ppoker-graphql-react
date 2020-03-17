@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.transition-bg-color {
+  transition: background-color 0.2 ease;
+}

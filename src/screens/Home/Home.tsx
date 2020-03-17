@@ -1,4 +1,10 @@
-import React from 'react';
+import React, {
+  useState,
+  ChangeEventHandler,
+  KeyboardEventHandler,
+} from 'react';
+import { useHistory } from 'react-router-dom';
+import qs from 'query-string';
 
 import HeroIcon from '../../components/HeroIcon';
 import HomeInputCard from './InputCard';
@@ -6,6 +12,46 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 function Home() {
+  const history = useHistory();
+  const [newRoomName, setNewRoomName] = useState('');
+  const [joinRoomName, setJoinRoomName] = useState('');
+
+  const goToCreateRoom = () => {
+    if (newRoomName.length === 0) return;
+
+    const currentSearch = qs.parse(history.location.search);
+    history.push({
+      pathname: '/room',
+      search: qs.stringify({ ...currentSearch, newRoomName }),
+    });
+  };
+
+  const goToRoom = () => {
+    if (joinRoomName.length === 0) return;
+
+    history.push(`/room/${encodeURIComponent(joinRoomName)}`);
+  };
+
+  const handleCreateRoomChange: ChangeEventHandler<HTMLInputElement> = e => {
+    setNewRoomName(e.currentTarget.value);
+  };
+
+  const handleCreateRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = e => {
+    if (e.key === 'Enter') {
+      goToCreateRoom();
+    }
+  };
+
+  const handleJoinRoomChange: ChangeEventHandler<HTMLInputElement> = e => {
+    setJoinRoomName(e.currentTarget.value);
+  };
+
+  const handleJoinRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = e => {
+    if (e.key === 'Enter') {
+      goToRoom();
+    }
+  };
+
   return (
     <>
       <Header />
@@ -22,12 +68,18 @@ function Home() {
           <HomeInputCard
             title="Create a room"
             buttonLabel="Create"
-            onClick={() => console.log('create room')}
+            onClick={goToCreateRoom}
+            onChange={handleCreateRoomChange}
+            onKeyPress={handleCreateRoomKeyPressed}
+            value={newRoomName}
           />
           <HomeInputCard
             title="Join a room"
             buttonLabel="Join"
-            onClick={() => console.log('join room')}
+            value={joinRoomName}
+            onChange={handleJoinRoomChange}
+            onKeyPress={handleJoinRoomKeyPressed}
+            onClick={goToRoom}
           />
         </div>
       </section>
