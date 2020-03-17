@@ -2,10 +2,13 @@ import React from 'react';
 
 import HeroIcon from '../../components/HeroIcon';
 import HomeInputCard from './InputCard';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 function Home() {
   return (
     <>
+      <Header />
       <section className="mb-10 flex flex-col items-center">
         <div className="flex justify-center w-full max-w-3xl">
           <HeroIcon />
@@ -28,6 +31,7 @@ function Home() {
           />
         </div>
       </section>
+      <Footer />
     </>
   );
 }
