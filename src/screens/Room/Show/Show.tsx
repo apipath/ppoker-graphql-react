@@ -75,7 +75,8 @@ function RoomShow() {
             </li>
           ))}
         </ul>
-        <div className="flex-grow mt-6 lg:mt-0">
+        <div className="my-8 border-b border-gray-300 lg:hidden"></div>
+        <div className="flex-grow lg:mt-0">
           <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
             <Participants
               participants={participants}
@@ -83,7 +84,7 @@ function RoomShow() {
               showVotes={showVotes}
             />
             <div className="w-full mt-6 md:mt-0">
-              <div className="flex justify-between mx-12 mb-12">
+              <div className="flex justify-around mb-12">
                 <Button>Show Votes</Button>
                 <Button>Clear Votes</Button>
               </div>

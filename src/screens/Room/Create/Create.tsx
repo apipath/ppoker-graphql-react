@@ -121,8 +121,8 @@ function RoomCreate() {
   const createEnabled = points.filter(({ label }) => label).length > 1;
 
   return (
-    <section className="w-1/2 mx-auto">
-      <header className="flex justify-between pb-2 mb-4 border-b-2 border-gray-200">
+    <section className="mx-auto md:w-2/3 lg:w-1/2">
+      <header className="flex justify-between w-full pb-2 mb-4 border-b-2 border-gray-200">
         <h2 className="text-xl font-semibold tracking-wide text-gray-900">
           {newRoomName}
         </h2>
