@@ -38,7 +38,7 @@ function PointRow({
       <div className="mr-2">
         <input
           ref={labelRef}
-          className="p-2 border-b-2 border-gray-400 outline-none focus:border-teal-500"
+          className="p-2 border-b-2 border-gray-400 outline-none appearance-none focus:border-teal-500"
           placeholder="label"
           value={label}
           onChange={handleLabelChange}
@@ -46,7 +46,7 @@ function PointRow({
       </div>
       <div>
         <input
-          className="p-2 font-medium text-center text-blue-400 placeholder-blue-300 bg-blue-100 rounded-full outline-none focus:placeholder-transparent"
+          className="p-2 font-medium text-center text-blue-400 placeholder-blue-300 bg-blue-100 rounded-full outline-none appearance-none focus:placeholder-transparent"
           placeholder="description"
           value={description}
           onChange={handleDescriptionChange}

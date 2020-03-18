@@ -20,7 +20,7 @@ const Participants: React.FC<Props> = ({
 }) => {
   // TODO: only display current user vote when showVotes is false
   return (
-    <div className="w-full border border-gray-300 rounded">
+    <div className="w-full border border-gray-300 rounded shadow">
       <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 border-b border-gray-300 rounded-tl rounded-tr">
         Participants
       </h3>
@@ -38,7 +38,7 @@ const Participants: React.FC<Props> = ({
           </li>
         ))}
       </ul>
-      <h3 className="py-2 text-center border-t border-b border-gray-300">
+      <h3 className="py-2 bg-indigo-900 text-indigo-100 text-center">
         Observers
       </h3>
       <ul className="p-4">
