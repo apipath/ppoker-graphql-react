@@ -1,4 +1,4 @@
-import React, { useState, ChangeEventHandler, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
 import classnames from 'classnames';
@@ -12,56 +12,13 @@ import nanoid from 'nanoid';
 import UseAnimations from 'react-useanimations';
 
 import Button from '../../../components/Button';
-
-type Point = {
-  id: string;
-  label: string;
-  description: string;
-};
-
-type PointRowProps = {
-  onLabelChange: ChangeEventHandler<HTMLInputElement>;
-  label: string;
-  onDescriptionChange: ChangeEventHandler<HTMLInputElement>;
-  description: string;
-  labelRef: React.Ref<HTMLInputElement>;
-};
-
-function PointRow({
-  onLabelChange: handleLabelChange,
-  label,
-  onDescriptionChange: handleDescriptionChange,
-  description,
-  labelRef,
-}: PointRowProps) {
-  return (
-    <div className="flex flex-col justify-center w-full sm:flex-row">
-      <div className="flex justify-center mr-0 sm:mr-2">
-        <input
-          ref={labelRef}
-          className="p-2 border-b-2 border-gray-400 outline-none appearance-none focus:border-teal-500"
-          placeholder="label"
-          value={label}
-          onChange={handleLabelChange}
-        />
-      </div>
-      <div className="flex justify-center mt-4 sm:mt-0">
-        <input
-          className="p-2 font-medium text-center text-blue-400 placeholder-blue-300 bg-blue-100 rounded-full outline-none appearance-none focus:placeholder-transparent"
-          placeholder="description"
-          value={description}
-          onChange={handleDescriptionChange}
-        />
-      </div>
-    </div>
-  );
-}
+import Point from './Point';
 
 function RoomCreate() {
   const firstRowRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
   const { newRoomName } = qs.parse(location.search);
-  const [points, setPoints] = useState<Array<Point>>(
+  const [points, setPoints] = useState(
     Array.from({ length: 3 }).map(() => ({
       id: nanoid(),
       label: '',
@@ -165,7 +122,7 @@ function RoomCreate() {
                           {...provided.dragHandleProps}
                         >
                           <>
-                            <PointRow
+                            <Point
                               labelRef={index === 0 ? firstRowRef : null}
                               label={label}
                               description={description}
