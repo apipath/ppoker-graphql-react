@@ -52,6 +52,7 @@ const Participants: React.FC<Props> = ({
 
 const clockIcon = (
   <svg
+    className="text-orange-500"
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -70,6 +71,7 @@ const clockIcon = (
 
 const checkIcon = (
   <svg
+    className="text-green-400"
     width="24"
     height="24"
     viewBox="0 0 24 24"

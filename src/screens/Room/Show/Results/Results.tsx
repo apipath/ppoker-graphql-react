@@ -46,7 +46,7 @@ const Results: React.FC<Props> = ({ participants }) => {
               Point
             </th>
             <th className="px-6 py-4 text-sm font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">
-              Value
+              Votes
             </th>
           </tr>
         </thead>

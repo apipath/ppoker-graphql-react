@@ -63,7 +63,6 @@ declare module 'react-useanimations' {
       | 'visibility2'
       | 'volume';
   };
-  // type UseAnimations = Component<Props>;
   class UseAnimations extends React.Component<Props> {}
   export default UseAnimations;
 }

@@ -35,8 +35,8 @@ function PointRow({
   labelRef,
 }: PointRowProps) {
   return (
-    <div className="flex justify-center w-full">
-      <div className="mr-2">
+    <div className="flex flex-col justify-center w-full sm:flex-row">
+      <div className="flex justify-center mr-0 sm:mr-2">
         <input
           ref={labelRef}
           className="p-2 border-b-2 border-gray-400 outline-none appearance-none focus:border-teal-500"
@@ -45,7 +45,7 @@ function PointRow({
           onChange={handleLabelChange}
         />
       </div>
-      <div>
+      <div className="flex justify-center mt-4 sm:mt-0">
         <input
           className="p-2 font-medium text-center text-blue-400 placeholder-blue-300 bg-blue-100 rounded-full outline-none appearance-none focus:placeholder-transparent"
           placeholder="description"
@@ -129,8 +129,8 @@ function RoomCreate() {
   };
 
   return (
-    <section className="mx-auto md:w-2/3 lg:w-1/2">
-      <header className="flex justify-between w-full pb-2 mb-4 border-b-2 border-gray-200">
+    <section className="md:mx-auto md:w-2/3 lg:w-1/2">
+      <header className="flex justify-between px-4 pb-2 mb-4 border-b-2 border-gray-200">
         <h2 className="text-xl font-semibold tracking-wide text-gray-900">
           {newRoomName}
         </h2>
@@ -155,7 +155,7 @@ function RoomCreate() {
                         <li
                           ref={provided.innerRef}
                           className={classnames(
-                            'px-2 py-4 flex items-center shadow bg-white my-1 rounded transition-bg-color',
+                            'px-2 py-4 w-full sm:w-auto flex items-center shadow bg-white my-1 rounded transition-bg-color',
                             {
                               [`bg-gray-200 shadow-md`]: snapshot.isDragging,
                               [`cursor-move`]: !isDragDisabled,
@@ -180,11 +180,12 @@ function RoomCreate() {
                               }
                             />
                             <svg
-                              className={classnames('m-2 text-gray-500', {
-                                [`text-gray-700`]: snapshot.isDragging,
-                              })}
-                              width="20"
-                              height="20"
+                              className={classnames(
+                                'w-8 sm:w-6 m-2 text-gray-500',
+                                {
+                                  [`text-gray-700`]: snapshot.isDragging,
+                                },
+                              )}
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               xmlns="http://www.w3.org/2000/svg"
@@ -195,6 +196,7 @@ function RoomCreate() {
                             </svg>
 
                             <UseAnimations
+                              size={32}
                               animationKey="trash2"
                               onClick={() => handleDelete(index)}
                             />
