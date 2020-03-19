@@ -9,6 +9,7 @@ import {
   DropResult,
 } from 'react-beautiful-dnd';
 import nanoid from 'nanoid';
+import UseAnimations from 'react-useanimations';
 
 import Button from '../../../components/Button';
 
@@ -119,6 +120,13 @@ function RoomCreate() {
   };
 
   const createEnabled = points.filter(({ label }) => label).length > 1;
+  const handleDelete = (index: number) => {
+    setPoints(currentPoints => {
+      const points = currentPoints.map(point => ({ ...point }));
+      points.splice(index, 1);
+      return points;
+    });
+  };
 
   return (
     <section className="mx-auto md:w-2/3 lg:w-1/2">
@@ -185,6 +193,11 @@ function RoomCreate() {
                               <path d="M10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10C12 11.1046 11.1046 12 10 12Z" />
                               <path d="M10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16C12 17.1046 11.1046 18 10 18Z" />
                             </svg>
+
+                            <UseAnimations
+                              animationKey="trash2"
+                              onClick={() => handleDelete(index)}
+                            />
                           </>
                         </li>
                       )}
