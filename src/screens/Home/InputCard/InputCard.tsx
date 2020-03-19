@@ -10,6 +10,7 @@ function HomeInputCard({ title, onClick, buttonLabel }: any) {
         <input
           className="py-2 px-4 border-2 bg-gray-100 rounded-l rounded-r-none border-gray-500 text-gray-700 focus:bg-white focus:outline-none focus:border-black"
           type="text"
+          aria-label={title}
           placeholder="new-room"
         />
         <button

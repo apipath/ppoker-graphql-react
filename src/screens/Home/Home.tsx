@@ -10,7 +10,7 @@ function Home() {
         <div className="flex justify-center w-full max-w-3xl">
           <HeroIcon />
         </div>
-        <p className="mt-8 w-1/2 font-sans text-center text-gray-600 font-thin">
+        <p className="mt-8 w-1/2 font-sans text-center text-gray-700 font-thin">
           ppoker help teams during their planning sessions
         </p>
       </section>
