@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { MouseEventHandler, InputHTMLAttributes } from 'react';
 
-function HomeInputCard({ title, onClick, buttonLabel }: any) {
+type Props = {
+  title: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+  buttonLabel: string;
+  value: string;
+} & InputHTMLAttributes<HTMLInputElement>;
+
+function HomeInputCard({
+  title,
+  buttonLabel,
+  value,
+  onClick,
+  ...inputProps
+}: Props) {
   return (
     <div className="px-8 py-4 md:max-w-xl flex flex-col text-white text-center">
       <h2 className="mb-4 uppercase tracking-wide font-semibold text-gray-800">
@@ -8,10 +21,12 @@ function HomeInputCard({ title, onClick, buttonLabel }: any) {
       </h2>
       <div className="flex">
         <input
+          {...inputProps}
           className="py-2 px-4 border-2 bg-gray-100 rounded-l rounded-r-none border-gray-500 text-gray-700 focus:bg-white focus:outline-none focus:border-black"
           type="text"
           aria-label={title}
           placeholder="new-room"
+          value={value}
         />
         <button
           onClick={onClick}
