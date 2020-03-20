@@ -1,34 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 
 import PointCard from '../PointCard';
 import Results from '../Results';
 import Button from '../../../../components/Button';
 import Participants from '../Participants';
-
-type Point = {
-  label: string;
-  description?: string;
-  order: number;
-};
-
-type Room = {
-  id: string;
-  name: string;
-  description?: string;
-  points: Array<Point>;
-};
-
-type Participant = {
-  id: number | string;
-  name: string;
-  voteLabel?: string;
-};
-
-type Observer = {
-  id: number | string;
-  name: string;
-};
+import { Participant, Observer, Room, Session } from '../../../../types';
 
 type Props = {
   room: Room;
@@ -43,6 +20,14 @@ const VoteRoom: React.FC<Props> = ({
   observers,
   showVotes,
 }) => {
+  // const currentUserParticipant = participants.find(
+  //   ({ id }) => id === session?.id,
+  // );
+  const [selected, setSelected] = useState();
+  // currentUserParticipant?.voteLabel || '',
+  const handleClick = () => {
+    // if (!session || session.role === 'observer') return;
+  };
   return (
     <div className="flex flex-col lg:flex-row">
       <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>

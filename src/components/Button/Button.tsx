@@ -6,8 +6,8 @@ type Props = React.PropsWithoutRef<JSX.IntrinsicElements['button']> & {
   loading?: boolean;
 };
 
-const Button: React.FC<Props> = props => {
-  const disabled = props.loading || props.disabled;
+const Button: React.FC<Props> = ({ loading, ...props }) => {
+  const disabled = loading || props.disabled;
   return (
     <button
       {...props}
@@ -20,11 +20,7 @@ const Button: React.FC<Props> = props => {
         },
       )}
     >
-      {props.loading ? (
-        <UseAnimations animationKey="infinity" />
-      ) : (
-        props.children
-      )}
+      {loading ? <UseAnimations animationKey="infinity" /> : props.children}
     </button>
   );
 };

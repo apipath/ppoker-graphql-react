@@ -1,15 +1,10 @@
 import React from 'react';
 
+import { Participant, Observer } from '../../../../types';
+
 type Props = {
-  participants: Array<{
-    id: number | string;
-    name: string;
-    voteLabel?: string | null;
-  }>;
-  observers: Array<{
-    id: number | string;
-    name: string;
-  }>;
+  participants: Array<Participant>;
+  observers: Array<Observer>;
   showVotes: boolean;
 };
 
@@ -19,6 +14,19 @@ const Participants: React.FC<Props> = ({
   showVotes,
 }) => {
   // TODO: only display current user vote when showVotes is false
+  const session = { id: null };
+
+  const getVoteOrIcon = (participant: Participant) => {
+    if (participant.id === session?.id) {
+      return participant.voteLabel;
+    }
+
+    return showVotes
+      ? participant.voteLabel
+      : participant.voteLabel
+      ? checkIcon
+      : clockIcon;
+  };
   return (
     <div className="w-full border border-gray-300 rounded shadow">
       <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 border-b border-gray-300 rounded-tl rounded-tr">
@@ -27,14 +35,8 @@ const Participants: React.FC<Props> = ({
       <ul className="p-4">
         {participants.map(participant => (
           <li key={participant.id} className="flex justify-between">
-            <div>{participant.name}</div>
-            <div>
-              {showVotes
-                ? participant.voteLabel
-                : participant.voteLabel
-                ? checkIcon
-                : clockIcon}
-            </div>
+            <div>{participant.username}</div>
+            <div>{getVoteOrIcon(participant)}</div>
           </li>
         ))}
       </ul>
@@ -43,7 +45,7 @@ const Participants: React.FC<Props> = ({
       </h3>
       <ul className="p-4">
         {observers.map(observer => (
-          <li key={observer.id}>{observer.name}</li>
+          <li key={observer.id}>{observer.username}</li>
         ))}
       </ul>
     </div>

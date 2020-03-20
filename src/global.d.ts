@@ -1,68 +1,25 @@
-declare module 'react-useanimations' {
-  import { ComponentClass, HTMLProps, Component } from 'react';
+import { compose } from 'redux';
 
-  type Props = HTMLProps<HTMLDivElement> & {
-    animationKey:
-      | 'activity'
-      | 'airplay'
-      | 'alertCircle'
-      | 'alertOctagon'
-      | 'alertTriangle'
-      | 'archive'
-      | 'arrowDown'
-      | 'arrowUp'
-      | 'bookmark'
-      | 'calendar'
-      | 'codepen'
-      | 'copy'
-      | 'download'
-      | 'edit'
-      | 'facebook'
-      | 'github'
-      | 'heart'
-      | 'checkbox'
-      | 'infinity'
-      | 'instagram'
-      | 'linkedin'
-      | 'loading'
-      | 'loading2'
-      | 'lock'
-      | 'mail'
-      | 'maximizeMinimize'
-      | 'maximizeMinimize2'
-      | 'menu'
-      | 'menu2'
-      | 'menu3'
-      | 'menu4'
-      | 'microphone'
-      | 'microphone2'
-      | 'notification'
-      | 'notification2'
-      | 'playPause'
-      | 'playPauseCircle'
-      | 'plusToX'
-      | 'pocket'
-      | 'radioButton'
-      | 'scrollDown'
-      | 'searchToX'
-      | 'settings'
-      | 'settings2'
-      | 'skipBack'
-      | 'skipForward'
-      | 'star'
-      | 'toggle'
-      | 'trash'
-      | 'trash2'
-      | 'twitter'
-      | 'userMinus'
-      | 'userPlus'
-      | 'userX'
-      | 'video'
-      | 'video2'
-      | 'visibility'
-      | 'visibility2'
-      | 'volume';
-  };
-  class UseAnimations extends React.Component<Props> {}
-  export default UseAnimations;
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
+
+declare module 'typesafe-actions' {
+  import { StateType, ActionType } from 'typesafe-actions';
+
+  export type Store = StateType<typeof import('./store/index').default>;
+
+  export type RootState = StateType<
+    typeof import('./store/root-reducer').default
+  >;
+
+  export type RootAction = ActionType<
+    typeof import('./store/root-action').default
+  >;
+
+  interface Types {
+    RootAction: RootAction;
+  }
 }

@@ -1,11 +1,9 @@
 import React from 'react';
 
+import { Participant } from '../../../../types';
+
 type Props = {
-  participants: Array<{
-    id: number | string;
-    name: string;
-    voteLabel?: string | null;
-  }>;
+  participants: Array<Participant>;
 };
 
 const Results: React.FC<Props> = ({ participants }) => {

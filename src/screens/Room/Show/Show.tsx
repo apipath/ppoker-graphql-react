@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useSession from '../../../hooks/use-session';
+
+import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
+import { Participant, Observer, Room } from '../../../types';
 
-const mockedRoom = {
+const mockedRoom: Room = {
   id: '12345',
   name: 'Impact',
   points: [
@@ -23,19 +25,19 @@ const mockedRoom = {
   ],
 };
 
-const mockedParticipants = [
-  { id: 1, name: 'Foo', voteLabel: '8' },
-  { id: 2, name: 'React', voteLabel: undefined },
-  { id: 3, name: 'Bar', voteLabel: '8' },
-  { id: 4, name: 'Elixir', voteLabel: '3' },
-  { id: 5, name: 'Baz', voteLabel: '8' },
-  { id: 6, name: 'Golang', voteLabel: '1' },
-  { id: 7, name: 'GraphQL', voteLabel: '8' },
+const mockedParticipants: Array<Participant> = [
+  { id: 1, username: 'Foo', voteLabel: '8' },
+  { id: 2, username: 'React', voteLabel: undefined },
+  { id: '12345', username: 'Bar', voteLabel: '8' },
+  { id: 4, username: 'Elixir', voteLabel: '3' },
+  { id: 5, username: 'Baz', voteLabel: '8' },
+  { id: 6, username: 'Golang', voteLabel: '1' },
+  { id: 7, username: 'GraphQL', voteLabel: '8' },
 ];
 
-const mockedObservers = [
-  { id: 8, name: 'Observer 1' },
-  { id: 9, name: 'Observer 2' },
+const mockedObservers: Array<Observer> = [
+  { id: 8, username: 'Observer 1' },
+  { id: 9, username: 'Observer 2' },
 ];
 
 function RoomShow() {
@@ -44,7 +46,7 @@ function RoomShow() {
   const [participants] = useState(mockedParticipants);
   const [observers] = useState(mockedObservers);
   const [showVotes] = useState(false);
-  const [session] = useSession();
+  const session = useTypedSelector(state => state.session);
 
   return (
     <section className="p-4 lg:p-5">
@@ -61,7 +63,7 @@ function RoomShow() {
             observers={observers}
           />
         ) : (
-          <JoinRoom id={id} />
+          <JoinRoom id={id} onLogin={(() => {}) as any} />
         )}
       </div>
     </section>
