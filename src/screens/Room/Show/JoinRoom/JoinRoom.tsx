@@ -23,7 +23,9 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
   const disabled = username.length === 0;
   const usernameError =
     username.length === 0 ? `Please fill out this field.` : undefined;
-  const handleOnClick = () => {
+  const handleSubmit = () => {
+    if (disabled) return;
+
     console.log('{ id, username, role, disabled }', {
       id,
       username,
@@ -39,9 +41,9 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
   };
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col w-full max-w-lg">
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full mb-6 mr-0 md:mr-2 md:w-1/2 md:mb-0">
+      <form className="flex flex-col w-full max-w-lg">
+        <div onSubmit={handleSubmit} className="flex flex-col md:flex-row">
+          <div className="w-full mr-0 md:mr-2 md:w-1/2 md:mb-0">
             <Input
               id="username"
               value={username}
@@ -60,11 +62,16 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
           </div>
         </div>
         <div className="mt-4 md:mt-0 flex items-center justify-end">
-          <Button disabled={disabled} onClick={handleOnClick} loading={loading}>
+          <Button
+            type="submit"
+            disabled={disabled}
+            onClick={handleSubmit}
+            loading={loading}
+          >
             Join
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

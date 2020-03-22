@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Participant, Observer, Room } from '../../../types';
+import { Participant, Observer, Room, Session } from '../../../types';
+import { useDispatch } from 'react-redux';
+import { setSession } from '../../../store/session/actions';
 
 const mockedRoom: Room = {
   id: '12345',
@@ -25,16 +27,6 @@ const mockedRoom: Room = {
   ],
 };
 
-const mockedParticipants: Array<Participant> = [
-  { id: 1, username: 'Foo', voteLabel: '8' },
-  { id: 2, username: 'React', voteLabel: undefined },
-  { id: '12345', username: 'Bar', voteLabel: '8' },
-  { id: 4, username: 'Elixir', voteLabel: '3' },
-  { id: 5, username: 'Baz', voteLabel: '8' },
-  { id: 6, username: 'Golang', voteLabel: '1' },
-  { id: 7, username: 'GraphQL', voteLabel: '8' },
-];
-
 const mockedObservers: Array<Observer> = [
   { id: 8, username: 'Observer 1' },
   { id: 9, username: 'Observer 2' },
@@ -43,10 +35,14 @@ const mockedObservers: Array<Observer> = [
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
   const [room] = useState(mockedRoom);
-  const [participants] = useState(mockedParticipants);
   const [observers] = useState(mockedObservers);
   const [showVotes] = useState(false);
   const session = useTypedSelector(state => state.session);
+  const dispatch = useDispatch();
+
+  const handleLogin = (session: Session) => {
+    dispatch(setSession(session));
+  };
 
   return (
     <section className="p-4 lg:p-5">
@@ -56,14 +52,9 @@ function RoomShow() {
       </h1>
       <div>
         {session ? (
-          <VoteRoom
-            room={room}
-            showVotes={showVotes}
-            participants={participants}
-            observers={observers}
-          />
+          <VoteRoom room={room} showVotes={showVotes} observers={observers} />
         ) : (
-          <JoinRoom id={id} onLogin={(() => {}) as any} />
+          <JoinRoom id={id} onLogin={handleLogin} />
         )}
       </div>
     </section>

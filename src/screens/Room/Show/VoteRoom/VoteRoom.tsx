@@ -1,38 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 
 import PointCard from '../PointCard';
 import Results from '../Results';
 import Button from '../../../../components/Button';
 import Participants from '../Participants';
-import { Participant, Observer, Room, Session } from '../../../../types';
+import { Observer, Room } from '../../../../types';
+import { useTypedSelector } from '../../../../store';
+import { Redirect } from 'react-router-dom';
 
 type Props = {
   room: Room;
-  participants: Array<Participant>;
   observers: Array<Observer>;
   showVotes: boolean;
 };
 
-const VoteRoom: React.FC<Props> = ({
-  room,
-  participants,
-  observers,
-  showVotes,
-}) => {
-  // const currentUserParticipant = participants.find(
-  //   ({ id }) => id === session?.id,
-  // );
-  const [selected, setSelected] = useState();
-  // currentUserParticipant?.voteLabel || '',
-  const handleClick = () => {
-    // if (!session || session.role === 'observer') return;
+const VoteRoom: React.FC<Props> = ({ room, observers, showVotes }) => {
+  const session = useTypedSelector(state => state.session);
+  const participantsById = useTypedSelector(state => state.participants);
+
+  if (!session) {
+    return <Redirect to="/" />;
+  }
+
+  const participants = Object.values(participantsById);
+
+  const handleClick = (...args: any) => {
+    if (!session || session.role === 'observer') return;
+    console.log('CLICKED', args);
   };
+
   return (
     <div className="flex flex-col lg:flex-row">
       <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
         {room.points.map(point => (
-          <li className="flex justify-center" key={point.label}>
+          <li
+            onClick={() => handleClick(point)}
+            className="flex justify-center"
+            key={point.label}
+          >
             <PointCard point={point} />
           </li>
         ))}
