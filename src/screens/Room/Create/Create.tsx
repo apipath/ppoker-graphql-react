@@ -10,12 +10,14 @@ import {
 } from 'react-beautiful-dnd';
 import nanoid from 'nanoid';
 import UseAnimations from 'react-useanimations';
+import { useToasts } from 'react-toast-notifications';
 
 import Button from '../../../components/Button';
 import Point from './Point';
 
 function RoomCreate() {
   const firstRowRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToasts();
   const location = useLocation();
   const { newRoomName } = qs.parse(location.search);
   const [points, setPoints] = useState(
@@ -43,6 +45,13 @@ function RoomCreate() {
   };
 
   const handlePointLabelChange = (label: string, index: number) => {
+    if (label && new Set(points.map(({ label }) => label)).has(label)) {
+      addToast(`Value "${label}" is not unique`, {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+    }
+
     setPoints(currentPoints => {
       const points = currentPoints.map(point => ({ ...point }));
       points[index].label = label;
@@ -76,7 +85,8 @@ function RoomCreate() {
     });
   };
 
-  const createEnabled = points.filter(({ label }) => label).length > 1;
+  const validLabels = new Set(points.map(({ label }) => label).filter(Boolean));
+  const createEnabled = validLabels.size > 1;
   const handleDelete = (index: number) => {
     setPoints(currentPoints => {
       const points = currentPoints.map(point => ({ ...point }));
@@ -84,6 +94,7 @@ function RoomCreate() {
       return points;
     });
   };
+  const pointsSet = new Set<string>();
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
@@ -105,6 +116,8 @@ function RoomCreate() {
               >
                 {points.map(({ id, label, description }, index) => {
                   const isDragDisabled = !label;
+                  const uniqueError = label && pointsSet.has(label);
+                  pointsSet.add(label);
 
                   return (
                     <Draggable key={id} draggableId={id} index={index}>
@@ -133,6 +146,9 @@ function RoomCreate() {
                                 e.target.value,
                                 index,
                               )
+                            }
+                            error={
+                              uniqueError ? 'Labels must be unique.' : undefined
                             }
                           />
                           <svg
