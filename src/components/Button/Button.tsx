@@ -15,7 +15,7 @@ const Button: React.FC<Props> = ({ loading, ...props }) => {
       className={cn(
         'flex rounded items-center shadow-md justify-center px-4 py-2 text-sm leading-5 font-medium bg-white focus:outline-none focus:shadow-outline transition ease-in-out duration-150',
         {
-          [`bg-gray-100 text-gray-600 cursor-not-allowed`]: disabled,
+          [`bg-gray-100 text-gray-600 opacity-60 cursor-not-allowed`]: disabled,
           [`hover:text-gray-600 text-gray-900`]: !disabled,
         },
       )}
