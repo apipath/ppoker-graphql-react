@@ -4,7 +4,12 @@ import Button from '../../../../components/Button';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
-import { Session, Role } from '../../../../types';
+import { Session, Role, Observer, Room, Participant } from '../../../../types';
+import {
+  mockedParticipants,
+  mockedRoom,
+  mockedObservers,
+} from '../../../../mocks';
 
 const ROLES: Array<{ label: string; value: Role }> = [
   { label: 'Participant', value: 'participant' },
@@ -13,7 +18,17 @@ const ROLES: Array<{ label: string; value: Role }> = [
 
 type Props = {
   id: string;
-  onLogin: (s: Session) => void;
+  onLogin: ({
+    session,
+    participants,
+    observers,
+    room,
+  }: {
+    session: Session;
+    participants: Array<Participant>;
+    observers: Array<Observer>;
+    room: Room;
+  }) => void;
 };
 
 const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
@@ -34,10 +49,18 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
     });
 
     setLoading(true);
+
     setTimeout(() => {
-      setLoading(false);
-      onLogin({ id: '12345', username, role });
-    }, 3000);
+      // TODO: use BE response
+      const session = { id: username, username, role };
+      const participants = [...mockedParticipants, { ...session }];
+      onLogin({
+        session,
+        participants,
+        observers: [...mockedObservers],
+        room: { ...mockedRoom },
+      });
+    }, 2000);
   };
   return (
     <div className="flex justify-center">

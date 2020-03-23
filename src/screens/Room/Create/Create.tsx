@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
+import { useDispatch } from 'react-redux';
 import classnames from 'classnames';
 import {
   Draggable,
@@ -11,13 +12,19 @@ import {
 import nanoid from 'nanoid';
 import UseAnimations from 'react-useanimations';
 import { useToasts } from 'react-toast-notifications';
+import { RouteComponentProps } from 'react-router';
 
 import Button from '../../../components/Button';
 import Point from './Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
+import { setRoom } from '../../../store/room/actions';
+import { mockedRoom } from '../../../mocks';
 
-function RoomCreate() {
+type Props = RouteComponentProps<{}>;
+
+const RoomCreate: React.FC<Props> = ({ history }) => {
   const firstRowRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
   const { addToast } = useToasts();
   const location = useLocation();
   const { newRoomName } = qs.parse(location.search);
@@ -43,6 +50,10 @@ function RoomCreate() {
       .filter(({ label }) => label)
       .map(({ id, ...rest }) => rest);
     console.log(opts);
+
+    dispatch(setRoom(mockedRoom));
+    // TODO: use response id
+    history.push('/room/somenewid');
   };
 
   const handlePointLabelChange = (label: string, index: number) => {
@@ -186,6 +197,6 @@ function RoomCreate() {
       </ul>
     </section>
   );
-}
+};
 
 export default RoomCreate;

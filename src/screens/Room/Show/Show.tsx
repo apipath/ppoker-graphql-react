@@ -4,45 +4,44 @@ import { useParams } from 'react-router-dom';
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Participant, Observer, Room, Session } from '../../../types';
-import { useDispatch } from 'react-redux';
+import { Observer, Session, Participant, Room } from '../../../types';
+import { useDispatch, batch } from 'react-redux';
 import { setSession } from '../../../store/session/actions';
-
-const mockedRoom: Room = {
-  id: '12345',
-  name: 'Impact',
-  points: [
-    { label: '0', description: '#its-free', order: 1 },
-    { label: '0.5', description: '#switch-it-on', order: 2 },
-    { label: '1', description: '#eating-cookie', order: 3 },
-    { label: '2', description: '#push-up', order: 4 },
-    { label: '3', description: '#mix-bake-eat', order: 5 },
-    { label: '5', description: '#its-onto-something', order: 6 },
-    { label: '8', description: '#think-code-repeat', order: 7 },
-    { label: '13', description: '#5-coffees', order: 8 },
-    { label: '20', description: '#100-push-ups', order: 9 },
-    { label: '40', description: '#40-days-40-nights', order: 10 },
-    { label: '100', description: '#fighting-aliens', order: 11 },
-    { label: '?', description: '#god-knows', order: 12 },
-  ],
-};
-
-const mockedObservers: Array<Observer> = [
-  { id: 8, username: 'Observer 1' },
-  { id: 9, username: 'Observer 2' },
-];
+import { setRoom } from '../../../store/room/actions';
+import { setObservers } from '../../../store/observers/actions';
+import { setParticipants } from '../../../store/participants/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
-  const [room] = useState(mockedRoom);
-  const [observers] = useState(mockedObservers);
+  const room = useTypedSelector(state => state.room);
   const [showVotes] = useState(false);
   const session = useTypedSelector(state => state.session);
   const dispatch = useDispatch();
 
-  const handleLogin = (session: Session) => {
-    dispatch(setSession(session));
+  const handleLogin = ({
+    session,
+    participants,
+    observers,
+    room,
+  }: {
+    session: Session;
+    participants: Array<Participant>;
+    observers: Array<Observer>;
+    room: Room;
+  }) => {
+    // TODO: https://redux.js.org/style-guide/style-guide/#write-meaningful-action-names
+    // TODO: https://redux.js.org/style-guide/style-guide/#allow-many-reducers-to-respond-to-the-same-action
+    batch(() => {
+      dispatch(setSession(session));
+      dispatch(setRoom(room));
+      dispatch(setObservers(observers));
+      dispatch(setRoom(room));
+      dispatch(setParticipants(participants));
+    });
   };
+
+  // TODO: use a proper loading
+  if (!room) return <p>Loading...</p>;
 
   return (
     <section className="p-4 lg:p-5">
@@ -52,7 +51,7 @@ function RoomShow() {
       </h1>
       <div>
         {session ? (
-          <VoteRoom room={room} showVotes={showVotes} observers={observers} />
+          <VoteRoom showVotes={showVotes} />
         ) : (
           <JoinRoom id={id} onLogin={handleLogin} />
         )}

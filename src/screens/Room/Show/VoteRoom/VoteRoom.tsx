@@ -5,25 +5,25 @@ import PointCard from '../PointCard';
 import Results from '../Results';
 import Button from '../../../../components/Button';
 import Participants from '../Participants';
-import { Observer, Room } from '../../../../types';
 import { useTypedSelector } from '../../../../store';
 import { Redirect } from 'react-router-dom';
 
 type Props = {
-  room: Room;
-  observers: Array<Observer>;
   showVotes: boolean;
 };
 
-const VoteRoom: React.FC<Props> = ({ room, observers, showVotes }) => {
+const VoteRoom: React.FC<Props> = ({ showVotes }) => {
+  const room = useTypedSelector(state => state.room);
+  const observersById = useTypedSelector(state => state.observers);
   const session = useTypedSelector(state => state.session);
   const participantsById = useTypedSelector(state => state.participants);
 
-  if (!session) {
+  if (!session || !room) {
     return <Redirect to="/" />;
   }
 
   const participants = Object.values(participantsById);
+  const observers = Object.values(observersById);
 
   const handleClick = (...args: any) => {
     if (!session || session.role === 'observer') return;

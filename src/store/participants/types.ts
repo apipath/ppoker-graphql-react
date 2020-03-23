@@ -1,9 +1,9 @@
 import { Participant } from '../../types';
 
-export const SET_PARTICIPANTS = 'PARTICIPANTS/SET_PARTICIPANTS';
-export const UPDATE_PARTICIPANT = 'PARTICIPANTS/UPDATE_PARTICIPANT';
-export const REMOVE_PARTICIPANT = 'PARTICIPANTS/REMOVE_PARTICIPANT';
-export const ADD_PARTICIPANT = 'PARTICIPANTS/ADD_PARTICIPANT';
+export const SET_PARTICIPANTS = 'participants/setParticipants' as const;
+export const UPDATE_PARTICIPANT = 'participants/updateParticipant' as const;
+export const REMOVE_PARTICIPANT = 'participants/removeParticipant' as const;
+export const ADD_PARTICIPANT = 'participants/addParticipant' as const;
 
 interface SetParticipants {
   type: typeof SET_PARTICIPANTS;

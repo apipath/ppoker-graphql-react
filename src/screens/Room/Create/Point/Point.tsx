@@ -23,10 +23,13 @@ const Point: React.FC<Props> = ({
       <div className="flex justify-center mr-0 sm:mr-2">
         <input
           ref={labelRef}
-          className={cn('p-2 border-b-2 outline-none appearance-none ', {
-            [`border-red-400 focus:border-red-400`]: error,
-            [`border-gray-400 focus:border-teal-500`]: !error,
-          })}
+          className={cn(
+            'p-2 bg-transparent border-b-2 outline-none appearance-none ',
+            {
+              [`border-red-400 focus:border-red-400`]: error,
+              [`border-gray-400 focus:border-teal-500`]: !error,
+            },
+          )}
           placeholder="label"
           value={label}
           onChange={handleLabelChange}
