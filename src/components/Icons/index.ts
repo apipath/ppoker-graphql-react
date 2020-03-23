@@ -1,3 +1,10 @@
 export { default as PlusIcon } from './PlusIcon';
 export { default as DotsIcon } from './DotsIcon';
 export { default as HeroIcon } from './HeroIcon';
+export { default as CaretDown } from './CaretDown';
+export { default as ClockIcon } from './ClockIcon';
+export { default as CheckIcon } from './CheckIcon';
+export { default as LogoSmallIcon } from './LogoSmallIcon';
+export { default as LogoBigIcon } from './LogoBigIcon';
+export { default as GithubIcon } from './GithubIcon';
+export { default as MenuIcon } from './MenuIcon';
