@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler } from 'react';
+import cn from 'classnames';
 
 type Props = {
   label: string;
@@ -6,6 +7,7 @@ type Props = {
   onLabelChange: ChangeEventHandler<HTMLInputElement>;
   description: string;
   labelRef: React.Ref<HTMLInputElement>;
+  error?: string;
 };
 
 const Point: React.FC<Props> = ({
@@ -14,13 +16,17 @@ const Point: React.FC<Props> = ({
   onDescriptionChange: handleDescriptionChange,
   description,
   labelRef,
+  error,
 }) => {
   return (
     <div className="flex flex-col justify-center w-full sm:flex-row">
       <div className="flex justify-center mr-0 sm:mr-2">
         <input
           ref={labelRef}
-          className="p-2 border-b-2 border-gray-400 outline-none appearance-none focus:border-teal-500"
+          className={cn('p-2 border-b-2 outline-none appearance-none ', {
+            [`border-red-400 focus:border-red-400`]: error,
+            [`border-gray-400 focus:border-teal-500`]: !error,
+          })}
           placeholder="label"
           value={label}
           onChange={handleLabelChange}

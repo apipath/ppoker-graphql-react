@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import cn from 'classnames';
-import Button from '../../../components/Button';
-import Participants from './Participants';
-import PointCard from './PointCard';
-import Results from './Results';
 
-type Room = {
-  id: string;
-  name: string;
-  description?: string;
-  points: Array<Point>;
-};
-
-type Point = {
-  label: string;
-  description?: string;
-  order: number;
-};
+import { useTypedSelector } from '../../../store';
+import JoinRoom from './JoinRoom';
+import VoteRoom from './VoteRoom';
+import { Participant, Observer, Room, Session } from '../../../types';
+import { useDispatch } from 'react-redux';
+import { setSession } from '../../../store/session/actions';
 
 const mockedRoom: Room = {
   id: '12345',
@@ -38,28 +27,22 @@ const mockedRoom: Room = {
   ],
 };
 
-const mockedParticipants = [
-  { id: 1, name: 'Foo', voteLabel: '8' },
-  { id: 2, name: 'React', voteLabel: undefined },
-  { id: 3, name: 'Bar', voteLabel: '8' },
-  { id: 4, name: 'Elixir', voteLabel: '3' },
-  { id: 5, name: 'Baz', voteLabel: '8' },
-  { id: 6, name: 'Golang', voteLabel: '1' },
-  { id: 7, name: 'GraphQL', voteLabel: '8' },
-];
-
-const mockedObservers = [
-  { id: 8, name: 'Observer 1' },
-  { id: 9, name: 'Observer 2' },
+const mockedObservers: Array<Observer> = [
+  { id: 8, username: 'Observer 1' },
+  { id: 9, username: 'Observer 2' },
 ];
 
 function RoomShow() {
-  const { id } = useParams();
-  console.log('Fetch room:', id);
+  const { id } = useParams<{ id: string }>();
   const [room] = useState(mockedRoom);
-  const [participants] = useState(mockedParticipants);
   const [observers] = useState(mockedObservers);
   const [showVotes] = useState(false);
+  const session = useTypedSelector(state => state.session);
+  const dispatch = useDispatch();
+
+  const handleLogin = (session: Session) => {
+    dispatch(setSession(session));
+  };
 
   return (
     <section className="p-4 lg:p-5">
@@ -67,31 +50,12 @@ function RoomShow() {
         <span className="text-gray-800">{room.name}</span>
         <span className="text-gray-700">#{room.id}</span>
       </h1>
-      <div className="flex flex-col lg:flex-row">
-        <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
-          {room.points.map(point => (
-            <li className="flex justify-center" key={point.label}>
-              <PointCard point={point} />
-            </li>
-          ))}
-        </ul>
-        <div className="my-8 border-b border-gray-300 lg:hidden"></div>
-        <div className="flex-grow lg:mt-0">
-          <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
-            <Participants
-              participants={participants}
-              observers={observers}
-              showVotes={showVotes}
-            />
-            <div className="w-full mt-6 md:mt-0">
-              <div className="flex justify-around mb-12">
-                <Button>Show Votes</Button>
-                <Button>Clear Votes</Button>
-              </div>
-              <Results participants={participants} />
-            </div>
-          </div>
-        </div>
+      <div>
+        {session ? (
+          <VoteRoom room={room} showVotes={showVotes} observers={observers} />
+        ) : (
+          <JoinRoom id={id} onLogin={handleLogin} />
+        )}
       </div>
     </section>
   );

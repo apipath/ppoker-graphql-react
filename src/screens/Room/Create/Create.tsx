@@ -10,12 +10,14 @@ import {
 } from 'react-beautiful-dnd';
 import nanoid from 'nanoid';
 import UseAnimations from 'react-useanimations';
+import { useToasts } from 'react-toast-notifications';
 
 import Button from '../../../components/Button';
 import Point from './Point';
 
 function RoomCreate() {
   const firstRowRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToasts();
   const location = useLocation();
   const { newRoomName } = qs.parse(location.search);
   const [points, setPoints] = useState(
@@ -43,6 +45,13 @@ function RoomCreate() {
   };
 
   const handlePointLabelChange = (label: string, index: number) => {
+    if (label && new Set(points.map(({ label }) => label)).has(label)) {
+      addToast(`Value "${label}" is not unique`, {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+    }
+
     setPoints(currentPoints => {
       const points = currentPoints.map(point => ({ ...point }));
       points[index].label = label;
@@ -76,7 +85,8 @@ function RoomCreate() {
     });
   };
 
-  const createEnabled = points.filter(({ label }) => label).length > 1;
+  const validLabels = new Set(points.map(({ label }) => label).filter(Boolean));
+  const createEnabled = validLabels.size > 1;
   const handleDelete = (index: number) => {
     setPoints(currentPoints => {
       const points = currentPoints.map(point => ({ ...point }));
@@ -84,6 +94,7 @@ function RoomCreate() {
       return points;
     });
   };
+  const pointsSet = new Set<string>();
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
@@ -105,6 +116,8 @@ function RoomCreate() {
               >
                 {points.map(({ id, label, description }, index) => {
                   const isDragDisabled = !label;
+                  const uniqueError = label && pointsSet.has(label);
+                  pointsSet.add(label);
 
                   return (
                     <Draggable key={id} draggableId={id} index={index}>
@@ -121,43 +134,45 @@ function RoomCreate() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <>
-                            <Point
-                              labelRef={index === 0 ? firstRowRef : null}
-                              label={label}
-                              description={description}
-                              onLabelChange={e =>
-                                handlePointLabelChange(e.target.value, index)
-                              }
-                              onDescriptionChange={e =>
-                                handlePointDescriptionChange(
-                                  e.target.value,
-                                  index,
-                                )
-                              }
-                            />
-                            <svg
-                              className={classnames(
-                                'w-8 sm:w-6 m-2 text-gray-500',
-                                {
-                                  [`text-gray-700`]: snapshot.isDragging,
-                                },
-                              )}
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2C11.1046 2 12 2.89543 12 4C12 5.10457 11.1046 6 10 6Z" />
-                              <path d="M10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10C12 11.1046 11.1046 12 10 12Z" />
-                              <path d="M10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16C12 17.1046 11.1046 18 10 18Z" />
-                            </svg>
+                          <Point
+                            labelRef={index === 0 ? firstRowRef : null}
+                            label={label}
+                            description={description}
+                            onLabelChange={e =>
+                              handlePointLabelChange(e.target.value, index)
+                            }
+                            onDescriptionChange={e =>
+                              handlePointDescriptionChange(
+                                e.target.value,
+                                index,
+                              )
+                            }
+                            error={
+                              uniqueError ? 'Labels must be unique.' : undefined
+                            }
+                          />
+                          <svg
+                            className={classnames(
+                              'w-8 sm:w-6 m-2 text-gray-500',
+                              {
+                                [`text-gray-700`]: snapshot.isDragging,
+                              },
+                            )}
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2C11.1046 2 12 2.89543 12 4C12 5.10457 11.1046 6 10 6Z" />
+                            <path d="M10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10C12 11.1046 11.1046 12 10 12Z" />
+                            <path d="M10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16C12 17.1046 11.1046 18 10 18Z" />
+                          </svg>
 
-                            <UseAnimations
-                              size={32}
-                              animationKey="trash2"
-                              onClick={() => handleDelete(index)}
-                            />
-                          </>
+                          <UseAnimations
+                            size={32}
+                            animationKey="trash2"
+                            onClick={() => handleDelete(index)}
+                            className="outline-none cursor-pointer"
+                          />
                         </li>
                       )}
                     </Draggable>
@@ -170,7 +185,7 @@ function RoomCreate() {
         </DragDropContext>
         <button
           onClick={handleNewPoint}
-          className="w-12 h-12 mx-auto my-4 flex justify-center items-center text-blue-900 bg-white rounded-full shadow-md hover:shadow-lg"
+          className="w-12 h-12 mx-auto my-4 flex justify-center focus:outline-none items-center text-blue-900 bg-white rounded-full shadow-md hover:shadow-lg"
         >
           <svg
             width="24"
