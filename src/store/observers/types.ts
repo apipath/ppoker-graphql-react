@@ -1,9 +1,9 @@
 import { Observer } from '../../types';
 
-export const SET_OBSERVERS = 'OBSERVERS/SET_OBSERVERS';
-export const UPDATE_OBSERVER = 'OBSERVERS/UPDATE_OBSERVER';
-export const REMOVE_OBSERVER = 'OBSERVERS/REMOVE_OBSERVER';
-export const ADD_OBSERVER = 'OBSERVERS/ADD_OBSERVER';
+export const SET_OBSERVERS = 'observers/setObservers' as const;
+export const UPDATE_OBSERVER = 'observers/updateObservers' as const;
+export const REMOVE_OBSERVER = 'observers/removeObservers' as const;
+export const ADD_OBSERVER = 'observers/addObserver' as const;
 
 interface SetObservers {
   type: typeof SET_OBSERVERS;

@@ -1,39 +1,28 @@
+import { RootAction } from 'typesafe-actions';
+
 import { Participant } from '../../types';
 import {
-  ParticipantsActionTypes,
   SET_PARTICIPANTS,
   ADD_PARTICIPANT,
   REMOVE_PARTICIPANT,
   UPDATE_PARTICIPANT,
 } from './types';
+import { JOIN_ROOM } from '../room/types';
+
+const initialState = {};
+
+const buildParticipants = (participants: Array<Participant>) =>
+  Object.fromEntries(participants.map(p => [p.id, p]));
 
 type ParticipantsState = Readonly<{ [key: string]: Readonly<Participant> }>;
 
-const mockedParticipants = [
-  { id: '1', username: 'Foo', voteLabel: '8' },
-  { id: '2', username: 'React', voteLabel: undefined },
-  { id: '12345', username: 'Bar', voteLabel: '8' },
-  { id: '4', username: 'Elixir', voteLabel: '3' },
-  { id: '5', username: 'Baz', voteLabel: '8' },
-  { id: '6', username: 'Golang', voteLabel: '1' },
-  { id: '7', username: 'GraphQL', voteLabel: '8' },
-];
-
-const initialState = mockedParticipants.reduce<{ [key: string]: Participant }>(
-  (obj, p) => {
-    obj[p.id] = p;
-    return obj;
-  },
-  {},
-);
-
 const ParticipantsReducer = (
   state: ParticipantsState = initialState,
-  action: ParticipantsActionTypes,
+  action: RootAction,
 ): ParticipantsState => {
   switch (action.type) {
     case SET_PARTICIPANTS:
-      return Object.fromEntries(action.payload.map(p => [p.id, p]));
+      return buildParticipants(action.payload);
     case UPDATE_PARTICIPANT: // fallthrough
     case ADD_PARTICIPANT: {
       return { ...state, [action.payload.id]: action.payload };
@@ -43,6 +32,8 @@ const ParticipantsReducer = (
       delete newState[action.payload.id];
       return newState;
     }
+    case JOIN_ROOM:
+      return buildParticipants(action.payload.participants);
     default:
       return state;
   }

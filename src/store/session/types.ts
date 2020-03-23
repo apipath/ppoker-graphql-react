@@ -1,6 +1,6 @@
 import { Session } from '../../types';
 
-export const SET_SESSION = 'SESSION/SET_SESSION' as const;
+export const SET_SESSION = 'session/setSession' as const;
 
 interface SetSessionAction {
   type: typeof SET_SESSION;
