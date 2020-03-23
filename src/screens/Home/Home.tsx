@@ -6,8 +6,8 @@ import React, {
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
 
-import HeroIcon from '../../components/HeroIcon';
 import HomeInputCard from './InputCard';
+import { HeroIcon } from '../../components/Icons';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
@@ -55,15 +55,15 @@ function Home() {
   return (
     <>
       <Header />
-      <section className="mb-10 flex flex-col items-center">
+      <section className="flex flex-col items-center mb-10">
         <div className="flex justify-center w-full max-w-3xl">
           <HeroIcon />
         </div>
-        <p className="mt-8 w-1/2 font-sans text-center text-gray-700 font-thin">
+        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700">
           ppoker help teams during their planning sessions
         </p>
       </section>
-      <section className="py-8 md:py-12 flex justify-center bg-gray-300">
+      <section className="flex justify-center py-8 bg-gray-300 md:py-12">
         <div className="max-w-4xl flex flex-col md:flex-row md:justify-around">
           <HomeInputCard
             title="Create a room"

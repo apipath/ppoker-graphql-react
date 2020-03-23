@@ -1,9 +1,11 @@
 import React from 'react';
 
-function HomeHeroIcon() {
+const HeroIcon: React.FC<{ className?: string }> = ({
+  className = 'w-full',
+}) => {
   return (
     <svg
-      className="w-full"
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1590 999"
     >
@@ -483,6 +485,6 @@ function HomeHeroIcon() {
       </g>
     </svg>
   );
-}
+};
 
-export default HomeHeroIcon;
+export default HeroIcon;
