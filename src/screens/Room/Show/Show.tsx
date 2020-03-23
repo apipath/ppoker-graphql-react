@@ -5,11 +5,8 @@ import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { Observer, Session, Participant, Room } from '../../../types';
-import { useDispatch, batch } from 'react-redux';
-import { setSession } from '../../../store/session/actions';
-import { setRoom } from '../../../store/room/actions';
-import { setObservers } from '../../../store/observers/actions';
-import { setParticipants } from '../../../store/participants/actions';
+import { useDispatch } from 'react-redux';
+import { joinRoom } from '../../../store/room/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
@@ -29,15 +26,7 @@ function RoomShow() {
     observers: Array<Observer>;
     room: Room;
   }) => {
-    // TODO: https://redux.js.org/style-guide/style-guide/#write-meaningful-action-names
-    // TODO: https://redux.js.org/style-guide/style-guide/#allow-many-reducers-to-respond-to-the-same-action
-    batch(() => {
-      dispatch(setSession(session));
-      dispatch(setRoom(room));
-      dispatch(setObservers(observers));
-      dispatch(setRoom(room));
-      dispatch(setParticipants(participants));
-    });
+    dispatch(joinRoom({ session, room, observers, participants }));
   };
 
   // TODO: use a proper loading
