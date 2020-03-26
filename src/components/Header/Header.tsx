@@ -7,7 +7,7 @@ import { LogoSmallIcon, LogoBigIcon, MenuIcon } from '../Icons';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => setIsOpen(val => !val);
+  const toggleMenu = () => setIsOpen((val) => !val);
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -17,6 +17,7 @@ function Header() {
           <Link to="/" onClick={closeMenu}>
             <LogoSmallIcon className="w-16 lg:hidden" />
             <LogoBigIcon className="hidden w-32 lg:block" />
+            Ppoker
           </Link>
         </div>
         <div className="block lg:hidden">
