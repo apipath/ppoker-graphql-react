@@ -12,7 +12,7 @@ declare module 'typesafe-actions' {
   export type Store = StateType<typeof import('./store/index').default>;
 
   export type RootState = StateType<
-    typeof import('./store/root-reducer').default
+    ReturnType<typeof import('./store/root-reducer').default>
   >;
 
   export type RootAction = ActionType<

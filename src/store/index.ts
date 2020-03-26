@@ -1,20 +1,36 @@
-import { createStore, compose } from 'redux';
+import { createStore, Middleware, applyMiddleware } from 'redux';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { createLogger } from 'redux-logger';
 import { RootState } from 'typesafe-actions';
 
-import rootReducer from './root-reducer';
+import createRootReducer from './root-reducer';
 
-const initialState = {};
-const store = createStore(
-  rootReducer,
-  initialState,
-  (process?.env?.NODE_ENV === 'development' &&
-    window &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()) ||
-    compose,
-);
+const configureStore = (preloadedState?: RootState) => {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  const allMiddleware: Array<Middleware> = [];
+  if (isDevelopment) {
+    allMiddleware.push(createLogger());
+  }
+
+  let middleware = applyMiddleware(...allMiddleware);
+  if (isDevelopment) {
+    const composeEnhancers = composeWithDevTools({});
+    middleware = composeEnhancers(middleware);
+  }
+
+  const store = createStore(createRootReducer(), preloadedState, middleware);
+
+  if (isDevelopment && module.hot) {
+    module.hot.accept('./root-reducer', () => {
+      store.replaceReducer(createRootReducer());
+    });
+  }
+
+  return store;
+};
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export default store;
+export default configureStore;
