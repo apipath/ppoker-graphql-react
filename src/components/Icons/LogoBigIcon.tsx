@@ -13,9 +13,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1100.51"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50.813"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50.813"
       fill="#2382d6"
       transform="matrix(4.23118 0 0 4.91998 -4671.300761 -13060.32)"
     >
@@ -24,9 +24,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1117.29"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50"
       transform="translate(-5429.327 -13060.32) scale(4.91998)"
     >
       P
@@ -34,9 +34,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1149.14"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50"
       fill="#ff088d"
       transform="translate(-5429.327 -13060.32) scale(4.91998)"
     >
@@ -45,9 +45,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1179.69"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50"
       transform="translate(-5429.327 -13060.32) scale(4.91998)"
     >
       ke
@@ -55,9 +55,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1237.09"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50"
       fill="#23d696"
       transform="translate(-5429.327 -13060.32) scale(4.91998)"
     >
@@ -66,9 +66,9 @@ const LogoBigIcon: React.FC<{ className?: string }> = ({ className }) => (
     <text
       x="1256.54"
       y="2691.1"
-      font-family="'HelveticaNeue-Bold','Helvetica Neue'"
-      font-weight="700"
-      font-size="50"
+      fontFamily="'HelveticaNeue-Bold','Helvetica Neue'"
+      fontWeight="700"
+      fontSize="50"
       transform="translate(-5429.327 -13060.32) scale(4.91998)"
     >
       {`{:}`}
