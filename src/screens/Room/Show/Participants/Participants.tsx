@@ -31,12 +31,12 @@ const Participants: React.FC<Props> = ({
     );
   };
   return (
-    <div className="w-full border border-gray-300 rounded shadow">
-      <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 border-b border-gray-300 rounded-tl rounded-tr">
+    <div className="w-full bg-white rounded shadow">
+      <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 rounded-tl rounded-tr">
         Participants
       </h3>
       <ul className="p-4">
-        {participants.map(participant => (
+        {participants.map((participant) => (
           <li key={participant.id} className="flex justify-between">
             <div>{participant.username}</div>
             <div>{getVoteOrIcon(participant)}</div>
@@ -47,7 +47,7 @@ const Participants: React.FC<Props> = ({
         Observers
       </h3>
       <ul className="p-4">
-        {observers.map(observer => (
+        {observers.map((observer) => (
           <li key={observer.id}>{observer.username}</li>
         ))}
       </ul>

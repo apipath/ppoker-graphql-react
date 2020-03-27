@@ -13,10 +13,10 @@ type Props = {
 };
 
 const VoteRoom: React.FC<Props> = ({ showVotes }) => {
-  const room = useTypedSelector(state => state.room);
-  const observersById = useTypedSelector(state => state.observers);
-  const session = useTypedSelector(state => state.session);
-  const participantsById = useTypedSelector(state => state.participants);
+  const room = useTypedSelector((state) => state.room);
+  const observersById = useTypedSelector((state) => state.observers);
+  const session = useTypedSelector((state) => state.session);
+  const participantsById = useTypedSelector((state) => state.participants);
 
   if (!session || !room) {
     return <Redirect to="/" />;
@@ -24,6 +24,12 @@ const VoteRoom: React.FC<Props> = ({ showVotes }) => {
 
   const participants = Object.values(participantsById);
   const observers = Object.values(observersById);
+  const participatingCurrentUser = participants.find(
+    ({ id }) => id === session.id,
+  );
+  const selectedPoint = participatingCurrentUser
+    ? participatingCurrentUser.voteLabel ?? ''
+    : '';
 
   const handleClick = (...args: any) => {
     if (!session || session.role === 'observer') return;
@@ -33,13 +39,13 @@ const VoteRoom: React.FC<Props> = ({ showVotes }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
-        {room.points.map(point => (
+        {room.points.map((point) => (
           <li
             onClick={() => handleClick(point)}
             className="flex justify-center"
             key={point.label}
           >
-            <PointCard point={point} />
+            <PointCard point={point} selected={point.label === selectedPoint} />
           </li>
         ))}
       </ul>
