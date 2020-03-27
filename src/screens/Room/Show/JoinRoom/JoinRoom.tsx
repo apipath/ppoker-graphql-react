@@ -11,6 +11,12 @@ import {
   mockedObservers,
 } from '../../../../mocks';
 
+const STORAGE_KEY = '_join_room' as const;
+type StorageState = {
+  username: string;
+  role: Role;
+};
+
 const ROLES: Array<{ label: string; value: Role }> = [
   { label: 'Participant', value: 'participant' },
   { label: 'Observer', value: 'observer' },
@@ -31,9 +37,19 @@ type Props = {
   }) => void;
 };
 
+const getStateFromStorage = (): StorageState => {
+  const state = localStorage.getItem(STORAGE_KEY);
+  if (state) {
+    return JSON.parse(state) as StorageState;
+  }
+
+  return { username: '', role: ROLES[0].value };
+};
+
 const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [role, setRole] = useState(ROLES[0].value);
+  const storageState = getStateFromStorage();
+  const [username, setUsername] = useState(storageState.username);
+  const [role, setRole] = useState(storageState.role);
   const [loading, setLoading] = useState(false);
   const disabled = username.length === 0;
   const usernameError =
@@ -60,6 +76,7 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
         observers: [...mockedObservers],
         room: { ...mockedRoom },
       });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ username, role }));
     }, 2000);
   };
   return (
@@ -79,7 +96,7 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
             <Select
               id="role"
               value={role}
-              onChange={() => setRole('observer')}
+              onChange={(role) => setRole(role as Role)}
               options={ROLES}
             />
           </div>
