@@ -21,7 +21,7 @@ const Select: React.FC<Props> = ({ id, options, onChange, value }) => {
         <select
           id={id}
           className="block w-full px-4 py-3 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none hover:border-gray-500 focus:outline-none focus:shadow-outline"
-          onChange={e => onChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           value={value}
         >
           {options.map(({ label, value }) => (
