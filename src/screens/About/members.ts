@@ -11,7 +11,7 @@ const members = [
     htmlUrl: 'https://github.com/cagodoy',
     name: 'Camilo Acuña Godoy',
     blog: '',
-    location: 'Santiago de Chile',
+    location: 'Miami, FL',
   },
   {
     login: 'sebastianvera',
@@ -19,13 +19,6 @@ const members = [
     name: 'Sebastian Vera',
     location: 'Berlin, Germany',
     blog: 'https://sebastianvera.github.io/web/',
-  },
-  {
-    login: 'RafaelVidaurre',
-    htmlUrl: 'https://github.com/RafaelVidaurre',
-    name: 'Rafael Vidaurre',
-    location: 'Chile',
-    blog: 'https://vidaurre.io',
   },
   {
     login: 'vinaybedre',
