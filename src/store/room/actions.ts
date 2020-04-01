@@ -1,5 +1,6 @@
 import { SET_ROOM, JOIN_ROOM } from './types';
-import { Room, Participant, Observer, Session } from '../../types';
+import { Participant, Observer, Session } from '../../types';
+import { Room } from '../../generated/graphql';
 
 export const setRoom = (room: Room) => ({
   type: SET_ROOM,

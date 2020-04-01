@@ -1,11 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { Point } from '../../../../generated/graphql';
+
 type Props = {
-  point: {
-    label: string;
-    description?: string;
-  };
+  point: Point;
   selected?: boolean;
 };
 
@@ -20,13 +19,17 @@ const PointCard: React.FC<Props> = ({ point, selected }) => {
       )}
     >
       <header className="flex items-center justify-center flex-grow">
-        <h3 className="text-4xl">{point.label}</h3>
+        <h3 className="text-4xl truncate" title={point.label}>
+          {point.label}
+        </h3>
       </header>
-      <div className="text-xs">
-        <span className="px-2 py-1 bg-blue-100 rounded-full">
-          {point.description}
-        </span>
-      </div>
+      {point.description && (
+        <div className="text-xs">
+          <span className="px-2 py-1 bg-blue-100 rounded-full">
+            {point.description}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

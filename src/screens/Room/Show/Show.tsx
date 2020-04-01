@@ -4,15 +4,19 @@ import { useParams } from 'react-router-dom';
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Observer, Session, Participant, Room } from '../../../types';
+import { Observer, Session, Participant } from '../../../types';
 import { useDispatch } from 'react-redux';
 import { joinRoom } from '../../../store/room/actions';
+import { useGetRoomQuery, Room } from '../../../generated/graphql';
+import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
-  const room = useTypedSelector(state => state.room);
+
+  const { data, loading, error } = useGetRoomQuery({ variables: { id } });
+
   const [showVotes] = useState(false);
-  const session = useTypedSelector(state => state.session);
+  const session = useTypedSelector((state) => state.session);
   const dispatch = useDispatch();
 
   const handleLogin = ({
@@ -29,8 +33,20 @@ function RoomShow() {
     dispatch(joinRoom({ session, room, observers, participants }));
   };
 
+  if (error) {
+    if (hasError(error, NOT_FOUND_ERR_CODE)) {
+      return <p>NOT FOUND</p>;
+    }
+
+    throw error;
+  }
   // TODO: use a proper loading
-  if (!room) return <p>Loading...</p>;
+  if (loading || !data) return <p>Loading...</p>;
+  const { room } = data;
+
+  if (!room) {
+    return <div>Create that room</div>;
+  }
 
   return (
     <section className="p-4 lg:p-5">
@@ -40,9 +56,9 @@ function RoomShow() {
       </h1>
       <div>
         {session ? (
-          <VoteRoom showVotes={showVotes} />
+          <VoteRoom room={room} showVotes={showVotes} />
         ) : (
-          <JoinRoom id={id} onLogin={handleLogin} />
+          <JoinRoom room={room} onLogin={handleLogin} />
         )}
       </div>
     </section>

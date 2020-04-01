@@ -4,12 +4,9 @@ import Button from '../../../../components/Button';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
-import { Session, Role, Observer, Room, Participant } from '../../../../types';
-import {
-  mockedParticipants,
-  mockedRoom,
-  mockedObservers,
-} from '../../../../mocks';
+import { Session, Role, Observer, Participant } from '../../../../types';
+import { Room } from '../../../../generated/graphql';
+import { mockedParticipants, mockedObservers } from '../../../../mocks';
 
 const STORAGE_KEY = '_join_room' as const;
 type StorageState = {
@@ -23,7 +20,7 @@ const ROLES: Array<{ label: string; value: Role }> = [
 ];
 
 type Props = {
-  id: string;
+  room: Room;
   onLogin: ({
     session,
     participants,
@@ -46,7 +43,7 @@ const getStateFromStorage = (): StorageState => {
   return { username: '', role: ROLES[0].value };
 };
 
-const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
+const JoinRoom: React.FC<Props> = ({ onLogin, room }) => {
   const storageState = getStateFromStorage();
   const [username, setUsername] = useState(storageState.username);
   const [role, setRole] = useState(storageState.role);
@@ -56,13 +53,6 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
     username.length === 0 ? `Please fill out this field.` : undefined;
   const handleSubmit = () => {
     if (disabled) return;
-
-    console.log('{ id, username, role, disabled }', {
-      id,
-      username,
-      role,
-      disabled,
-    });
 
     setLoading(true);
 
@@ -74,7 +64,7 @@ const JoinRoom: React.FC<Props> = ({ id, onLogin }) => {
         session,
         participants,
         observers: [...mockedObservers],
-        room: { ...mockedRoom },
+        room,
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ username, role }));
     }, 2000);

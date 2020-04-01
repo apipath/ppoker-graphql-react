@@ -16,16 +16,3 @@ export type Observer = {
   id: number | string;
   username: string;
 };
-
-export type Point = {
-  label: string;
-  description?: string;
-  order: number;
-};
-
-export type Room = {
-  id: string;
-  name: string;
-  description?: string;
-  points: Array<Point>;
-};

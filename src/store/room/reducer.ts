@@ -1,6 +1,6 @@
 import { RootAction } from 'typesafe-actions';
 
-import { Room } from '../../types';
+import { Room } from '../../generated/graphql';
 import { SET_ROOM, JOIN_ROOM } from './types';
 
 type RoomState = Readonly<Room | null>;

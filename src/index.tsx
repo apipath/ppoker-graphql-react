@@ -1,25 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+import { ToastProvider } from 'react-toast-notifications';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+
 import './styles.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store';
-import { Provider } from 'react-redux';
-import { ToastProvider } from 'react-toast-notifications';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 const store = configureStore();
 
+const client = new ApolloClient({
+  uri: 'http://localhost:8080/query',
+});
+
 const render = (AppComponent: typeof App) =>
   ReactDOM.render(
-    <Provider store={store}>
-      <ToastProvider placement="bottom-right">
-        <Router>
-          <AppComponent />
-        </Router>
-      </ToastProvider>
-    </Provider>,
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <ToastProvider placement="bottom-right">
+          <Router>
+            <AppComponent />
+          </Router>
+        </ToastProvider>
+      </Provider>
+    </ApolloProvider>,
     document.getElementById('root'),
   );
 

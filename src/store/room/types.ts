@@ -1,4 +1,5 @@
-import { Room, Session, Participant, Observer } from '../../types';
+import { Session, Participant, Observer } from '../../types';
+import { Room } from '../../generated/graphql';
 
 export const SET_ROOM = 'room/setRoom' as const;
 export const JOIN_ROOM = 'room/joinRoom' as const;

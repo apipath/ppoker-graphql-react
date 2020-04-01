@@ -1,0 +1,14 @@
+mutation CreateRoom(
+  $roomInput: CreateRoomInput!
+  $pointsInput: [PointInput!]!
+) {
+  createRoom(roomInput: $roomInput, pointsInput: $pointsInput) {
+    id
+    name
+    description
+    points {
+      label
+      description
+    }
+  }
+}

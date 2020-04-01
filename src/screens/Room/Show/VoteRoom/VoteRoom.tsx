@@ -7,13 +7,14 @@ import Button from '../../../../components/Button';
 import Participants from '../Participants';
 import { useTypedSelector } from '../../../../store';
 import { Redirect } from 'react-router-dom';
+import { Room } from '../../../../generated/graphql';
 
 type Props = {
   showVotes: boolean;
+  room: Room;
 };
 
-const VoteRoom: React.FC<Props> = ({ showVotes }) => {
-  const room = useTypedSelector((state) => state.room);
+const VoteRoom: React.FC<Props> = ({ showVotes, room }) => {
   const observersById = useTypedSelector((state) => state.observers);
   const session = useTypedSelector((state) => state.session);
   const participantsById = useTypedSelector((state) => state.participants);

@@ -8,3 +8,4 @@ export { default as LogoSmallIcon } from './LogoSmallIcon';
 export { default as LogoBigIcon } from './LogoBigIcon';
 export { default as GithubIcon } from './GithubIcon';
 export { default as MenuIcon } from './MenuIcon';
+export { default as BugFix } from './BugFix';

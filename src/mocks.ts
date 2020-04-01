@@ -1,21 +1,22 @@
-import { Room, Observer } from './types';
+import { Observer } from './types';
+import { Room } from './generated/graphql';
 
 export const mockedRoom: Room = {
   id: '12345',
   name: 'Impact',
   points: [
-    { label: '0', description: '#its-free', order: 1 },
-    { label: '0.5', description: '#switch-it-on', order: 2 },
-    { label: '1', description: '#eating-cookie', order: 3 },
-    { label: '2', description: '#push-up', order: 4 },
-    { label: '3', description: '#mix-bake-eat', order: 5 },
-    { label: '5', description: '#its-onto-something', order: 6 },
-    { label: '8', description: '#think-code-repeat', order: 7 },
-    { label: '13', description: '#5-coffees', order: 8 },
-    { label: '20', description: '#100-push-ups', order: 9 },
-    { label: '40', description: '#40-days-40-nights', order: 10 },
-    { label: '100', description: '#fighting-aliens', order: 11 },
-    { label: '?', description: '#god-knows', order: 12 },
+    { label: '0', description: '#its-free' },
+    { label: '0.5', description: '#switch-it-on' },
+    { label: '1', description: '#eating-cookie' },
+    { label: '2', description: '#push-up' },
+    { label: '3', description: '#mix-bake-eat' },
+    { label: '5', description: '#its-onto-something' },
+    { label: '8', description: '#think-code-repeat' },
+    { label: '13', description: '#5-coffees' },
+    { label: '20', description: '#100-push-ups' },
+    { label: '40', description: '#40-days-40-nights' },
+    { label: '100', description: '#fighting-aliens' },
+    { label: '?', description: '#god-knows' },
   ],
 };
 
