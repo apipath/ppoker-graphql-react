@@ -26,6 +26,25 @@ export type MutationCreateRoomArgs = {
   pointsInput: Array<PointInput>;
 };
 
+export type Observer = {
+  __typename?: 'Observer';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type OnlineRoom = {
+  __typename?: 'OnlineRoom';
+  participants: Array<Participant>;
+  observers: Array<Observer>;
+};
+
+export type Participant = {
+  __typename?: 'Participant';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  votedPoint?: Maybe<Point>;
+};
+
 export type Point = {
   __typename?: 'Point';
   label: Scalars['String'];
@@ -46,12 +65,28 @@ export type QueryRoomArgs = {
   id: Scalars['ID'];
 };
 
+export enum Role {
+  Participant = 'PARTICIPANT',
+  Observer = 'OBSERVER',
+}
+
 export type Room = {
   __typename?: 'Room';
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   points: Array<Point>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  joinRoom?: Maybe<OnlineRoom>;
+};
+
+export type SubscriptionJoinRoomArgs = {
+  roomId: Scalars['ID'];
+  username: Scalars['String'];
+  role: Role;
 };
 
 export type CreateRoomMutationVariables = {
@@ -66,6 +101,29 @@ export type CreateRoomMutation = { __typename?: 'Mutation' } & {
           { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
         >;
       }
+  >;
+};
+
+export type JoinRoomSubscriptionVariables = {
+  roomId: Scalars['ID'];
+  username: Scalars['String'];
+  role: Role;
+};
+
+export type JoinRoomSubscription = { __typename?: 'Subscription' } & {
+  joinRoom?: Maybe<
+    { __typename?: 'OnlineRoom' } & {
+      participants: Array<
+        { __typename?: 'Participant' } & Pick<Participant, 'id' | 'name'> & {
+            votedPoint?: Maybe<
+              { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
+            >;
+          }
+      >;
+      observers: Array<
+        { __typename?: 'Observer' } & Pick<Observer, 'id' | 'name'>
+      >;
+    }
   >;
 };
 
@@ -142,6 +200,60 @@ export type CreateRoomMutationResult = ApolloReactCommon.MutationResult<
 export type CreateRoomMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateRoomMutation,
   CreateRoomMutationVariables
+>;
+export const JoinRoomDocument = gql`
+  subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
+    joinRoom(roomId: $roomId, username: $username, role: $role) {
+      participants {
+        id
+        name
+        votedPoint {
+          label
+          description
+        }
+      }
+      observers {
+        id
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useJoinRoomSubscription__
+ *
+ * To run a query within a React component, call `useJoinRoomSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useJoinRoomSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinRoomSubscription({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *      username: // value for 'username'
+ *      role: // value for 'role'
+ *   },
+ * });
+ */
+export function useJoinRoomSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    JoinRoomSubscription,
+    JoinRoomSubscriptionVariables
+  >,
+) {
+  return ApolloReactHooks.useSubscription<
+    JoinRoomSubscription,
+    JoinRoomSubscriptionVariables
+  >(JoinRoomDocument, baseOptions);
+}
+export type JoinRoomSubscriptionHookResult = ReturnType<
+  typeof useJoinRoomSubscription
+>;
+export type JoinRoomSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  JoinRoomSubscription
 >;
 export const GetRoomDocument = gql`
   query GetRoom($id: ID!) {

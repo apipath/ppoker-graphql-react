@@ -4,9 +4,8 @@ import Button from '../../../../components/Button';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
-import { Session, Role, Observer, Participant } from '../../../../types';
-import { Room } from '../../../../generated/graphql';
-import { mockedParticipants, mockedObservers } from '../../../../mocks';
+import { Session, Observer, Participant } from '../../../../types';
+import { Room, Role } from '../../../../generated/graphql';
 
 const STORAGE_KEY = '_join_room' as const;
 type StorageState = {
@@ -15,8 +14,8 @@ type StorageState = {
 };
 
 const ROLES: Array<{ label: string; value: Role }> = [
-  { label: 'Participant', value: 'participant' },
-  { label: 'Observer', value: 'observer' },
+  { label: 'Participant', value: Role.Participant },
+  { label: 'Observer', value: Role.Observer },
 ];
 
 type Props = {
@@ -56,18 +55,13 @@ const JoinRoom: React.FC<Props> = ({ onLogin, room }) => {
 
     setLoading(true);
 
-    setTimeout(() => {
-      // TODO: use BE response
-      const session = { id: username, username, role };
-      const participants = [...mockedParticipants, { ...session }];
-      onLogin({
-        session,
-        participants,
-        observers: [...mockedObservers],
-        room,
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ username, role }));
-    }, 2000);
+    const session: Session = { username, role };
+    onLogin({
+      session,
+      participants: [],
+      observers: [],
+      room,
+    });
   };
   return (
     <div className="flex justify-center">

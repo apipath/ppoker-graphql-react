@@ -6,34 +6,49 @@ import Results from '../Results';
 import Button from '../../../../components/Button';
 import Participants from '../Participants';
 import { useTypedSelector } from '../../../../store';
-import { Redirect } from 'react-router-dom';
-import { Room } from '../../../../generated/graphql';
+import {
+  Room,
+  Role,
+  useJoinRoomSubscription,
+} from '../../../../generated/graphql';
+import { Session } from '../../../../types';
 
 type Props = {
   showVotes: boolean;
   room: Room;
+  session: Session;
 };
 
-const VoteRoom: React.FC<Props> = ({ showVotes, room }) => {
+const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
   const observersById = useTypedSelector((state) => state.observers);
-  const session = useTypedSelector((state) => state.session);
   const participantsById = useTypedSelector((state) => state.participants);
+  console.log('RENDER');
+  const { data, loading, error } = useJoinRoomSubscription({
+    variables: {
+      roomId: room.id,
+      username: session.username,
+      role: session.role,
+    },
+    shouldResubscribe: true,
+  });
 
-  if (!session || !room) {
-    return <Redirect to="/" />;
-  }
+  console.log('joinRoom', data?.joinRoom);
+
+  if (loading || !data || !data.joinRoom) return <div>Loading...</div>;
+
+  if (error) throw error; // Will be catched by error boundary
 
   const participants = Object.values(participantsById);
   const observers = Object.values(observersById);
   const participatingCurrentUser = participants.find(
-    ({ id }) => id === session.id,
+    ({ id }) => id === 'TODO', // TODO: implement this
   );
   const selectedPoint = participatingCurrentUser
     ? participatingCurrentUser.voteLabel ?? ''
     : '';
 
   const handleClick = (...args: any) => {
-    if (!session || session.role === 'observer') return;
+    if (!session || session.role === Role.Observer) return;
     console.log('CLICKED', args);
   };
 

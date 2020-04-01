@@ -1,0 +1,16 @@
+subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
+  joinRoom(roomId: $roomId, username: $username, role: $role) {
+    participants {
+      id
+      name
+      votedPoint {
+        label
+        description
+      }
+    }
+    observers {
+      id
+      name
+    }
+  }
+}

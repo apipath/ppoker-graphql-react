@@ -1,22 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { Provider } from 'react-redux';
 import { ToastProvider } from 'react-toast-notifications';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
 
 import './styles.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store';
+import buildApolloClient from './apollo';
 
 const store = configureStore();
 
-const client = new ApolloClient({
-  uri: 'http://localhost:8080/query',
-});
+const HTTP_GRAPHQL_URI = 'http://localhost:8080/query';
+const WS_GRAPHQL_URI = 'ws://localhost:8080/query';
+const client = buildApolloClient(HTTP_GRAPHQL_URI, WS_GRAPHQL_URI);
 
 const render = (AppComponent: typeof App) =>
   ReactDOM.render(

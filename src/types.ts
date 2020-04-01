@@ -1,7 +1,6 @@
-export type Role = 'participant' | 'observer';
+import { Role } from './generated/graphql';
 
 export type Session = {
-  id: string;
   username: string;
   role: Role;
 };

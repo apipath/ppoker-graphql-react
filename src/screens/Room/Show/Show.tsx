@@ -56,7 +56,7 @@ function RoomShow() {
       </h1>
       <div>
         {session ? (
-          <VoteRoom room={room} showVotes={showVotes} />
+          <VoteRoom session={session} room={room} showVotes={showVotes} />
         ) : (
           <JoinRoom room={room} onLogin={handleLogin} />
         )}
