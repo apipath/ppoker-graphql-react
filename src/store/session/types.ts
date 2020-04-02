@@ -1,4 +1,4 @@
-import { Session } from '../../types';
+import { Session } from '../../generated/graphql';
 
 export const SET_SESSION = 'session/setSession' as const;
 

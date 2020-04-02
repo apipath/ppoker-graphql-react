@@ -11,15 +11,27 @@ export type Scalars = {
   Float: number;
 };
 
+export type ClearVotesInput = {
+  roomId: Scalars['ID'];
+};
+
 export type CreateRoomInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+};
+
+export type CreateSessionInput = {
+  userName: Scalars['String'];
+  role: Role;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createRoom?: Maybe<Room>;
   vote: Scalars['Boolean'];
+  showVotes: Scalars['Boolean'];
+  clearVotes: Scalars['Boolean'];
+  createSession: Session;
 };
 
 export type MutationCreateRoomArgs = {
@@ -29,6 +41,18 @@ export type MutationCreateRoomArgs = {
 
 export type MutationVoteArgs = {
   voteInput: VoteInput;
+};
+
+export type MutationShowVotesArgs = {
+  showVotesInput: ShowVotesInput;
+};
+
+export type MutationClearVotesArgs = {
+  clearVotesInput: ClearVotesInput;
+};
+
+export type MutationCreateSessionArgs = {
+  createSessionInput?: Maybe<CreateSessionInput>;
 };
 
 export type Observer = {
@@ -83,6 +107,17 @@ export type Room = {
   points: Array<Point>;
 };
 
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['ID'];
+  userName: Scalars['String'];
+  role: Role;
+};
+
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   joinRoom?: Maybe<OnlineRoom>;
@@ -90,7 +125,8 @@ export type Subscription = {
 
 export type SubscriptionJoinRoomArgs = {
   roomId: Scalars['ID'];
-  username: Scalars['String'];
+  userId: Scalars['ID'];
+  userName: Scalars['String'];
   role: Role;
 };
 
@@ -115,6 +151,17 @@ export type CreateRoomMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type CreateSessionMutationVariables = {
+  createSessionInput: CreateSessionInput;
+};
+
+export type CreateSessionMutation = { __typename?: 'Mutation' } & {
+  createSession: { __typename?: 'Session' } & Pick<
+    Session,
+    'id' | 'userName' | 'role'
+  >;
+};
+
 export type VoteMutationVariables = {
   voteInput: VoteInput;
 };
@@ -123,7 +170,8 @@ export type VoteMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'vote'>;
 
 export type JoinRoomSubscriptionVariables = {
   roomId: Scalars['ID'];
-  username: Scalars['String'];
+  userId: Scalars['ID'];
+  userName: Scalars['String'];
   role: Role;
 };
 
@@ -218,6 +266,58 @@ export type CreateRoomMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateRoomMutation,
   CreateRoomMutationVariables
 >;
+export const CreateSessionDocument = gql`
+  mutation CreateSession($createSessionInput: CreateSessionInput!) {
+    createSession(createSessionInput: $createSessionInput) {
+      id
+      userName
+      role
+    }
+  }
+`;
+export type CreateSessionMutationFn = ApolloReactCommon.MutationFunction<
+  CreateSessionMutation,
+  CreateSessionMutationVariables
+>;
+
+/**
+ * __useCreateSessionMutation__
+ *
+ * To run a mutation, you first call `useCreateSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSessionMutation, { data, loading, error }] = useCreateSessionMutation({
+ *   variables: {
+ *      createSessionInput: // value for 'createSessionInput'
+ *   },
+ * });
+ */
+export function useCreateSessionMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateSessionMutation,
+    CreateSessionMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    CreateSessionMutation,
+    CreateSessionMutationVariables
+  >(CreateSessionDocument, baseOptions);
+}
+export type CreateSessionMutationHookResult = ReturnType<
+  typeof useCreateSessionMutation
+>;
+export type CreateSessionMutationResult = ApolloReactCommon.MutationResult<
+  CreateSessionMutation
+>;
+export type CreateSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateSessionMutation,
+  CreateSessionMutationVariables
+>;
 export const VoteDocument = gql`
   mutation Vote($voteInput: VoteInput!) {
     vote(voteInput: $voteInput)
@@ -263,8 +363,18 @@ export type VoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   VoteMutationVariables
 >;
 export const JoinRoomDocument = gql`
-  subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
-    joinRoom(roomId: $roomId, username: $username, role: $role) {
+  subscription JoinRoom(
+    $roomId: ID!
+    $userId: ID!
+    $userName: String!
+    $role: Role!
+  ) {
+    joinRoom(
+      roomId: $roomId
+      userId: $userId
+      userName: $userName
+      role: $role
+    ) {
       participants {
         id
         name
@@ -294,7 +404,8 @@ export const JoinRoomDocument = gql`
  * const { data, loading, error } = useJoinRoomSubscription({
  *   variables: {
  *      roomId: // value for 'roomId'
- *      username: // value for 'username'
+ *      userId: // value for 'userId'
+ *      userName: // value for 'userName'
  *      role: // value for 'role'
  *   },
  * });

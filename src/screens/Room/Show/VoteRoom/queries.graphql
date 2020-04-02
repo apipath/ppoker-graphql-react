@@ -2,8 +2,13 @@ mutation Vote($voteInput: VoteInput!) {
   vote(voteInput: $voteInput)
 }
 
-subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
-  joinRoom(roomId: $roomId, username: $username, role: $role) {
+subscription JoinRoom(
+  $roomId: ID!
+  $userId: ID!
+  $userName: String!
+  $role: Role!
+) {
+  joinRoom(roomId: $roomId, userId: $userId, userName: $userName, role: $role) {
     participants {
       id
       name

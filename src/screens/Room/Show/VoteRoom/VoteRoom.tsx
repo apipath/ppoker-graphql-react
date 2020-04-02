@@ -10,8 +10,8 @@ import {
   useJoinRoomSubscription,
   useVoteMutation,
   Point,
+  Session,
 } from '../../../../generated/graphql';
-import { Session } from '../../../../types';
 
 type Props = {
   showVotes: boolean;
@@ -24,7 +24,8 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
     {
       variables: {
         roomId: room.id,
-        username: session.username,
+        userId: session.id,
+        userName: session.userName,
         role: session.role,
       },
       shouldResubscribe: true,
@@ -47,10 +48,9 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
   if (error) throw error; // Will be catched by error boundary
 
   const { participants, observers } = data.joinRoom;
-  const participatingCurrentUser =
-    participants.find(
-      ({ id }) => id === 'TODO', // TODO: implement this
-    ) || participants[0];
+  const participatingCurrentUser = participants.find(
+    ({ id }) => id === session.id,
+  );
   const selectedPoint = participatingCurrentUser
     ? participatingCurrentUser.votedPoint?.label ?? ''
     : '';

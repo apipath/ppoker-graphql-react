@@ -1,6 +1,6 @@
 import { RootAction } from 'typesafe-actions';
 
-import { Session } from '../../types';
+import { Session } from '../../generated/graphql';
 import { SET_SESSION } from './types';
 
 type SessionState = Readonly<Session | null>;

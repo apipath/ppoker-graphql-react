@@ -4,14 +4,15 @@ import Button from '../../../../components/Button';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
-import { Session } from '../../../../types';
-import { Room, Role } from '../../../../generated/graphql';
+import {
+  Room,
+  Role,
+  Session,
+  useCreateSessionMutation,
+} from '../../../../generated/graphql';
 
 const STORAGE_KEY = '_join_room' as const;
-type StorageState = {
-  username: string;
-  role: Role;
-};
+type StorageState = Pick<Session, 'userName' | 'role'>;
 
 const ROLES: Array<{ label: string; value: Role }> = [
   { label: 'Participant', value: Role.Participant },
@@ -29,37 +30,49 @@ const getStateFromStorage = (): StorageState => {
     return JSON.parse(state) as StorageState;
   }
 
-  return { username: '', role: ROLES[0].value };
+  return { userName: '', role: ROLES[0].value };
 };
 
 const JoinRoom: React.FC<Props> = ({ onLogin }) => {
   const storageState = getStateFromStorage();
-  const [username, setUsername] = useState(storageState.username);
+  const [userName, setUserName] = useState(storageState.userName);
   const [role, setRole] = useState(storageState.role);
-  const [loading, setLoading] = useState(false);
-  const disabled = username.length === 0;
+  const disabled = userName.length === 0;
+  const [createSession, { loading }] = useCreateSessionMutation();
+
   const usernameError =
-    username.length === 0 ? `Please fill out this field.` : undefined;
+    userName.length === 0 ? `Please fill out this field.` : undefined;
+
   const handleSubmit = () => {
     if (disabled) return;
 
-    setLoading(true);
+    createSession({ variables: { createSessionInput: { role, userName } } })
+      .then((response) => {
+        if (response.errors && response.errors.length > 0) {
+          // TODO: better error handling
+          throw response.errors; // let error boundary take care of it
+        }
 
-    const session: Session = { username, role };
-    onLogin({
-      session,
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+        if (!response.data) throw new Error('No data');
+
+        const session = response.data.createSession;
+        onLogin({ session });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+      })
+      .catch((err) => {
+        throw err; // Let error boundary take care of it
+      });
   };
+
   return (
     <div className="flex justify-center">
-      <form className="flex flex-col w-full max-w-lg">
-        <div onSubmit={handleSubmit} className="flex flex-col md:flex-row">
+      <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-lg">
+        <div className="flex flex-col md:flex-row">
           <div className="w-full mr-0 md:mr-2 md:w-1/2 md:mb-0">
             <Input
               id="username"
-              value={username}
-              onChange={setUsername}
+              value={userName}
+              onChange={setUserName}
               error={usernameError}
             />
           </div>

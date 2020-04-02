@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Session } from '../../../types';
 import { useDispatch } from 'react-redux';
-import { useGetRoomQuery } from '../../../generated/graphql';
+import { useGetRoomQuery, Session } from '../../../generated/graphql';
 import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
 import { setSession } from '../../../store/session/actions';
 
