@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import session from './session/reducer';
+import user from './user/reducer';
 
-export const createRootReducer = () => combineReducers({ session });
+export const createRootReducer = () => combineReducers({ user });
 
 export default createRootReducer;

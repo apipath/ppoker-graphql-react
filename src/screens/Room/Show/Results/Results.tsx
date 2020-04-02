@@ -4,9 +4,12 @@ import { Participant } from '../../../../generated/graphql';
 
 type Props = {
   participants: Array<Participant>;
+  showVotes: boolean;
 };
 
-const Results: React.FC<Props> = ({ participants }) => {
+const Results: React.FC<Props> = ({ participants, showVotes }) => {
+  if (!showVotes) return null;
+
   const statistics = participants.reduce(
     (obj: { [key: string]: number }, participant) => {
       if (participant.votedPoint == null) return obj;
@@ -22,11 +25,15 @@ const Results: React.FC<Props> = ({ participants }) => {
     ([, a], [, b]) => b - a,
   );
 
-  const consensus = sortedStatistics.length === 1;
-  if (consensus) {
+  const [mostVotedPointLabel, mostVotedPointVotes] = sortedStatistics[0] || [];
+  const consensus =
+    sortedStatistics.length === 1 &&
+    mostVotedPointVotes === participants.length;
+
+  if (showVotes && consensus) {
     return (
       <div className="flex flex-col mb-6 text-xl ">
-        <span className="text-4xl text-center">8</span>
+        <span className="text-4xl text-center">{mostVotedPointLabel}</span>
         <div className="flex justify-center">
           <span className="px-4 py-1 text-white uppercase bg-green-400 rounded-full">
             Consensus

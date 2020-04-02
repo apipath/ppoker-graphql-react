@@ -1,7 +1,7 @@
-mutation CreateSession($createSessionInput: CreateSessionInput!) {
-  createSession(createSessionInput: $createSessionInput) {
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
     id
-    userName
+    name
     role
   }
 }

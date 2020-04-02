@@ -1,5 +1,5 @@
-import * as session from './session/actions';
+import * as user from './user/actions';
 
 export default {
-  session,
+  user,
 };

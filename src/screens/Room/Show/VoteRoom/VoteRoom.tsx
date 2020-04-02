@@ -11,24 +11,24 @@ import {
   useJoinRoomSubscription,
   useVoteMutation,
   Point,
-  Session,
+  User,
 } from '../../../../generated/graphql';
 
 type Props = {
   showVotes: boolean;
   room: Room;
-  session: Session;
+  user: User;
 };
 
-const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
+const VoteRoom: React.FC<Props> = ({ showVotes, room, user }) => {
   const { addToast } = useToasts();
   const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
     {
       variables: {
         roomId: room.id,
-        userId: session.id,
-        userName: session.userName,
-        role: session.role,
+        userId: user.id,
+        userName: user.name,
+        role: user.role,
       },
       shouldResubscribe: true,
     },
@@ -43,14 +43,14 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
 
   const { participants, observers } = data.joinRoom;
   const participatingCurrentUser = participants.find(
-    ({ id }) => id === session.id,
+    ({ id }) => id === user.id,
   );
   const selectedPoint = participatingCurrentUser
     ? participatingCurrentUser.votedPoint?.label ?? ''
     : '';
 
   const handleClick = (point: Point) => {
-    if (!session || !participatingCurrentUser) return;
+    if (!user || !participatingCurrentUser) return;
     voteMutation({
       variables: {
         voteInput: {
@@ -103,6 +103,7 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
       <div className="flex-grow lg:mt-0">
         <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
           <Participants
+            user={user}
             participants={participants}
             observers={observers}
             showVotes={showVotes}
@@ -112,7 +113,7 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
               <Button>Show Votes</Button>
               <Button>Clear Votes</Button>
             </div>
-            <Results participants={participants} />
+            <Results participants={participants} showVotes={showVotes} />
           </div>
         </div>
       </div>

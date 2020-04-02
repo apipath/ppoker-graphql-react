@@ -5,9 +5,9 @@ import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { useDispatch } from 'react-redux';
-import { useGetRoomQuery, Session } from '../../../generated/graphql';
+import { useGetRoomQuery, User } from '../../../generated/graphql';
 import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
-import { setSession } from '../../../store/session/actions';
+import { setUser } from '../../../store/user/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
@@ -15,11 +15,11 @@ function RoomShow() {
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
 
   const [showVotes] = useState(false);
-  const session = useTypedSelector((state) => state.session);
+  const user = useTypedSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const handleLogin = ({ session }: { session: Session }) => {
-    dispatch(setSession(session));
+  const handleLogin = ({ user }: { user: User }) => {
+    dispatch(setUser(user));
   };
 
   if (error) {
@@ -44,8 +44,8 @@ function RoomShow() {
         <span className="text-gray-700">#{room.id}</span>
       </h1>
       <div>
-        {session ? (
-          <VoteRoom session={session} room={room} showVotes={showVotes} />
+        {user ? (
+          <VoteRoom user={user} room={room} showVotes={showVotes} />
         ) : (
           <JoinRoom room={room} onLogin={handleLogin} />
         )}

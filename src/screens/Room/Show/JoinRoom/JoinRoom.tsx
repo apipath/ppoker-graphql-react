@@ -7,12 +7,12 @@ import Input from '../../../../components/Input';
 import {
   Room,
   Role,
-  Session,
-  useCreateSessionMutation,
+  User,
+  useCreateUserMutation,
 } from '../../../../generated/graphql';
 
-const STORAGE_KEY = '_join_room' as const;
-type StorageState = Pick<Session, 'userName' | 'role'>;
+const STORAGE_KEY = '_user_' as const;
+type StorageState = Pick<User, 'name' | 'role'>;
 
 const ROLES: Array<{ label: string; value: Role }> = [
   { label: 'Participant', value: Role.Participant },
@@ -21,7 +21,7 @@ const ROLES: Array<{ label: string; value: Role }> = [
 
 type Props = {
   room: Room;
-  onLogin: ({ session }: { session: Session }) => void;
+  onLogin: ({ user }: { user: User }) => void;
 };
 
 const getStateFromStorage = (): StorageState => {
@@ -30,23 +30,23 @@ const getStateFromStorage = (): StorageState => {
     return JSON.parse(state) as StorageState;
   }
 
-  return { userName: '', role: ROLES[0].value };
+  return { name: '', role: ROLES[0].value };
 };
 
 const JoinRoom: React.FC<Props> = ({ onLogin }) => {
   const storageState = getStateFromStorage();
-  const [userName, setUserName] = useState(storageState.userName);
+  const [name, setName] = useState(storageState.name);
   const [role, setRole] = useState(storageState.role);
-  const disabled = userName.length === 0;
-  const [createSession, { loading }] = useCreateSessionMutation();
+  const disabled = name.length === 0;
+  const [createUser, { loading }] = useCreateUserMutation();
 
   const usernameError =
-    userName.length === 0 ? `Please fill out this field.` : undefined;
+    name.length === 0 ? `Please fill out this field.` : undefined;
 
   const handleSubmit = () => {
     if (disabled) return;
 
-    createSession({ variables: { createSessionInput: { role, userName } } })
+    createUser({ variables: { createUserInput: { role, userName: name } } })
       .then((response) => {
         if (response.errors && response.errors.length > 0) {
           // TODO: better error handling
@@ -55,9 +55,9 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
 
         if (!response.data) throw new Error('No data');
 
-        const session = response.data.createSession;
-        onLogin({ session });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+        const user = response.data.createUser;
+        onLogin({ user });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
       })
       .catch((err) => {
         throw err; // Let error boundary take care of it
@@ -71,8 +71,8 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
           <div className="w-full mr-0 md:mr-2 md:w-1/2 md:mb-0">
             <Input
               id="username"
-              value={userName}
-              onChange={setUserName}
+              value={name}
+              onChange={setName}
               error={usernameError}
             />
           </div>

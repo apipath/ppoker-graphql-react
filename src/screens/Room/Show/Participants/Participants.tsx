@@ -1,25 +1,27 @@
 import React from 'react';
+import cn from 'classnames';
 
 import { ClockIcon, CheckIcon } from '../../../../components/Icons';
-import { Participant, Observer } from '../../../../generated/graphql';
+import { Participant, Observer, User } from '../../../../generated/graphql';
 
 type Props = {
   participants: Array<Participant>;
   observers: Array<Observer>;
   showVotes: boolean;
+  user: User;
 };
 
 const Participants: React.FC<Props> = ({
   participants,
   observers,
   showVotes,
+  user,
 }) => {
   // TODO: only display current user vote when showVotes is false
-  const session = { id: null };
 
   const getVoteOrIcon = (participant: Participant) => {
-    if (participant.id === session?.id) {
-      return participant.votedPoint;
+    if (participant.id === user.id) {
+      return participant.votedPoint?.label;
     }
 
     return showVotes ? (
@@ -38,7 +40,13 @@ const Participants: React.FC<Props> = ({
       <ul className="p-4">
         {participants.map((participant) => (
           <li key={participant.id} className="flex justify-between">
-            <div>{participant.name}</div>
+            <div
+              className={cn({
+                [`font-semibold`]: participant.id === user.id,
+              })}
+            >
+              {participant.name}
+            </div>
             <div>{getVoteOrIcon(participant)}</div>
           </li>
         ))}

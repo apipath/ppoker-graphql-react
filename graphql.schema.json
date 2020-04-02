@@ -334,15 +334,15 @@
             "deprecationReason": null
           },
           {
-            "name": "createSession",
+            "name": "createUser",
             "description": "",
             "args": [
               {
-                "name": "createSessionInput",
+                "name": "createUserInput",
                 "description": "",
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "CreateSessionInput",
+                  "name": "CreateUserInput",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -353,7 +353,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Session",
+                "name": "User",
                 "ofType": null
               }
             },
@@ -551,7 +551,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateSessionInput",
+        "name": "CreateUserInput",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -613,7 +613,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Session",
+        "name": "User",
         "description": "",
         "fields": [
           {
@@ -633,7 +633,7 @@
             "deprecationReason": null
           },
           {
-            "name": "userName",
+            "name": "name",
             "description": "",
             "args": [],
             "type": {
@@ -755,6 +755,22 @@
         "name": "OnlineRoom",
         "description": "",
         "fields": [
+          {
+            "name": "showVotes",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "participants",
             "description": "",
