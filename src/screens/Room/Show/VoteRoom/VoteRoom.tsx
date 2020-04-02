@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import { useToasts } from 'react-toast-notifications';
 
 import PointCard from '../PointCard';
 import Results from '../Results';
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
+  const { addToast } = useToasts();
   const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
     {
       variables: {
@@ -32,15 +34,7 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
     },
   );
 
-  const [voteMutation, { loading: voteLoading }] = useVoteMutation({
-    onCompleted: (data) => {
-      console.log('VOTED', data);
-    },
-    onError: (err) => {
-      // Let react boundaries take care of this
-      throw err;
-    },
-  });
+  const [voteMutation, { loading: voteLoading }] = useVoteMutation();
 
   if (subscriptionLoading || !data || !data.joinRoom)
     return <div>Loading...</div>;
@@ -65,7 +59,27 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
           pointLabel: point.label,
         },
       },
-    });
+    })
+      .then((response) => {
+        if (response.errors && response.errors.length > 0) {
+          // TODO: handle errors gracefully
+          throw response.errors;
+        }
+
+        if (!response.data) {
+          throw new Error('Unexpected error'); // Let error boundary take care of it
+        }
+
+        if (!response.data.vote) {
+          addToast(`Could not vote "${point.label}", unexpected error`, {
+            autoDismiss: true,
+            appearance: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        throw err; // Let error boundary to take care of it
+      });
   };
 
   return (
