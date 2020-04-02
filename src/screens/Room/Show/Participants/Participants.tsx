@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Participant, Observer } from '../../../../types';
 import { ClockIcon, CheckIcon } from '../../../../components/Icons';
+import { Participant, Observer } from '../../../../generated/graphql';
 
 type Props = {
   participants: Array<Participant>;
@@ -19,12 +19,12 @@ const Participants: React.FC<Props> = ({
 
   const getVoteOrIcon = (participant: Participant) => {
     if (participant.id === session?.id) {
-      return participant.voteLabel;
+      return participant.votedPoint;
     }
 
     return showVotes ? (
-      participant.voteLabel
-    ) : participant.voteLabel ? (
+      participant.votedPoint
+    ) : participant.votedPoint ? (
       <CheckIcon className="w-6 text-green-400" />
     ) : (
       <ClockIcon className="w-6 text-orange-500" />
@@ -38,7 +38,7 @@ const Participants: React.FC<Props> = ({
       <ul className="p-4">
         {participants.map((participant) => (
           <li key={participant.id} className="flex justify-between">
-            <div>{participant.username}</div>
+            <div>{participant.name}</div>
             <div>{getVoteOrIcon(participant)}</div>
           </li>
         ))}
@@ -48,7 +48,7 @@ const Participants: React.FC<Props> = ({
       </h3>
       <ul className="p-4">
         {observers.map((observer) => (
-          <li key={observer.id}>{observer.username}</li>
+          <li key={observer.id}>{observer.name}</li>
         ))}
       </ul>
     </div>

@@ -5,11 +5,11 @@ import PointCard from '../PointCard';
 import Results from '../Results';
 import Button from '../../../../components/Button';
 import Participants from '../Participants';
-import { useTypedSelector } from '../../../../store';
 import {
   Room,
-  Role,
   useJoinRoomSubscription,
+  useVoteMutation,
+  Point,
 } from '../../../../generated/graphql';
 import { Session } from '../../../../types';
 
@@ -20,36 +20,52 @@ type Props = {
 };
 
 const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
-  const observersById = useTypedSelector((state) => state.observers);
-  const participantsById = useTypedSelector((state) => state.participants);
-  console.log('RENDER');
-  const { data, loading, error } = useJoinRoomSubscription({
-    variables: {
-      roomId: room.id,
-      username: session.username,
-      role: session.role,
+  const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
+    {
+      variables: {
+        roomId: room.id,
+        username: session.username,
+        role: session.role,
+      },
+      shouldResubscribe: true,
     },
-    shouldResubscribe: true,
+  );
+
+  const [voteMutation, { loading: voteLoading }] = useVoteMutation({
+    onCompleted: (data) => {
+      console.log('VOTED', data);
+    },
+    onError: (err) => {
+      // Let react boundaries take care of this
+      throw err;
+    },
   });
 
-  console.log('joinRoom', data?.joinRoom);
-
-  if (loading || !data || !data.joinRoom) return <div>Loading...</div>;
+  if (subscriptionLoading || !data || !data.joinRoom)
+    return <div>Loading...</div>;
 
   if (error) throw error; // Will be catched by error boundary
 
-  const participants = Object.values(participantsById);
-  const observers = Object.values(observersById);
-  const participatingCurrentUser = participants.find(
-    ({ id }) => id === 'TODO', // TODO: implement this
-  );
+  const { participants, observers } = data.joinRoom;
+  const participatingCurrentUser =
+    participants.find(
+      ({ id }) => id === 'TODO', // TODO: implement this
+    ) || participants[0];
   const selectedPoint = participatingCurrentUser
-    ? participatingCurrentUser.voteLabel ?? ''
+    ? participatingCurrentUser.votedPoint?.label ?? ''
     : '';
 
-  const handleClick = (...args: any) => {
-    if (!session || session.role === Role.Observer) return;
-    console.log('CLICKED', args);
+  const handleClick = (point: Point) => {
+    if (!session || !participatingCurrentUser) return;
+    voteMutation({
+      variables: {
+        voteInput: {
+          roomId: room.id,
+          userId: participatingCurrentUser.id,
+          pointLabel: point.label,
+        },
+      },
+    });
   };
 
   return (
@@ -61,7 +77,11 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, session }) => {
             className="flex justify-center"
             key={point.label}
           >
-            <PointCard point={point} selected={point.label === selectedPoint} />
+            <PointCard
+              point={point}
+              disabled={voteLoading}
+              selected={point.label === selectedPoint}
+            />
           </li>
         ))}
       </ul>

@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Observer, Session, Participant } from '../../../types';
+import { Session } from '../../../types';
 import { useDispatch } from 'react-redux';
-import { joinRoom } from '../../../store/room/actions';
-import { useGetRoomQuery, Room } from '../../../generated/graphql';
+import { useGetRoomQuery } from '../../../generated/graphql';
 import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
+import { setSession } from '../../../store/session/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
@@ -19,18 +19,8 @@ function RoomShow() {
   const session = useTypedSelector((state) => state.session);
   const dispatch = useDispatch();
 
-  const handleLogin = ({
-    session,
-    participants,
-    observers,
-    room,
-  }: {
-    session: Session;
-    participants: Array<Participant>;
-    observers: Array<Observer>;
-    room: Room;
-  }) => {
-    dispatch(joinRoom({ session, room, observers, participants }));
+  const handleLogin = ({ session }: { session: Session }) => {
+    dispatch(setSession(session));
   };
 
   if (error) {

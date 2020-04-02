@@ -4,7 +4,7 @@ import Button from '../../../../components/Button';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
-import { Session, Observer, Participant } from '../../../../types';
+import { Session } from '../../../../types';
 import { Room, Role } from '../../../../generated/graphql';
 
 const STORAGE_KEY = '_join_room' as const;
@@ -20,17 +20,7 @@ const ROLES: Array<{ label: string; value: Role }> = [
 
 type Props = {
   room: Room;
-  onLogin: ({
-    session,
-    participants,
-    observers,
-    room,
-  }: {
-    session: Session;
-    participants: Array<Participant>;
-    observers: Array<Observer>;
-    room: Room;
-  }) => void;
+  onLogin: ({ session }: { session: Session }) => void;
 };
 
 const getStateFromStorage = (): StorageState => {
@@ -42,7 +32,7 @@ const getStateFromStorage = (): StorageState => {
   return { username: '', role: ROLES[0].value };
 };
 
-const JoinRoom: React.FC<Props> = ({ onLogin, room }) => {
+const JoinRoom: React.FC<Props> = ({ onLogin }) => {
   const storageState = getStateFromStorage();
   const [username, setUsername] = useState(storageState.username);
   const [role, setRole] = useState(storageState.role);
@@ -58,10 +48,8 @@ const JoinRoom: React.FC<Props> = ({ onLogin, room }) => {
     const session: Session = { username, role };
     onLogin({
       session,
-      participants: [],
-      observers: [],
-      room,
     });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
   };
   return (
     <div className="flex justify-center">

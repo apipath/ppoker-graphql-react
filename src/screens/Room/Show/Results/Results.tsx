@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Participant } from '../../../../types';
+import { Participant } from '../../../../generated/graphql';
 
 type Props = {
   participants: Array<Participant>;
@@ -9,9 +9,9 @@ type Props = {
 const Results: React.FC<Props> = ({ participants }) => {
   const statistics = participants.reduce(
     (obj: { [key: string]: number }, participant) => {
-      if (participant.voteLabel == null) return obj;
+      if (participant.votedPoint == null) return obj;
 
-      const label = participant.voteLabel;
+      const { label } = participant.votedPoint;
       obj[label] = obj[label] || 0;
       obj[label]++;
       return obj;

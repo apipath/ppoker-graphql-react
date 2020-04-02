@@ -6,9 +6,11 @@ import { Point } from '../../../../generated/graphql';
 type Props = {
   point: Point;
   selected?: boolean;
+  disabled: boolean;
 };
 
 const PointCard: React.FC<Props> = ({ point, selected }) => {
+  // TODO: use disabled prop
   return (
     <div
       className={cn(

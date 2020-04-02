@@ -1,3 +1,7 @@
+mutation Vote($voteInput: VoteInput!) {
+  vote(voteInput: $voteInput)
+}
+
 subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
   joinRoom(roomId: $roomId, username: $username, role: $role) {
     participants {

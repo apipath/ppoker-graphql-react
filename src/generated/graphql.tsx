@@ -19,11 +19,16 @@ export type CreateRoomInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createRoom?: Maybe<Room>;
+  vote: Scalars['Boolean'];
 };
 
 export type MutationCreateRoomArgs = {
   roomInput: CreateRoomInput;
   pointsInput: Array<PointInput>;
+};
+
+export type MutationVoteArgs = {
+  voteInput: VoteInput;
 };
 
 export type Observer = {
@@ -89,6 +94,12 @@ export type SubscriptionJoinRoomArgs = {
   role: Role;
 };
 
+export type VoteInput = {
+  roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
 export type CreateRoomMutationVariables = {
   roomInput: CreateRoomInput;
   pointsInput: Array<PointInput>;
@@ -103,6 +114,12 @@ export type CreateRoomMutation = { __typename?: 'Mutation' } & {
       }
   >;
 };
+
+export type VoteMutationVariables = {
+  voteInput: VoteInput;
+};
+
+export type VoteMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'vote'>;
 
 export type JoinRoomSubscriptionVariables = {
   roomId: Scalars['ID'];
@@ -200,6 +217,50 @@ export type CreateRoomMutationResult = ApolloReactCommon.MutationResult<
 export type CreateRoomMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateRoomMutation,
   CreateRoomMutationVariables
+>;
+export const VoteDocument = gql`
+  mutation Vote($voteInput: VoteInput!) {
+    vote(voteInput: $voteInput)
+  }
+`;
+export type VoteMutationFn = ApolloReactCommon.MutationFunction<
+  VoteMutation,
+  VoteMutationVariables
+>;
+
+/**
+ * __useVoteMutation__
+ *
+ * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteMutation, { data, loading, error }] = useVoteMutation({
+ *   variables: {
+ *      voteInput: // value for 'voteInput'
+ *   },
+ * });
+ */
+export function useVoteMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    VoteMutation,
+    VoteMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<VoteMutation, VoteMutationVariables>(
+    VoteDocument,
+    baseOptions,
+  );
+}
+export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export type VoteMutationResult = ApolloReactCommon.MutationResult<VoteMutation>;
+export type VoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  VoteMutation,
+  VoteMutationVariables
 >;
 export const JoinRoomDocument = gql`
   subscription JoinRoom($roomId: ID!, $username: String!, $role: Role!) {
