@@ -9,14 +9,14 @@ type Props = {
   disabled: boolean;
 };
 
-const PointCard: React.FC<Props> = ({ point, selected }) => {
-  // TODO: use disabled prop
+const PointCard: React.FC<Props> = ({ point, selected, disabled }) => {
   return (
     <div
       className={cn(
         'flex flex-col w-40 h-40 p-2 bg-white rounded shadow-md cursor-pointer hover:shadow-lg p4',
         {
           [`border-2 border-orange-300`]: selected,
+          [`cursor-not-allowed`]: disabled,
         },
       )}
     >

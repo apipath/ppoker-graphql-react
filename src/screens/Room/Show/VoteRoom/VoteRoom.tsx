@@ -34,8 +34,14 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
       shouldResubscribe: true,
     },
   );
-  const [showVotesMutation] = useShowVotesMutation();
-  const [clearVotesMutation] = useClearVotesMutation();
+  const [
+    showVotesMutation,
+    { loading: showVotesLoading },
+  ] = useShowVotesMutation();
+  const [
+    clearVotesMutation,
+    { loading: clearVotesLoading },
+  ] = useClearVotesMutation();
   const [voteMutation, { loading: voteLoading }] = useVoteMutation();
 
   if (subscriptionLoading || !data || !data.joinRoom)
@@ -98,7 +104,7 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
       <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
         {room.points.map((point) => (
           <li
-            onClick={() => handleClick(point)}
+            onClick={() => !voteLoading && handleClick(point)}
             className="flex justify-center"
             key={point.label}
           >
@@ -121,8 +127,12 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
           />
           <div className="w-full mt-6 md:mt-0">
             <div className="flex justify-around mb-12">
-              <Button onClick={handleShowVotes}>Show Votes</Button>
-              <Button onClick={handleClearVotes}>Clear Votes</Button>
+              <Button onClick={handleShowVotes} disabled={showVotesLoading}>
+                Show Votes
+              </Button>
+              <Button onClick={handleClearVotes} disabled={clearVotesLoading}>
+                Clear Votes
+              </Button>
             </div>
             <Results participants={participants} showVotes={showVotes} />
           </div>
