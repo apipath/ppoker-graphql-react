@@ -10,11 +10,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store';
 import buildApolloClient from './apollo';
+import { WS_GRAPHQL_URI, HTTP_GRAPHQL_URI } from './constants';
 
 const store = configureStore();
 
-const HTTP_GRAPHQL_URI = 'http://localhost:8080/query';
-const WS_GRAPHQL_URI = 'ws://localhost:8080/query';
 const client = buildApolloClient(HTTP_GRAPHQL_URI, WS_GRAPHQL_URI);
 
 const render = (AppComponent: typeof App) =>
