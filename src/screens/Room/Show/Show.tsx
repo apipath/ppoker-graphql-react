@@ -1,24 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { useDispatch } from 'react-redux';
 import { useGetRoomQuery, User } from '../../../generated/graphql';
 import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
-import { setUser } from '../../../store/user/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
 
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
 
-  const user = useTypedSelector((state) => state.user);
-  const dispatch = useDispatch();
-
+  const [user, setUser] = useState<User | null>(null);
   const handleLogin = ({ user }: { user: User }) => {
-    dispatch(setUser(user));
+    setUser(user);
   };
 
   if (error) {
