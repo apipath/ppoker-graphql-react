@@ -66,7 +66,7 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
 
   return (
     <div className="flex justify-center">
-      <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-lg">
+      <div className="flex flex-col w-full max-w-lg">
         <div className="flex flex-col md:flex-row">
           <div className="w-full mr-0 md:mr-2 md:w-1/2 md:mb-0">
             <Input
@@ -87,16 +87,11 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
           </div>
         </div>
         <div className="mt-4 md:mt-0 flex items-center justify-end">
-          <Button
-            type="submit"
-            disabled={disabled}
-            onClick={handleSubmit}
-            loading={loading}
-          >
+          <Button loading={loading} onClick={handleSubmit}>
             Join
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
