@@ -14,10 +14,9 @@ function Header() {
     <nav className="flex flex-wrap items-center justify-between">
       <div className="flex flex-wrap items-center justify-between w-full p-6 lg:w-auto">
         <div>
-          <Link to="/" onClick={closeMenu}>
+          <Link to="/" onClick={closeMenu} aria-label="Ppoker">
             <LogoSmallIcon className="w-16 lg:hidden" />
             <LogoBigIcon className="hidden w-32 lg:block" />
-            Ppoker
           </Link>
         </div>
         <div className="block lg:hidden">

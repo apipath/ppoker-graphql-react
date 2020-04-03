@@ -7,7 +7,7 @@ import Room from './screens/Room';
 
 const App: React.FC = () => {
   return (
-    <main className="flex flex-col font-sans">
+    <main className="flex flex-col w-full">
       <Switch>
         <Route path="/" component={Home} exact />
         <Route path="/about" component={About} />

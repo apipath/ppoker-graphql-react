@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
-import { useDispatch } from 'react-redux';
 import classnames from 'classnames';
 import {
   Draggable,
@@ -17,17 +16,17 @@ import { RouteComponentProps } from 'react-router';
 import Button from '../../../components/Button';
 import Point from './Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
-import { setRoom } from '../../../store/room/actions';
-import { mockedRoom } from '../../../mocks';
+import { useCreateRoomMutation } from '../../../generated/graphql';
 
 type Props = RouteComponentProps<{}>;
 
 const RoomCreate: React.FC<Props> = ({ history }) => {
   const firstRowRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
   const { addToast } = useToasts();
   const location = useLocation();
-  const { newRoomName } = qs.parse(location.search);
+  const parsedQuery = qs.parse(location.search);
+  const newRoomName =
+    'newRoomName' in parsedQuery ? String(parsedQuery.newRoomName) : '';
   const [points, setPoints] = useState(
     Array.from({ length: 3 }).map(() => ({
       id: nanoid(),
@@ -35,6 +34,17 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
       description: '',
     })),
   );
+  const [createRoom, { loading }] = useCreateRoomMutation({
+    onCompleted: (data) => {
+      if (!data.createRoom) return;
+      const { id } = data.createRoom;
+      history.push(`/room/${id}`);
+    },
+    onError: (err) => {
+      // Let react boundaries take care of this
+      throw err;
+    },
+  });
 
   useEffect(() => {
     if (firstRowRef.current) {
@@ -43,17 +53,19 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   }, []);
 
   const handleNewPoint = () =>
-    setPoints(opts => [...opts, { id: nanoid(), label: '', description: '' }]);
+    setPoints((opts) => [
+      ...opts,
+      { id: nanoid(), label: '', description: '' },
+    ]);
 
   const handleCreateRoom = () => {
-    const opts = points
+    const pointsInput = points
       .filter(({ label }) => label)
       .map(({ id, ...rest }) => rest);
-    console.log(opts);
-
-    dispatch(setRoom(mockedRoom));
-    // TODO: use response id
-    history.push('/room/somenewid');
+    const roomInput = { name: newRoomName };
+    createRoom({
+      variables: { roomInput, pointsInput },
+    });
   };
 
   const handlePointLabelChange = (label: string, index: number) => {
@@ -64,8 +76,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
       });
     }
 
-    setPoints(currentPoints => {
-      const points = currentPoints.map(point => ({ ...point }));
+    setPoints((currentPoints) => {
+      const points = currentPoints.map((point) => ({ ...point }));
       points[index].label = label;
 
       return points;
@@ -73,8 +85,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   };
 
   const handlePointDescriptionChange = (description: string, index: number) => {
-    setPoints(currentPoints => {
-      const points = currentPoints.map(point => ({ ...point }));
+    setPoints((currentPoints) => {
+      const points = currentPoints.map((point) => ({ ...point }));
       points[index].description = description;
 
       return points;
@@ -88,8 +100,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
 
     const sourceIndex = source.index;
     const destinationIndex = destination.index;
-    setPoints(currentPoints => {
-      const points = currentPoints.map(point => ({ ...point }));
+    setPoints((currentPoints) => {
+      const points = currentPoints.map((point) => ({ ...point }));
       const tmp = points[sourceIndex];
       points.splice(sourceIndex, 1);
       points.splice(destinationIndex, 0, tmp);
@@ -100,8 +112,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   const validLabels = new Set(points.map(({ label }) => label).filter(Boolean));
   const createEnabled = validLabels.size > 1;
   const handleDelete = (index: number) => {
-    setPoints(currentPoints => {
-      const points = currentPoints.map(point => ({ ...point }));
+    setPoints((currentPoints) => {
+      const points = currentPoints.map((point) => ({ ...point }));
       points.splice(index, 1);
       return points;
     });
@@ -114,14 +126,18 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
         <h2 className="text-xl font-semibold tracking-wide text-gray-900">
           {newRoomName}
         </h2>
-        <Button onClick={handleCreateRoom} disabled={!createEnabled}>
+        <Button
+          loading={loading}
+          onClick={handleCreateRoom}
+          disabled={!createEnabled}
+        >
           Create
         </Button>
       </header>
       <ul>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="new-room">
-            {provided => (
+            {(provided) => (
               <div
                 className="flex flex-col items-center"
                 ref={provided.innerRef}
@@ -150,10 +166,10 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                             labelRef={index === 0 ? firstRowRef : null}
                             label={label}
                             description={description}
-                            onLabelChange={e =>
+                            onLabelChange={(e) =>
                               handlePointLabelChange(e.target.value, index)
                             }
-                            onDescriptionChange={e =>
+                            onDescriptionChange={(e) =>
                               handlePointDescriptionChange(
                                 e.target.value,
                                 index,
@@ -175,6 +191,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                           <UseAnimations
                             size={32}
                             animationKey="trash2"
+                            disabled={loading}
                             onClick={() => handleDelete(index)}
                             className="outline-none cursor-pointer"
                           />
@@ -190,6 +207,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
         </DragDropContext>
         <button
           onClick={handleNewPoint}
+          disabled={loading}
           className="w-12 h-12 mx-auto my-4 flex justify-center focus:outline-none items-center text-blue-900 bg-white rounded-full shadow-md hover:shadow-lg"
         >
           <PlusIcon className="w-6" />

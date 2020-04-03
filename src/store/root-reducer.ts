@@ -1,11 +1,7 @@
 import { combineReducers } from 'redux';
 
-import session from './session/reducer';
-import participants from './participants/reducer';
-import observers from './observers/reducer';
-import room from './room/reducer';
+import user from './user/reducer';
 
-export const createRootReducer = () =>
-  combineReducers({ session, participants, observers, room });
+export const createRootReducer = () => combineReducers({ user });
 
 export default createRootReducer;

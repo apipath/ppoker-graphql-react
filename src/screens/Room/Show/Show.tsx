@@ -1,36 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTypedSelector } from '../../../store';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
-import { Observer, Session, Participant, Room } from '../../../types';
 import { useDispatch } from 'react-redux';
-import { joinRoom } from '../../../store/room/actions';
+import { useGetRoomQuery, User } from '../../../generated/graphql';
+import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
+import { setUser } from '../../../store/user/actions';
 
 function RoomShow() {
   const { id } = useParams<{ id: string }>();
-  const room = useTypedSelector(state => state.room);
-  const [showVotes] = useState(false);
-  const session = useTypedSelector(state => state.session);
+
+  const { data, loading, error } = useGetRoomQuery({ variables: { id } });
+
+  const user = useTypedSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const handleLogin = ({
-    session,
-    participants,
-    observers,
-    room,
-  }: {
-    session: Session;
-    participants: Array<Participant>;
-    observers: Array<Observer>;
-    room: Room;
-  }) => {
-    dispatch(joinRoom({ session, room, observers, participants }));
+  const handleLogin = ({ user }: { user: User }) => {
+    dispatch(setUser(user));
   };
 
+  if (error) {
+    if (hasError(error, NOT_FOUND_ERR_CODE)) {
+      return <p>NOT FOUND</p>;
+    }
+
+    throw error;
+  }
   // TODO: use a proper loading
-  if (!room) return <p>Loading...</p>;
+  if (loading || !data) return <p>Loading...</p>;
+  const { room } = data;
+
+  if (!room) {
+    return <div>Create that room</div>;
+  }
 
   return (
     <section className="p-4 lg:p-5">
@@ -39,10 +43,10 @@ function RoomShow() {
         <span className="text-gray-700">#{room.id}</span>
       </h1>
       <div>
-        {session ? (
-          <VoteRoom showVotes={showVotes} />
+        {user ? (
+          <VoteRoom user={user} room={room} />
         ) : (
-          <JoinRoom id={id} onLogin={handleLogin} />
+          <JoinRoom room={room} onLogin={handleLogin} />
         )}
       </div>
     </section>

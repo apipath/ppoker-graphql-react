@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import RoomCreate from './Create';
 import RoomShow from './Show';
 import Header from '../../components/Header';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 function Room() {
   const { path } = useRouteMatch();
@@ -11,10 +12,12 @@ function Room() {
   return (
     <>
       <Header />
-      <Switch>
-        <Route path={path} exact component={RoomCreate} />
-        <Route path={`${path}/:id`} component={RoomShow} />
-      </Switch>
+      <ErrorBoundary>
+        <Switch>
+          <Route path={path} exact component={RoomCreate} />
+          <Route path={`${path}/:id`} component={RoomShow} />
+        </Switch>
+      </ErrorBoundary>
     </>
   );
 }
