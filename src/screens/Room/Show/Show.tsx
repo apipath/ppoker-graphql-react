@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTypedSelector } from '../../../store';
@@ -14,7 +14,6 @@ function RoomShow() {
 
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
 
-  const [showVotes] = useState(false);
   const user = useTypedSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -45,7 +44,7 @@ function RoomShow() {
       </h1>
       <div>
         {user ? (
-          <VoteRoom user={user} room={room} showVotes={showVotes} />
+          <VoteRoom user={user} room={room} />
         ) : (
           <JoinRoom room={room} onLogin={handleLogin} />
         )}

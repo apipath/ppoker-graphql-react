@@ -2,6 +2,14 @@ mutation Vote($voteInput: VoteInput!) {
   vote(voteInput: $voteInput)
 }
 
+mutation ShowVotes($showVotesInput: ShowVotesInput!) {
+  showVotes(showVotesInput: $showVotesInput)
+}
+
+mutation ClearVotes($clearVotesInput: ClearVotesInput!) {
+  clearVotes(clearVotesInput: $clearVotesInput)
+}
+
 subscription JoinRoom(
   $roomId: ID!
   $userId: ID!
@@ -9,6 +17,7 @@ subscription JoinRoom(
   $role: Role!
 ) {
   joinRoom(roomId: $roomId, userId: $userId, userName: $userName, role: $role) {
+    showVotes
     participants {
       id
       name

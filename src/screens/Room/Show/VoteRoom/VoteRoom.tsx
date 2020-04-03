@@ -12,15 +12,16 @@ import {
   useVoteMutation,
   Point,
   User,
+  useShowVotesMutation,
+  useClearVotesMutation,
 } from '../../../../generated/graphql';
 
 type Props = {
-  showVotes: boolean;
   room: Room;
   user: User;
 };
 
-const VoteRoom: React.FC<Props> = ({ showVotes, room, user }) => {
+const VoteRoom: React.FC<Props> = ({ room, user }) => {
   const { addToast } = useToasts();
   const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
     {
@@ -33,7 +34,8 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, user }) => {
       shouldResubscribe: true,
     },
   );
-
+  const [showVotesMutation] = useShowVotesMutation();
+  const [clearVotesMutation] = useClearVotesMutation();
   const [voteMutation, { loading: voteLoading }] = useVoteMutation();
 
   if (subscriptionLoading || !data || !data.joinRoom)
@@ -41,13 +43,22 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, user }) => {
 
   if (error) throw error; // Will be catched by error boundary
 
-  const { participants, observers } = data.joinRoom;
+  const { participants, observers, showVotes: roomShowVotes } = data.joinRoom;
   const participatingCurrentUser = participants.find(
     ({ id }) => id === user.id,
   );
   const selectedPoint = participatingCurrentUser
     ? participatingCurrentUser.votedPoint?.label ?? ''
     : '';
+  const everyoneVoted =
+    participants.length > 0 && participants.every((p) => p.votedPoint);
+  const showVotes = roomShowVotes || everyoneVoted;
+
+  const handleShowVotes = () =>
+    showVotesMutation({ variables: { showVotesInput: { roomId: room.id } } });
+
+  const handleClearVotes = () =>
+    clearVotesMutation({ variables: { clearVotesInput: { roomId: room.id } } });
 
   const handleClick = (point: Point) => {
     if (!user || !participatingCurrentUser) return;
@@ -110,8 +121,8 @@ const VoteRoom: React.FC<Props> = ({ showVotes, room, user }) => {
           />
           <div className="w-full mt-6 md:mt-0">
             <div className="flex justify-around mb-12">
-              <Button>Show Votes</Button>
-              <Button>Clear Votes</Button>
+              <Button onClick={handleShowVotes}>Show Votes</Button>
+              <Button onClick={handleClearVotes}>Clear Votes</Button>
             </div>
             <Results participants={participants} showVotes={showVotes} />
           </div>

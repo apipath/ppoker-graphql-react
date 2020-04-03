@@ -166,6 +166,24 @@ export type VoteMutationVariables = {
 
 export type VoteMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'vote'>;
 
+export type ShowVotesMutationVariables = {
+  showVotesInput: ShowVotesInput;
+};
+
+export type ShowVotesMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'showVotes'
+>;
+
+export type ClearVotesMutationVariables = {
+  clearVotesInput: ClearVotesInput;
+};
+
+export type ClearVotesMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'clearVotes'
+>;
+
 export type JoinRoomSubscriptionVariables = {
   roomId: Scalars['ID'];
   userId: Scalars['ID'];
@@ -175,18 +193,18 @@ export type JoinRoomSubscriptionVariables = {
 
 export type JoinRoomSubscription = { __typename?: 'Subscription' } & {
   joinRoom?: Maybe<
-    { __typename?: 'OnlineRoom' } & {
-      participants: Array<
-        { __typename?: 'Participant' } & Pick<Participant, 'id' | 'name'> & {
-            votedPoint?: Maybe<
-              { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
-            >;
-          }
-      >;
-      observers: Array<
-        { __typename?: 'Observer' } & Pick<Observer, 'id' | 'name'>
-      >;
-    }
+    { __typename?: 'OnlineRoom' } & Pick<OnlineRoom, 'showVotes'> & {
+        participants: Array<
+          { __typename?: 'Participant' } & Pick<Participant, 'id' | 'name'> & {
+              votedPoint?: Maybe<
+                { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
+              >;
+            }
+        >;
+        observers: Array<
+          { __typename?: 'Observer' } & Pick<Observer, 'id' | 'name'>
+        >;
+      }
   >;
 };
 
@@ -360,6 +378,102 @@ export type VoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   VoteMutation,
   VoteMutationVariables
 >;
+export const ShowVotesDocument = gql`
+  mutation ShowVotes($showVotesInput: ShowVotesInput!) {
+    showVotes(showVotesInput: $showVotesInput)
+  }
+`;
+export type ShowVotesMutationFn = ApolloReactCommon.MutationFunction<
+  ShowVotesMutation,
+  ShowVotesMutationVariables
+>;
+
+/**
+ * __useShowVotesMutation__
+ *
+ * To run a mutation, you first call `useShowVotesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShowVotesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [showVotesMutation, { data, loading, error }] = useShowVotesMutation({
+ *   variables: {
+ *      showVotesInput: // value for 'showVotesInput'
+ *   },
+ * });
+ */
+export function useShowVotesMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    ShowVotesMutation,
+    ShowVotesMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    ShowVotesMutation,
+    ShowVotesMutationVariables
+  >(ShowVotesDocument, baseOptions);
+}
+export type ShowVotesMutationHookResult = ReturnType<
+  typeof useShowVotesMutation
+>;
+export type ShowVotesMutationResult = ApolloReactCommon.MutationResult<
+  ShowVotesMutation
+>;
+export type ShowVotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  ShowVotesMutation,
+  ShowVotesMutationVariables
+>;
+export const ClearVotesDocument = gql`
+  mutation ClearVotes($clearVotesInput: ClearVotesInput!) {
+    clearVotes(clearVotesInput: $clearVotesInput)
+  }
+`;
+export type ClearVotesMutationFn = ApolloReactCommon.MutationFunction<
+  ClearVotesMutation,
+  ClearVotesMutationVariables
+>;
+
+/**
+ * __useClearVotesMutation__
+ *
+ * To run a mutation, you first call `useClearVotesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearVotesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearVotesMutation, { data, loading, error }] = useClearVotesMutation({
+ *   variables: {
+ *      clearVotesInput: // value for 'clearVotesInput'
+ *   },
+ * });
+ */
+export function useClearVotesMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    ClearVotesMutation,
+    ClearVotesMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    ClearVotesMutation,
+    ClearVotesMutationVariables
+  >(ClearVotesDocument, baseOptions);
+}
+export type ClearVotesMutationHookResult = ReturnType<
+  typeof useClearVotesMutation
+>;
+export type ClearVotesMutationResult = ApolloReactCommon.MutationResult<
+  ClearVotesMutation
+>;
+export type ClearVotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  ClearVotesMutation,
+  ClearVotesMutationVariables
+>;
 export const JoinRoomDocument = gql`
   subscription JoinRoom(
     $roomId: ID!
@@ -373,6 +487,7 @@ export const JoinRoomDocument = gql`
       userName: $userName
       role: $role
     ) {
+      showVotes
       participants {
         id
         name

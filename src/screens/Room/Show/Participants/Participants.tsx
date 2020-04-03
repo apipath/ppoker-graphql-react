@@ -17,15 +17,13 @@ const Participants: React.FC<Props> = ({
   showVotes,
   user,
 }) => {
-  // TODO: only display current user vote when showVotes is false
-
   const getVoteOrIcon = (participant: Participant) => {
     if (participant.id === user.id) {
       return participant.votedPoint?.label;
     }
 
     return showVotes ? (
-      participant.votedPoint
+      participant.votedPoint?.label
     ) : participant.votedPoint ? (
       <CheckIcon className="w-6 text-green-400" />
     ) : (
@@ -51,14 +49,18 @@ const Participants: React.FC<Props> = ({
           </li>
         ))}
       </ul>
-      <h3 className="py-2 bg-indigo-900 text-indigo-100 text-center">
-        Observers
-      </h3>
-      <ul className="p-4">
-        {observers.map((observer) => (
-          <li key={observer.id}>{observer.name}</li>
-        ))}
-      </ul>
+      {observers.length > 0 && (
+        <>
+          <h3 className="py-2 bg-indigo-900 text-indigo-100 text-center">
+            Observers
+          </h3>
+          <ul className="p-4">
+            {observers.map((observer) => (
+              <li key={observer.id}>{observer.name}</li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 };
