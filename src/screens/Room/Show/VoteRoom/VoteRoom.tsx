@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import { useToasts } from 'react-toast-notifications';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import PointCard from '../PointCard';
 import Results from '../Results';
@@ -15,6 +16,11 @@ import {
   useShowVotesMutation,
   useClearVotesMutation,
 } from '../../../../generated/graphql';
+
+const transition = { ease: 'easeOut', duration: 0.5 };
+const initial = { opacity: 0 };
+const animate = { opacity: 1 };
+const exit = { opacity: 0 };
 
 type Props = {
   room: Room;
@@ -159,7 +165,19 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
                 Clear Votes
               </Button>
             </div>
-            <Results participants={participants} showVotes={showVotes} />
+            <AnimatePresence>
+              {showVotes && (
+                <motion.div
+                  key="results"
+                  initial={initial}
+                  animate={animate}
+                  exit={exit}
+                  transition={transition}
+                >
+                  <Results participants={participants} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
