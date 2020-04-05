@@ -37,8 +37,8 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
   const storageState = getStateFromStorage();
   const [name, setName] = useState(storageState.name);
   const [role, setRole] = useState(storageState.role);
-  const disabled = name.length === 0;
   const [createUser, { loading }] = useCreateUserMutation();
+  const disabled = name.length === 0;
 
   const usernameError =
     name.length === 0 ? `Please fill out this field.` : undefined;
@@ -64,6 +64,12 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
       });
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode !== 13 || disabled || loading) return;
+
+    handleSubmit();
+  };
+
   return (
     <div className="flex justify-center">
       <div className="flex flex-col w-full max-w-lg">
@@ -71,8 +77,10 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
           <div className="w-full mr-0 md:mr-2 md:w-1/2 md:mb-0">
             <Input
               id="username"
+              autoComplete="on"
               value={name}
-              onChange={setName}
+              onChange={(e) => setName(e.currentTarget.value)}
+              onKeyDown={handleKeyPress}
               error={usernameError}
             />
           </div>

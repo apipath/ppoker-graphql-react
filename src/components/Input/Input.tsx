@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, HTMLProps } from 'react';
 import cn from 'classnames';
 
 type Props = {
-  onChange: (v: string) => void;
   value: string;
   error?: string;
   id: string;
-};
+} & HTMLProps<HTMLInputElement>;
 
-const Input: React.FC<Props> = ({ id, onChange, value, error }) => {
+const Input: React.FC<Props> = ({
+  id,
+  onChange,
+  value,
+  error,
+  className,
+  onBlur,
+  ...rest
+}) => {
   const [isDirty, setIsDirty] = useState(false);
-  const handleOnBlur = () => {
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsDirty(true);
+    onBlur && onBlur(e);
   };
 
   const showError = isDirty && error;
@@ -25,7 +33,9 @@ const Input: React.FC<Props> = ({ id, onChange, value, error }) => {
         Name
       </label>
       <input
+        {...rest}
         className={cn(
+          className,
           'block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-white border rounded appearance-none focus:outline-none',
           {
             [`border-red-500`]: showError,
@@ -34,7 +44,7 @@ const Input: React.FC<Props> = ({ id, onChange, value, error }) => {
         id={id}
         type="text"
         placeholder="Jane"
-        onChange={e => onChange(e.target.value)}
+        onChange={onChange}
         onBlur={handleOnBlur}
         value={value}
       />
