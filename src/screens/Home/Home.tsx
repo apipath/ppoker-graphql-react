@@ -32,21 +32,25 @@ function Home() {
     history.push(`/room/${encodeURIComponent(joinRoomName)}`);
   };
 
-  const handleCreateRoomChange: ChangeEventHandler<HTMLInputElement> = e => {
+  const handleCreateRoomChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setNewRoomName(e.currentTarget.value);
   };
 
-  const handleCreateRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = e => {
+  const handleCreateRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = (
+    e,
+  ) => {
     if (e.key === 'Enter') {
       goToCreateRoom();
     }
   };
 
-  const handleJoinRoomChange: ChangeEventHandler<HTMLInputElement> = e => {
+  const handleJoinRoomChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setJoinRoomName(e.currentTarget.value);
   };
 
-  const handleJoinRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = e => {
+  const handleJoinRoomKeyPressed: KeyboardEventHandler<HTMLInputElement> = (
+    e,
+  ) => {
     if (e.key === 'Enter') {
       goToRoom();
     }
@@ -80,6 +84,7 @@ function Home() {
             onChange={handleJoinRoomChange}
             onKeyPress={handleJoinRoomKeyPressed}
             onClick={goToRoom}
+            autoComplete="on"
           />
         </div>
       </section>
