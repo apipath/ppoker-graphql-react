@@ -15,6 +15,7 @@ import {
   User,
   useShowVotesMutation,
   useClearVotesMutation,
+  Role,
 } from '../../../../generated/graphql';
 
 const transition = { ease: 'easeOut', duration: 0.5 };
@@ -127,22 +128,26 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
 
   return (
     <div className="flex flex-col lg:flex-row">
-      <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
-        {room.points.map((point) => (
-          <li
-            onClick={() => !voteLoading && handleClick(point)}
-            className="flex justify-center"
-            key={point.label}
-          >
-            <PointCard
-              point={point}
-              disabled={voteLoading}
-              selected={point.label === selectedPoint}
-            />
-          </li>
-        ))}
-      </ul>
-      <div className="my-8 border-b border-gray-300 lg:hidden"></div>
+      {user.role === Role.Participant && (
+        <>
+          <ul className={cn('w-full grid gap-2 grid-cols-fill-40', 'lg:w-1/2')}>
+            {room.points.map((point) => (
+              <li
+                onClick={() => !voteLoading && handleClick(point)}
+                className="flex justify-center"
+                key={point.label}
+              >
+                <PointCard
+                  point={point}
+                  disabled={voteLoading}
+                  selected={point.label === selectedPoint}
+                />
+              </li>
+            ))}
+          </ul>
+          <div className="my-8 border-b border-gray-300 lg:hidden"></div>
+        </>
+      )}
       <div className="flex-grow lg:mt-0">
         <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
           <div>
