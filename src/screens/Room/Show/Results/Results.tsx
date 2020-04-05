@@ -42,6 +42,7 @@ const Results: React.FC<Props> = ({ participants, showVotes }) => {
       </div>
     );
   }
+
   return (
     <div className="flex justify-center mb-6 bg-white rounded shadow">
       <table className="w-full text-left border-collapse">

@@ -61,10 +61,30 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
   const showVotes = roomShowVotes || everyoneVoted;
 
   const handleShowVotes = () =>
-    showVotesMutation({ variables: { showVotesInput: { roomId: room.id } } });
+    showVotesMutation({
+      variables: { showVotesInput: { roomId: room.id } },
+    }).then((res) => {
+      if (res.errors && res.errors.length > 0) {
+        addToast(`Could not show votes`, {
+          autoDismiss: true,
+          appearance: 'error',
+        });
+        return;
+      }
+    });
 
   const handleClearVotes = () =>
-    clearVotesMutation({ variables: { clearVotesInput: { roomId: room.id } } });
+    clearVotesMutation({
+      variables: { clearVotesInput: { roomId: room.id } },
+    }).then((res) => {
+      if (res.errors && res.errors.length > 0) {
+        addToast(`Could not clear votes`, {
+          autoDismiss: true,
+          appearance: 'error',
+        });
+        return;
+      }
+    });
 
   const handleClick = (point: Point) => {
     if (!user || !participatingCurrentUser) return;
@@ -119,15 +139,20 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
       <div className="my-8 border-b border-gray-300 lg:hidden"></div>
       <div className="flex-grow lg:mt-0">
         <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
-          <Participants
-            user={user}
-            participants={participants}
-            observers={observers}
-            showVotes={showVotes}
-          />
+          <div>
+            <Participants
+              user={user}
+              participants={participants}
+              observers={observers}
+              showVotes={showVotes}
+            />
+          </div>
           <div className="w-full mt-6 md:mt-0">
             <div className="flex justify-around mb-12">
-              <Button onClick={handleShowVotes} disabled={showVotesLoading}>
+              <Button
+                onClick={handleShowVotes}
+                disabled={showVotesLoading || showVotes}
+              >
                 Show Votes
               </Button>
               <Button onClick={handleClearVotes} disabled={clearVotesLoading}>
