@@ -87,7 +87,7 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
           </div>
         </div>
         <div className="mt-4 md:mt-0 flex items-center justify-end">
-          <Button loading={loading} onClick={handleSubmit}>
+          <Button disabled={disabled} loading={loading} onClick={handleSubmit}>
             Join
           </Button>
         </div>
