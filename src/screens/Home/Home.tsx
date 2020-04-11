@@ -60,11 +60,11 @@ function Home() {
     <>
       <Header />
       <section className="flex flex-col items-center mb-10">
-        <div className="flex justify-center w-full max-w-3xl">
-          <HeroIcon />
-        </div>
-        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700">
-          ppoker help teams during their planning sessions
+        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-4xl">
+          Ppoker help teams during their planning sessions
+        </p>
+        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-2xl">
+          Create a room or join a room to get started
         </p>
       </section>
       <section className="flex justify-center py-8 bg-gray-300 md:py-12">
@@ -86,6 +86,11 @@ function Home() {
             onClick={goToRoom}
             autoComplete="on"
           />
+        </div>
+      </section>
+      <section className="flex flex-col items-center mb-10">
+        <div className="flex justify-center w-full max-w-3xl">
+          <HeroIcon />
         </div>
       </section>
       <Footer />
