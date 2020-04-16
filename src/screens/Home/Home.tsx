@@ -60,7 +60,7 @@ function Home() {
     <>
       <Header />
       <section className="flex flex-col items-center mb-10">
-        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-4xl">
+        <p className="w-full md:w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-4xl">
           Ppoker help teams during their planning sessions
         </p>
         <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-2xl">
