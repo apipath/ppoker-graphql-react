@@ -8,7 +8,7 @@ import {
   DragDropContext,
   DropResult,
 } from 'react-beautiful-dnd';
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import UseAnimations from 'react-useanimations';
 import { useToasts } from 'react-toast-notifications';
 import { RouteComponentProps } from 'react-router';

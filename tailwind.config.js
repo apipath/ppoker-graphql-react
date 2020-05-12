@@ -1,4 +1,5 @@
 module.exports = {
+  purge: ['./src/**/*.{js,ts}', './src/**/*.{jsx,tsx}', './public/index.html'],
   theme: {
     extend: {
       gridTemplateColumns: {
