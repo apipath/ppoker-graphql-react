@@ -60,10 +60,10 @@ function Home() {
     <>
       <Header />
       <section className="flex flex-col items-center mb-10">
-        <p className="w-full md:w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-4xl">
+        <p className="w-full mt-8 font-sans text-4xl font-thin text-center text-gray-700 md:w-1/2">
           Ppoker help teams during their planning sessions
         </p>
-        <p className="w-1/2 mt-8 font-sans font-thin text-center text-gray-700 text-2xl">
+        <p className="w-1/2 mt-8 font-sans text-2xl font-thin text-center text-gray-700">
           Create a room or join a room to get started
         </p>
       </section>
@@ -72,19 +72,21 @@ function Home() {
           <HomeInputCard
             title="Create a room"
             buttonLabel="Create"
-            onClick={goToCreateRoom}
+            onSubmit={goToCreateRoom}
             onChange={handleCreateRoomChange}
             onKeyPress={handleCreateRoomKeyPressed}
             value={newRoomName}
           />
           <HomeInputCard
+            id="join-room"
+            autoComplete="on"
+            autoCorrect="on"
             title="Join a room"
             buttonLabel="Join"
             value={joinRoomName}
             onChange={handleJoinRoomChange}
             onKeyPress={handleJoinRoomKeyPressed}
-            onClick={goToRoom}
-            autoComplete="on"
+            onSubmit={goToRoom}
           />
         </div>
       </section>
