@@ -1,10 +1,13 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import { onError } from 'apollo-link-error';
-import { WebSocketLink } from 'apollo-link-ws';
-import { ApolloLink, split } from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  split,
+  HttpLink,
+} from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 export default (httpUri: string, wsUri: string) => {
   const httpLink = new HttpLink({

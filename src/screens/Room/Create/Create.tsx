@@ -10,6 +10,7 @@ import {
 } from 'react-beautiful-dnd';
 import { nanoid } from 'nanoid';
 import UseAnimations from 'react-useanimations';
+import trash2 from 'react-useanimations/lib/trash2';
 import { useToasts } from 'react-toast-notifications';
 import { RouteComponentProps } from 'react-router';
 
@@ -190,7 +191,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
 
                           <UseAnimations
                             size={32}
-                            animationKey="trash2"
+                            animation={trash2}
                             disabled={loading}
                             onClick={() => handleDelete(index)}
                             className="outline-none cursor-pointer"
@@ -208,7 +209,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
         <button
           onClick={handleNewPoint}
           disabled={loading}
-          className="w-12 h-12 mx-auto my-4 flex justify-center focus:outline-none items-center text-blue-900 bg-white rounded-full shadow-md hover:shadow-lg"
+          className="flex items-center justify-center w-12 h-12 mx-auto my-4 text-blue-900 bg-white rounded-full shadow-md focus:outline-none hover:shadow-lg"
         >
           <PlusIcon className="w-6" />
         </button>

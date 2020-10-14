@@ -1,5 +1,6 @@
 import React from 'react';
 import UseAnimations from 'react-useanimations';
+import infinity from 'react-useanimations/lib/infinity';
 import cn from 'classnames';
 
 type Props = React.PropsWithoutRef<JSX.IntrinsicElements['button']> & {
@@ -20,7 +21,7 @@ const Button: React.FC<Props> = ({ loading, ...props }) => {
         },
       )}
     >
-      {loading ? <UseAnimations animationKey="infinity" /> : props.children}
+      {loading ? <UseAnimations animation={infinity} /> : props.children}
     </button>
   );
 };

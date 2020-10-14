@@ -81,7 +81,6 @@ const Participants: React.FC<Props> = ({
             </ul>
           </motion.div>
         )}
-        }
         {observers.length > 0 && (
           <motion.div
             key="observers"
@@ -99,7 +98,7 @@ const Participants: React.FC<Props> = ({
                   const currentUser = observer.id === user.id;
                   return (
                     <motion.li
-                      className="flex p-4 items-center"
+                      className="flex items-center p-4"
                       initial={initial}
                       animate={animate}
                       exit={exit}
