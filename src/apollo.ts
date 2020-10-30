@@ -1,15 +1,15 @@
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloLink,
+  from,
   split,
   HttpLink,
 } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { onError } from '@apollo/client/link/error';
 
-export default (httpUri: string, wsUri: string) => {
+const buildClient = (httpUri: string, wsUri: string) => {
   const httpLink = new HttpLink({
     uri: httpUri,
     credentials: 'same-origin',
@@ -22,8 +22,7 @@ export default (httpUri: string, wsUri: string) => {
     },
   });
 
-  const link = split(
-    // split based on operation type
+  const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
       return (
@@ -36,7 +35,8 @@ export default (httpUri: string, wsUri: string) => {
   );
 
   return new ApolloClient({
-    link: ApolloLink.from([
+    link: from([
+      splitLink,
       onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors)
           graphQLErrors.forEach(({ message, locations, path }) =>
@@ -46,8 +46,9 @@ export default (httpUri: string, wsUri: string) => {
           );
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
-      link,
     ]),
     cache: new InMemoryCache(),
   });
 };
+
+export default buildClient;
