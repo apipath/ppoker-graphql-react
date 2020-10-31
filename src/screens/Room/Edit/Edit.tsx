@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import qs from 'query-string';
+import { useParams } from 'react-router-dom';
 import classnames from 'classnames';
 import {
   Draggable,
@@ -17,48 +16,60 @@ import { RouteComponentProps } from 'react-router';
 import Button from '../../../components/Button';
 import Point from '../../../components/Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
-import { useCreateRoomMutation } from '../../../generated/graphql';
+import {
+  useEditRoomMutation,
+  useGetRoomQuery,
+} from '../../../generated/graphql';
 
 type Props = RouteComponentProps<{}>;
 
-const RoomCreate: React.FC<Props> = ({ history }) => {
-  const firstRowRef = useRef<HTMLInputElement>(null);
+const RoomEdit: React.FC<Props> = () => {
+  const { id } = useParams<{ id: string }>();
   const newRoomNameRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();
-  const location = useLocation();
-  const parsedQuery = qs.parse(location.search);
-  const [newRoomName, setNewRoomName] = useState(
-    'newRoomName' in parsedQuery ? String(parsedQuery.newRoomName) : '',
-  );
+  const { data, loading } = useGetRoomQuery({ variables: { id } });
   const [points, setPoints] = useState(
-    Array.from({ length: 3 }).map(() => ({
+    (data?.room?.points || []).map(({ label, description }) => ({
+      label,
+      description,
       id: nanoid(),
-      label: '',
-      description: '',
     })),
   );
-  const [createRoom, { loading }] = useCreateRoomMutation({
+
+  const [newRoomName, setNewRoomName] = useState(data?.room?.name || '');
+
+  const [editRoom, { loading: editRoomLoading }] = useEditRoomMutation({
     onCompleted: (data) => {
-      if (!data.createRoom) return;
-      const { id } = data.createRoom;
-      history.push(`/room/${id}`);
+      if (!data.editRoom) return;
+      addToast('Room updated!', { appearance: 'success', autoDismiss: true });
     },
     onError: (err) => {
       // Let react boundaries take care of this
       throw err;
     },
   });
+
+  useEffect(() => {
+    if (data && data?.room && data?.room.points) {
+      setPoints(
+        data.room.points.map(({ label, description }) => ({
+          label,
+          description,
+          id: nanoid(),
+        })) || [],
+      );
+      setNewRoomName(data.room.name);
+      if (newRoomNameRef.current) {
+        newRoomNameRef.current.focus();
+      }
+    }
+  }, [data]);
+
+  if (loading || !data || !data?.room?.name) return <>Loading...</>;
+
   const handleNewRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRoomName(e.target.value);
   };
-
-  useEffect(() => {
-    if (newRoomName.length === 0 && newRoomNameRef.current) {
-      newRoomNameRef.current.focus();
-    } else if (firstRowRef.current) {
-      firstRowRef.current.focus();
-    }
-  }, []);
 
   const handleNewPoint = () =>
     setPoints((opts) => [
@@ -66,12 +77,13 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
       { id: nanoid(), label: '', description: '' },
     ]);
 
-  const handleCreateRoom = () => {
+  const handleEditRoom = () => {
+    if (!points) return;
     const pointsInput = points
       .filter(({ label }) => label)
-      .map(({ id, ...rest }) => rest);
-    const roomInput = { name: newRoomName };
-    createRoom({
+      .map(({ label, description }) => ({ label, description }));
+    const roomInput = { id, name: newRoomName };
+    editRoom({
       variables: { roomInput, pointsInput },
     });
   };
@@ -118,7 +130,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   };
 
   const validLabels = new Set(points.map(({ label }) => label).filter(Boolean));
-  const createEnabled = validLabels.size > 1;
+  const updateEnabled = validLabels.size > 1 && newRoomName.length > 0;
   const handleDelete = (index: number) => {
     setPoints((currentPoints) => {
       const points = currentPoints.map((point) => ({ ...point }));
@@ -152,10 +164,10 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
         </h2>
         <Button
           loading={loading}
-          onClick={handleCreateRoom}
-          disabled={!createEnabled}
+          onClick={handleEditRoom}
+          disabled={!updateEnabled}
         >
-          Create
+          Update
         </Button>
       </header>
       <ul>
@@ -187,9 +199,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                           {...provided.dragHandleProps}
                         >
                           <Point
-                            labelRef={index === 0 ? firstRowRef : null}
                             label={label}
-                            description={description}
+                            description={description || ''}
                             onLabelChange={(e) =>
                               handlePointLabelChange(e.target.value, index)
                             }
@@ -215,7 +226,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                           <UseAnimations
                             size={32}
                             animation={trash2}
-                            disabled={loading}
+                            disabled={editRoomLoading}
                             onClick={() => handleDelete(index)}
                             className="outline-none cursor-pointer"
                           />
@@ -231,7 +242,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
         </DragDropContext>
         <button
           onClick={handleNewPoint}
-          disabled={loading}
+          disabled={editRoomLoading}
           className="flex items-center justify-center w-12 h-12 mx-auto my-4 text-blue-900 bg-white rounded-full shadow-md focus:outline-none hover:shadow-lg"
         >
           <PlusIcon className="w-6" />
@@ -241,4 +252,4 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   );
 };
 
-export default RoomCreate;
+export default RoomEdit;

@@ -6,7 +6,7 @@ type Props = {
   onDescriptionChange: ChangeEventHandler<HTMLInputElement>;
   onLabelChange: ChangeEventHandler<HTMLInputElement>;
   description: string;
-  labelRef: React.Ref<HTMLInputElement>;
+  labelRef?: React.Ref<HTMLInputElement>;
   error?: string;
 };
 

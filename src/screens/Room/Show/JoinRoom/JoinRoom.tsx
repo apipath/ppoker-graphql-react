@@ -65,7 +65,7 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode !== 13 || disabled || loading) return;
+    if (e.key !== 'Enter' || disabled || loading) return;
 
     handleSubmit();
   };
@@ -94,7 +94,7 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
             />
           </div>
         </div>
-        <div className="mt-4 md:mt-0 flex items-center justify-end">
+        <div className="flex items-center justify-end mt-4 md:mt-0">
           <Button disabled={disabled} loading={loading} onClick={handleSubmit}>
             Join
           </Button>

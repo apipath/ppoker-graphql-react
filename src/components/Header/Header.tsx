@@ -52,15 +52,21 @@ function Header() {
             </HeaderLink>
           </li>
           <li className="block mt-4 ml-4 lg:hidden">
-            <button className="px-4 py-2 text-sm leading-none border border-gray-800 rounded focus:outline-none hover:text-white hover:bg-gray-800">
+            <Link
+              className="px-4 py-2 text-sm leading-none border border-gray-800 rounded focus:outline-none focus:shadow-outline focus:border-blue-400 hover:text-white hover:bg-gray-800"
+              to="/room"
+            >
               New Room
-            </button>
+            </Link>
           </li>
         </ul>
       </div>
-      <button className="hidden lg:inline mx-4 px-4 py-2 rounded-full border border-gray-800 hover:shadow focus:outline-none text-md hover:text-white hover:bg-gray-800 font-medium">
+      <Link
+        className="hidden px-4 py-2 mx-4 font-medium border border-gray-800 rounded-full lg:inline hover:shadow focus:outline-none focus:shadow-outline focus:border-blue-400 text-md hover:text-white hover:bg-gray-800"
+        to="/room"
+      >
         New Room
-      </button>
+      </Link>
     </nav>
   );
 }

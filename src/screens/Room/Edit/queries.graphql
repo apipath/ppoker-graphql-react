@@ -1,0 +1,10 @@
+mutation EditRoom($roomInput: EditRoomInput!, $pointsInput: [PointInput!]!) {
+  editRoom(roomInput: $roomInput, pointsInput: $pointsInput) {
+    id
+    name
+    points {
+      label
+      description
+    }
+  }
+}
