@@ -1,7 +1,9 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,23 +13,24 @@ export type Scalars = {
   Float: number;
 };
 
-export type ClearVotesInput = {
-  roomId: Scalars['ID'];
-};
-
-export type CreateRoomInput = {
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
   name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+  role: Role;
 };
 
-export type CreateUserInput = {
-  userName: Scalars['String'];
-  role: Role;
+export type Participant = {
+  __typename?: 'Participant';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  votedPoint?: Maybe<Point>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createRoom?: Maybe<Room>;
+  editRoom?: Maybe<Room>;
   vote: Scalars['Boolean'];
   showVotes: Scalars['Boolean'];
   clearVotes: Scalars['Boolean'];
@@ -36,6 +39,11 @@ export type Mutation = {
 
 export type MutationCreateRoomArgs = {
   roomInput: CreateRoomInput;
+  pointsInput: Array<PointInput>;
+};
+
+export type MutationEditRoomArgs = {
+  roomInput: EditRoomInput;
   pointsInput: Array<PointInput>;
 };
 
@@ -55,37 +63,6 @@ export type MutationCreateUserArgs = {
   createUserInput?: Maybe<CreateUserInput>;
 };
 
-export type Observer = {
-  __typename?: 'Observer';
-  id: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type OnlineRoom = {
-  __typename?: 'OnlineRoom';
-  showVotes: Scalars['Boolean'];
-  participants: Array<Participant>;
-  observers: Array<Observer>;
-};
-
-export type Participant = {
-  __typename?: 'Participant';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  votedPoint?: Maybe<Point>;
-};
-
-export type Point = {
-  __typename?: 'Point';
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type PointInput = {
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   room?: Maybe<Room>;
@@ -95,10 +72,42 @@ export type QueryRoomArgs = {
   id: Scalars['ID'];
 };
 
+export type VoteInput = {
+  roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type CreateUserInput = {
+  userName: Scalars['String'];
+  role: Role;
+};
+
 export enum Role {
   Participant = 'PARTICIPANT',
   Observer = 'OBSERVER',
 }
+
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type Point = {
+  __typename?: 'Point';
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type CreateRoomInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type Observer = {
+  __typename?: 'Observer';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
 
 export type Room = {
   __typename?: 'Room';
@@ -108,7 +117,17 @@ export type Room = {
   points: Array<Point>;
 };
 
-export type ShowVotesInput = {
+export type EditRoomInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type PointInput = {
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type ClearVotesInput = {
   roomId: Scalars['ID'];
 };
 
@@ -124,23 +143,17 @@ export type SubscriptionJoinRoomArgs = {
   role: Role;
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  role: Role;
+export type OnlineRoom = {
+  __typename?: 'OnlineRoom';
+  showVotes: Scalars['Boolean'];
+  participants: Array<Participant>;
+  observers: Array<Observer>;
 };
 
-export type VoteInput = {
-  roomId: Scalars['ID'];
-  pointLabel: Scalars['String'];
-  userId: Scalars['ID'];
-};
-
-export type CreateRoomMutationVariables = {
+export type CreateRoomMutationVariables = Exact<{
   roomInput: CreateRoomInput;
   pointsInput: Array<PointInput>;
-};
+}>;
 
 export type CreateRoomMutation = { __typename?: 'Mutation' } & {
   createRoom?: Maybe<
@@ -152,44 +165,59 @@ export type CreateRoomMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
-export type CreateUserMutationVariables = {
-  createUserInput: CreateUserInput;
+export type EditRoomMutationVariables = Exact<{
+  roomInput: EditRoomInput;
+  pointsInput: Array<PointInput>;
+}>;
+
+export type EditRoomMutation = { __typename?: 'Mutation' } & {
+  editRoom?: Maybe<
+    { __typename?: 'Room' } & Pick<Room, 'id' | 'name'> & {
+        points: Array<
+          { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
+        >;
+      }
+  >;
 };
+
+export type CreateUserMutationVariables = Exact<{
+  createUserInput: CreateUserInput;
+}>;
 
 export type CreateUserMutation = { __typename?: 'Mutation' } & {
   createUser: { __typename?: 'User' } & Pick<User, 'id' | 'name' | 'role'>;
 };
 
-export type VoteMutationVariables = {
+export type VoteMutationVariables = Exact<{
   voteInput: VoteInput;
-};
+}>;
 
 export type VoteMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'vote'>;
 
-export type ShowVotesMutationVariables = {
+export type ShowVotesMutationVariables = Exact<{
   showVotesInput: ShowVotesInput;
-};
+}>;
 
 export type ShowVotesMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'showVotes'
 >;
 
-export type ClearVotesMutationVariables = {
+export type ClearVotesMutationVariables = Exact<{
   clearVotesInput: ClearVotesInput;
-};
+}>;
 
 export type ClearVotesMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'clearVotes'
 >;
 
-export type JoinRoomSubscriptionVariables = {
+export type JoinRoomSubscriptionVariables = Exact<{
   roomId: Scalars['ID'];
   userId: Scalars['ID'];
   userName: Scalars['String'];
   role: Role;
-};
+}>;
 
 export type JoinRoomSubscription = { __typename?: 'Subscription' } & {
   joinRoom?: Maybe<
@@ -208,13 +236,13 @@ export type JoinRoomSubscription = { __typename?: 'Subscription' } & {
   >;
 };
 
-export type GetRoomQueryVariables = {
+export type GetRoomQueryVariables = Exact<{
   id: Scalars['ID'];
-};
+}>;
 
 export type GetRoomQuery = { __typename?: 'Query' } & {
   room?: Maybe<
-    { __typename?: 'Room' } & Pick<Room, 'id' | 'name' | 'description'> & {
+    { __typename?: 'Room' } & Pick<Room, 'id' | 'name'> & {
         points: Array<
           { __typename?: 'Point' } & Pick<Point, 'label' | 'description'>
         >;
@@ -238,7 +266,7 @@ export const CreateRoomDocument = gql`
     }
   }
 `;
-export type CreateRoomMutationFn = ApolloReactCommon.MutationFunction<
+export type CreateRoomMutationFn = Apollo.MutationFunction<
   CreateRoomMutation,
   CreateRoomMutationVariables
 >;
@@ -262,25 +290,77 @@ export type CreateRoomMutationFn = ApolloReactCommon.MutationFunction<
  * });
  */
 export function useCreateRoomMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
+  baseOptions?: Apollo.MutationHookOptions<
     CreateRoomMutation,
     CreateRoomMutationVariables
   >,
 ) {
-  return ApolloReactHooks.useMutation<
-    CreateRoomMutation,
-    CreateRoomMutationVariables
-  >(CreateRoomDocument, baseOptions);
+  return Apollo.useMutation<CreateRoomMutation, CreateRoomMutationVariables>(
+    CreateRoomDocument,
+    baseOptions,
+  );
 }
 export type CreateRoomMutationHookResult = ReturnType<
   typeof useCreateRoomMutation
 >;
-export type CreateRoomMutationResult = ApolloReactCommon.MutationResult<
+export type CreateRoomMutationResult = Apollo.MutationResult<
   CreateRoomMutation
 >;
-export type CreateRoomMutationOptions = ApolloReactCommon.BaseMutationOptions<
+export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<
   CreateRoomMutation,
   CreateRoomMutationVariables
+>;
+export const EditRoomDocument = gql`
+  mutation EditRoom($roomInput: EditRoomInput!, $pointsInput: [PointInput!]!) {
+    editRoom(roomInput: $roomInput, pointsInput: $pointsInput) {
+      id
+      name
+      points {
+        label
+        description
+      }
+    }
+  }
+`;
+export type EditRoomMutationFn = Apollo.MutationFunction<
+  EditRoomMutation,
+  EditRoomMutationVariables
+>;
+
+/**
+ * __useEditRoomMutation__
+ *
+ * To run a mutation, you first call `useEditRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editRoomMutation, { data, loading, error }] = useEditRoomMutation({
+ *   variables: {
+ *      roomInput: // value for 'roomInput'
+ *      pointsInput: // value for 'pointsInput'
+ *   },
+ * });
+ */
+export function useEditRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditRoomMutation,
+    EditRoomMutationVariables
+  >,
+) {
+  return Apollo.useMutation<EditRoomMutation, EditRoomMutationVariables>(
+    EditRoomDocument,
+    baseOptions,
+  );
+}
+export type EditRoomMutationHookResult = ReturnType<typeof useEditRoomMutation>;
+export type EditRoomMutationResult = Apollo.MutationResult<EditRoomMutation>;
+export type EditRoomMutationOptions = Apollo.BaseMutationOptions<
+  EditRoomMutation,
+  EditRoomMutationVariables
 >;
 export const CreateUserDocument = gql`
   mutation CreateUser($createUserInput: CreateUserInput!) {
@@ -291,7 +371,7 @@ export const CreateUserDocument = gql`
     }
   }
 `;
-export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
+export type CreateUserMutationFn = Apollo.MutationFunction<
   CreateUserMutation,
   CreateUserMutationVariables
 >;
@@ -314,23 +394,23 @@ export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
  * });
  */
 export function useCreateUserMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
+  baseOptions?: Apollo.MutationHookOptions<
     CreateUserMutation,
     CreateUserMutationVariables
   >,
 ) {
-  return ApolloReactHooks.useMutation<
-    CreateUserMutation,
-    CreateUserMutationVariables
-  >(CreateUserDocument, baseOptions);
+  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(
+    CreateUserDocument,
+    baseOptions,
+  );
 }
 export type CreateUserMutationHookResult = ReturnType<
   typeof useCreateUserMutation
 >;
-export type CreateUserMutationResult = ApolloReactCommon.MutationResult<
+export type CreateUserMutationResult = Apollo.MutationResult<
   CreateUserMutation
 >;
-export type CreateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<
   CreateUserMutation,
   CreateUserMutationVariables
 >;
@@ -339,7 +419,7 @@ export const VoteDocument = gql`
     vote(voteInput: $voteInput)
   }
 `;
-export type VoteMutationFn = ApolloReactCommon.MutationFunction<
+export type VoteMutationFn = Apollo.MutationFunction<
   VoteMutation,
   VoteMutationVariables
 >;
@@ -362,19 +442,16 @@ export type VoteMutationFn = ApolloReactCommon.MutationFunction<
  * });
  */
 export function useVoteMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    VoteMutation,
-    VoteMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>,
 ) {
-  return ApolloReactHooks.useMutation<VoteMutation, VoteMutationVariables>(
+  return Apollo.useMutation<VoteMutation, VoteMutationVariables>(
     VoteDocument,
     baseOptions,
   );
 }
 export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
-export type VoteMutationResult = ApolloReactCommon.MutationResult<VoteMutation>;
-export type VoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export type VoteMutationOptions = Apollo.BaseMutationOptions<
   VoteMutation,
   VoteMutationVariables
 >;
@@ -383,7 +460,7 @@ export const ShowVotesDocument = gql`
     showVotes(showVotesInput: $showVotesInput)
   }
 `;
-export type ShowVotesMutationFn = ApolloReactCommon.MutationFunction<
+export type ShowVotesMutationFn = Apollo.MutationFunction<
   ShowVotesMutation,
   ShowVotesMutationVariables
 >;
@@ -406,23 +483,21 @@ export type ShowVotesMutationFn = ApolloReactCommon.MutationFunction<
  * });
  */
 export function useShowVotesMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
+  baseOptions?: Apollo.MutationHookOptions<
     ShowVotesMutation,
     ShowVotesMutationVariables
   >,
 ) {
-  return ApolloReactHooks.useMutation<
-    ShowVotesMutation,
-    ShowVotesMutationVariables
-  >(ShowVotesDocument, baseOptions);
+  return Apollo.useMutation<ShowVotesMutation, ShowVotesMutationVariables>(
+    ShowVotesDocument,
+    baseOptions,
+  );
 }
 export type ShowVotesMutationHookResult = ReturnType<
   typeof useShowVotesMutation
 >;
-export type ShowVotesMutationResult = ApolloReactCommon.MutationResult<
-  ShowVotesMutation
->;
-export type ShowVotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
+export type ShowVotesMutationResult = Apollo.MutationResult<ShowVotesMutation>;
+export type ShowVotesMutationOptions = Apollo.BaseMutationOptions<
   ShowVotesMutation,
   ShowVotesMutationVariables
 >;
@@ -431,7 +506,7 @@ export const ClearVotesDocument = gql`
     clearVotes(clearVotesInput: $clearVotesInput)
   }
 `;
-export type ClearVotesMutationFn = ApolloReactCommon.MutationFunction<
+export type ClearVotesMutationFn = Apollo.MutationFunction<
   ClearVotesMutation,
   ClearVotesMutationVariables
 >;
@@ -454,23 +529,23 @@ export type ClearVotesMutationFn = ApolloReactCommon.MutationFunction<
  * });
  */
 export function useClearVotesMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
+  baseOptions?: Apollo.MutationHookOptions<
     ClearVotesMutation,
     ClearVotesMutationVariables
   >,
 ) {
-  return ApolloReactHooks.useMutation<
-    ClearVotesMutation,
-    ClearVotesMutationVariables
-  >(ClearVotesDocument, baseOptions);
+  return Apollo.useMutation<ClearVotesMutation, ClearVotesMutationVariables>(
+    ClearVotesDocument,
+    baseOptions,
+  );
 }
 export type ClearVotesMutationHookResult = ReturnType<
   typeof useClearVotesMutation
 >;
-export type ClearVotesMutationResult = ApolloReactCommon.MutationResult<
+export type ClearVotesMutationResult = Apollo.MutationResult<
   ClearVotesMutation
 >;
-export type ClearVotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
+export type ClearVotesMutationOptions = Apollo.BaseMutationOptions<
   ClearVotesMutation,
   ClearVotesMutationVariables
 >;
@@ -524,12 +599,12 @@ export const JoinRoomDocument = gql`
  * });
  */
 export function useJoinRoomSubscription(
-  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+  baseOptions?: Apollo.SubscriptionHookOptions<
     JoinRoomSubscription,
     JoinRoomSubscriptionVariables
   >,
 ) {
-  return ApolloReactHooks.useSubscription<
+  return Apollo.useSubscription<
     JoinRoomSubscription,
     JoinRoomSubscriptionVariables
   >(JoinRoomDocument, baseOptions);
@@ -537,7 +612,7 @@ export function useJoinRoomSubscription(
 export type JoinRoomSubscriptionHookResult = ReturnType<
   typeof useJoinRoomSubscription
 >;
-export type JoinRoomSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+export type JoinRoomSubscriptionResult = Apollo.SubscriptionResult<
   JoinRoomSubscription
 >;
 export const GetRoomDocument = gql`
@@ -545,7 +620,6 @@ export const GetRoomDocument = gql`
     room(id: $id) {
       id
       name
-      description
       points {
         label
         description
@@ -571,30 +645,27 @@ export const GetRoomDocument = gql`
  * });
  */
 export function useGetRoomQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    GetRoomQuery,
-    GetRoomQueryVariables
-  >,
+  baseOptions?: Apollo.QueryHookOptions<GetRoomQuery, GetRoomQueryVariables>,
 ) {
-  return ApolloReactHooks.useQuery<GetRoomQuery, GetRoomQueryVariables>(
+  return Apollo.useQuery<GetRoomQuery, GetRoomQueryVariables>(
     GetRoomDocument,
     baseOptions,
   );
 }
 export function useGetRoomLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+  baseOptions?: Apollo.LazyQueryHookOptions<
     GetRoomQuery,
     GetRoomQueryVariables
   >,
 ) {
-  return ApolloReactHooks.useLazyQuery<GetRoomQuery, GetRoomQueryVariables>(
+  return Apollo.useLazyQuery<GetRoomQuery, GetRoomQueryVariables>(
     GetRoomDocument,
     baseOptions,
   );
 }
 export type GetRoomQueryHookResult = ReturnType<typeof useGetRoomQuery>;
 export type GetRoomLazyQueryHookResult = ReturnType<typeof useGetRoomLazyQuery>;
-export type GetRoomQueryResult = ApolloReactCommon.QueryResult<
+export type GetRoomQueryResult = Apollo.QueryResult<
   GetRoomQuery,
   GetRoomQueryVariables
 >;
