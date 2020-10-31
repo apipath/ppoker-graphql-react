@@ -58,7 +58,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
     } else if (firstRowRef.current) {
       firstRowRef.current.focus();
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleNewPoint = () =>
     setPoints((opts) => [
