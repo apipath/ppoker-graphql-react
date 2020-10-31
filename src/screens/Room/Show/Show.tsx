@@ -33,7 +33,7 @@ function RoomShow() {
 
   return (
     <section className="p-4 lg:p-5">
-      <h1 className="mb-8 text-2xl font-medium text-center">
+      <h1 className="mb-4 text-2xl font-medium text-center">
         <span className="text-gray-800">{room.name}</span>
         <span className="text-gray-700">#{room.id}</span>
       </h1>
