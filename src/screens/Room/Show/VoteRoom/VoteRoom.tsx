@@ -148,15 +148,15 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
           ))}
         </ul>
         {user.role === Role.Observer && (
-          <div className="block mb-4 lg:mt-4">
+          <div className="block mb-8 lg:mt-8">
             <h3 className="text-sm text-center text-gray-600 leading-5">
               Observers cannot vote
             </h3>
           </div>
         )}
       </div>
-      <div className="my-4 border-b border-gray-300 lg:hidden"></div>
-      <div className="flex-grow mt-4 lg:mt-0">
+      <div className="my-8 border-b border-gray-300 lg:hidden"></div>
+      <div className="flex-grow mt-4 lg:mt-0 lg:ml-4">
         <div className="flex flex-col w-full md:grid md:grid-cols-2 md:gap-4">
           <div>
             <Participants
@@ -167,7 +167,7 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
             />
           </div>
           <div className="w-full mt-6 md:mt-0">
-            <div className="flex justify-around mb-12">
+            <div className="flex justify-around">
               <Button
                 onClick={handleShowVotes}
                 disabled={showVotesLoading || showVotes}
