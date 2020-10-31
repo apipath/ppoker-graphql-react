@@ -11,20 +11,22 @@ import { nanoid } from 'nanoid';
 import UseAnimations from 'react-useanimations';
 import trash2 from 'react-useanimations/lib/trash2';
 import { useToasts } from 'react-toast-notifications';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useLocation } from 'react-router';
 
-import Button from '../../../components/Button';
 import Point from '../../../components/Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
 import {
   useEditRoomMutation,
   useGetRoomQuery,
 } from '../../../generated/graphql';
+import Button3D from '../../../components/Button3D';
+import Link3D from '../../../components/Link3D';
 
 type Props = RouteComponentProps<{}>;
 
 const RoomEdit: React.FC<Props> = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const newRoomNameRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();
   const { data, loading } = useGetRoomQuery({ variables: { id } });
@@ -162,13 +164,22 @@ const RoomEdit: React.FC<Props> = () => {
             />
           </div>
         </h2>
-        <Button
-          loading={loading}
-          onClick={handleEditRoom}
-          disabled={!updateEnabled}
-        >
-          Update
-        </Button>
+        <div className="flex">
+          <Button3D
+            loading={loading}
+            onClick={handleEditRoom}
+            disabled={!updateEnabled}
+          >
+            Update
+          </Button3D>
+
+          <Link3D
+            className="ml-4"
+            to={location.pathname.replace(/\/edit$/, '')}
+          >
+            Join Room
+          </Link3D>
+        </div>
       </header>
       <ul>
         <DragDropContext onDragEnd={handleDragEnd}>

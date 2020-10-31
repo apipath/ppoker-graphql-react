@@ -14,7 +14,7 @@ import trash2 from 'react-useanimations/lib/trash2';
 import { useToasts } from 'react-toast-notifications';
 import { RouteComponentProps } from 'react-router';
 
-import Button from '../../../components/Button';
+import Button3D from '../../../components/Button3D';
 import Point from '../../../components/Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
 import { useCreateRoomMutation } from '../../../generated/graphql';
@@ -150,13 +150,13 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
             />
           </div>
         </h2>
-        <Button
+        <Button3D
           loading={loading}
           onClick={handleCreateRoom}
           disabled={!createEnabled}
         >
           Create
-        </Button>
+        </Button3D>
       </header>
       <ul>
         <DragDropContext onDragEnd={handleDragEnd}>
