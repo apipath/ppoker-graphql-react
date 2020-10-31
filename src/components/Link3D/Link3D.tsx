@@ -13,7 +13,8 @@ const Link3D: React.FC<LinkProps & { color?: Color }> = ({
     <Link
       {...rest}
       className={cn(
-        'px-4 py-2 font-bold text-white bg-purple-500 border-b-4 border-purple-700 rounded hover:bg-purple-400 hover:border-purple-500'.replaceAll(
+        'px-4 py-2 font-bold text-white border-b-4 rounded',
+        'bg-purple-500 border-purple-700 hover:bg-purple-400 hover:border-purple-500'.replaceAll(
           'purple',
           color,
         ),
