@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, matchPath } from 'react-router-dom';
 import classnames from 'classnames';
 
 import HeaderLink from './Link';
 import { LogoSmallIcon, LogoBigIcon, MenuIcon } from '../Icons';
+import Link3D from '../Link3D';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((val) => !val);
   const closeMenu = () => setIsOpen(false);
+  const location = useLocation();
+  const enableEditButton = matchPath(location.pathname, {
+    path: '/room/:id',
+    exact: true,
+  });
 
   return (
     <nav className="flex flex-wrap items-center justify-between">
@@ -52,21 +58,31 @@ function Header() {
             </HeaderLink>
           </li>
           <li className="block mt-4 ml-4 lg:hidden">
-            <Link
-              className="px-4 py-2 text-sm leading-none border border-gray-800 rounded focus:outline-none focus:shadow-outline focus:border-blue-400 hover:text-white hover:bg-gray-800"
-              to="/room"
-            >
+            <Link3D onClick={closeMenu} to="/room" color="indigo">
               New Room
-            </Link>
+            </Link3D>
+            {enableEditButton && (
+              <Link3D
+                onClick={closeMenu}
+                className="ml-4"
+                to={location.pathname + '/edit'}
+              >
+                Edit
+              </Link3D>
+            )}
           </li>
         </ul>
       </div>
-      <Link
-        className="hidden px-4 py-2 mx-4 font-medium border border-gray-800 rounded-full lg:inline hover:shadow focus:outline-none focus:shadow-outline focus:border-blue-400 text-md hover:text-white hover:bg-gray-800"
-        to="/room"
-      >
-        New Room
-      </Link>
+      <div className="hidden mx-4 lg:inline">
+        <Link3D to="/room" color="indigo">
+          New Room
+        </Link3D>
+        {enableEditButton && (
+          <Link3D className="ml-4" to={location.pathname + '/edit'}>
+            Edit
+          </Link3D>
+        )}
+      </div>
     </nav>
   );
 }

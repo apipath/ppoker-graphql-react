@@ -7,7 +7,7 @@ import { useGetRoomQuery, User } from '../../../generated/graphql';
 
 type Props = RouteComponentProps<{ id: string }>;
 
-const RoomShow: React.FC<Props> = ({ history, location }) => {
+const RoomShow: React.FC<Props> = ({ location }) => {
   const { id } = useParams<{ id: string }>();
 
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
@@ -35,14 +35,6 @@ const RoomShow: React.FC<Props> = ({ history, location }) => {
           <span className="text-gray-800">{room.name}</span>
           <span className="text-gray-700">#{room.id}</span>
         </h1>
-        <div className="flex items-center justify-end">
-          <button
-            className="px-4 py-2 font-bold text-white bg-purple-500 border-b-4 border-purple-700 rounded hover:bg-purple-400 hover:border-purple-500"
-            onClick={() => history.push(location.pathname + '/edit')}
-          >
-            Edit
-          </button>
-        </div>
       </header>
       <div>
         {user ? (

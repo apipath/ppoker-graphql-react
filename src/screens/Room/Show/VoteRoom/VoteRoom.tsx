@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import PointCard from '../PointCard';
 import Results from '../Results';
-import Button from '../../../../components/Button';
+import Button3D from '../../../../components/Button3D';
 import Participants from '../Participants';
 import {
   Room,
@@ -168,15 +168,20 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
           </div>
           <div className="w-full mt-6 md:mt-0">
             <div className="flex justify-around">
-              <Button
+              <Button3D
+                color="teal"
                 onClick={handleShowVotes}
                 disabled={showVotesLoading || showVotes}
               >
                 Show Votes
-              </Button>
-              <Button onClick={handleClearVotes} disabled={clearVotesLoading}>
+              </Button3D>
+              <Button3D
+                color="teal"
+                onClick={handleClearVotes}
+                disabled={clearVotesLoading}
+              >
                 Clear Votes
-              </Button>
+              </Button3D>
             </div>
             <AnimatePresence>
               {showVotes && (
