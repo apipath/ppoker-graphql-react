@@ -4,7 +4,6 @@ import { RouteComponentProps, useParams } from 'react-router-dom';
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { useGetRoomQuery, User } from '../../../generated/graphql';
-import { NOT_FOUND_ERR_CODE, hasError } from '../../../errors';
 
 type Props = RouteComponentProps<{ id: string }>;
 
@@ -19,11 +18,7 @@ const RoomShow: React.FC<Props> = ({ history, location }) => {
   };
 
   if (error) {
-    if (hasError(error, NOT_FOUND_ERR_CODE)) {
-      return <p>NOT FOUND</p>;
-    }
-
-    throw error;
+    throw error; // will be catched by error boundary
   }
   // TODO: use a proper loading
   if (loading || !data) return <p>Loading...</p>;
