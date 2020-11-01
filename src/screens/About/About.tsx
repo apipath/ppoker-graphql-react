@@ -11,23 +11,26 @@ const About: React.FC = () => {
       <Header />
       <article>
         <section className="flex flex-col items-center text-center">
-          <h2 className="tracking-wide font-semibold text-gray-800 text-4xl">
+          <h2 className="text-4xl font-semibold tracking-wide text-gray-800">
             About us
           </h2>
-          <p className="m-8 max-w-4xl text-xl">
-            We are a group of passionate developers who met in time and decided
-            to share what we have learned by building open source apps.
+          <p className="max-w-4xl m-8 text-xl">
+            We are a group of passionate developers who met over time and
+            decided to share what we have learned by building open source apps.
           </p>
         </section>
 
         <section className="mt-4 text-center">
-          <h2 className="tracking-wide font-semibold text-gray-800 text-4xl">
+          <h2 className="text-4xl font-semibold tracking-wide text-gray-800">
             Meet the team
           </h2>
-          <div className="mt-4 flex justify-center">
-            <ul className="flex justify-center flex-wrap">
+          <div className="flex justify-center mt-4">
+            <ul className="flex flex-wrap justify-center">
               {members.map(({ name, login, location, htmlUrl }) => (
-                <li className="flex sm:my-4 justify-center w-full sm:flex sm:justify-center sm:w-1/2 md:w-5/12 lg:w-1/3">
+                <li
+                  key={name}
+                  className="flex justify-center w-full sm:my-4 sm:flex sm:justify-center sm:w-1/2 md:w-5/12 lg:w-1/3"
+                >
                   <AboutMember
                     name={name}
                     login={login}
