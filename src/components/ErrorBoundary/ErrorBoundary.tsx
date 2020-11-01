@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import Button from '../Button';
 import { BugFix } from '../Icons';
 import { isNotFoundError } from '../../errors';
 import NotFound from '../Icons/NotFound';
+import Link3D from '../Link3D';
 
 type Props = { render?: () => JSX.Element };
 type State = { hasError: boolean; error: Error | null };
@@ -40,9 +39,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                 Ooops... looks like you got lost
               </p>
               <div className="inline-block mt-2">
-                <Link to="/">
-                  <Button>GO HOME</Button>
-                </Link>
+                <Link3D to="/">GO HOME</Link3D>
               </div>
             </div>
           </div>
@@ -70,9 +67,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                 Sorry, there was an unexpected error.
               </p>
               <div className="inline-block mt-2">
-                <Link to="/">
-                  <Button>GO HOME</Button>
-                </Link>
+                <Link3D to="/">GO HOME</Link3D>
               </div>
             </div>
           </div>
