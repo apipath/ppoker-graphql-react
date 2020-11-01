@@ -60,18 +60,19 @@ function Home() {
     <>
       <Header />
       <section className="flex flex-col items-center mb-10">
-        <p className="w-full mt-8 font-sans text-4xl font-thin text-center text-gray-700 md:w-1/2">
+        <p className="w-full p-4 mt-8 font-sans text-4xl font-thin text-center text-gray-700 md:w-1/2">
           Ppoker help teams during their planning sessions
         </p>
         <p className="w-1/2 mt-8 font-sans text-2xl font-thin text-center text-gray-700">
-          Create a room or join a room to get started
+          Create or join a room to get started
         </p>
       </section>
       <section className="flex justify-center py-8 bg-gray-300 md:py-12">
-        <div className="max-w-4xl flex flex-col md:flex-row md:justify-around">
+        <div className="flex flex-col max-w-4xl md:flex-row md:justify-around">
           <HomeInputCard
             title="Create a room"
             buttonLabel="Create"
+            className="md:mr-8"
             onSubmit={goToCreateRoom}
             onChange={handleCreateRoomChange}
             onKeyPress={handleCreateRoomKeyPressed}

@@ -1,8 +1,10 @@
 import React, { MouseEventHandler, HTMLProps } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   title: string;
   onSubmit: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
   buttonLabel: string;
   value: string;
 } & HTMLProps<HTMLInputElement>;
@@ -12,10 +14,16 @@ function HomeInputCard({
   buttonLabel,
   value,
   onSubmit,
+  className,
   ...inputProps
 }: Props) {
   return (
-    <div className="flex flex-col px-8 py-4 text-center text-white md:max-w-xl">
+    <div
+      className={classnames(
+        'flex flex-col py-4 text-center text-white md:max-w-xl',
+        className,
+      )}
+    >
       <h2 className="mb-4 font-semibold tracking-wide text-gray-800 uppercase">
         {title}
       </h2>
@@ -31,7 +39,7 @@ function HomeInputCard({
         <button
           onClick={onSubmit}
           type="button"
-          className="py-2 px-6 w-24 border-2 rounded-l-none border-black rounded-r bg-black font-bold focus:outline-none hover:bg-gray-900 focus:shadow-outline"
+          className="w-24 px-6 py-2 font-bold bg-black border-2 border-black rounded-l-none rounded-r focus:outline-none hover:bg-gray-900 focus:shadow-outline"
         >
           {buttonLabel}
         </button>

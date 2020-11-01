@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Button from '../../../../components/Button';
+import Button3D from '../../../../components/Button3D';
 import Select from '../../../../components/Select';
 import Input from '../../../../components/Input';
 
@@ -95,9 +95,13 @@ const JoinRoom: React.FC<Props> = ({ onLogin }) => {
           </div>
         </div>
         <div className="flex items-center justify-end mt-4 md:mt-0">
-          <Button disabled={disabled} loading={loading} onClick={handleSubmit}>
+          <Button3D
+            disabled={disabled}
+            loading={loading}
+            onClick={handleSubmit}
+          >
             Join
-          </Button>
+          </Button3D>
         </div>
       </div>
     </div>

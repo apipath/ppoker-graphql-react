@@ -136,7 +136,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
             <input
               ref={newRoomNameRef}
               className={classnames(
-                'p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
+                'w-4/5 p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
                 {
                   [`border-red-400 focus:border-red-400`]:
                     newRoomName.length === 0,
