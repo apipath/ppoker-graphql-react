@@ -187,6 +187,7 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
               {showVotes && (
                 <motion.div
                   key="results"
+                  className="mt-8"
                   initial={initial}
                   animate={animate}
                   exit={exit}
