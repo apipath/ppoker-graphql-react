@@ -14,6 +14,13 @@ const members = [
     blog: '',
   },
   {
+    login: 'cagodoy',
+    htmlUrl: 'https://github.com/cagodoy',
+    name: 'Camilo Acuña Godoy',
+    blog: '',
+    location: 'Miami, FL',
+  },
+  {
     login: 'vinaybedre',
     htmlUrl: 'https://github.com/vinaybedre',
     name: 'Vinay',
