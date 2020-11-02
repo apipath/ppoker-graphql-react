@@ -18,8 +18,8 @@ function Header() {
   });
 
   return (
-    <nav className="flex flex-wrap items-center justify-between">
-      <div className="flex flex-wrap items-center justify-between w-full p-6 lg:w-auto">
+    <nav className="grid grid-cols-1 lg:grid-cols-3">
+      <div className="flex items-center justify-between p-6">
         <div>
           <Link to="/" onClick={closeMenu} aria-label="Ppoker">
             <LogoSmallIcon className="w-16 lg:hidden" />
@@ -39,10 +39,10 @@ function Header() {
       <div
         className={classnames(
           isOpen ? 'block' : 'hidden',
-          'w-full lg:inline-block flex-grow lg:w-2/4 lg:max-w-md',
+          'lg:flex lg:items-center', // lg:w-2/4 lg:max-w-md',
         )}
       >
-        <ul className="flex-grow border-t border-gray-300 lg:border-t-0 lg:flex lg:justify-around">
+        <ul className="w-full border-t border-gray-300 lg:border-t-0 lg:flex lg:justify-around">
           <li className="block mt-4 ml-4 lg:mt-0">
             <HeaderLink to="/" exact onClick={closeMenu}>
               Home
@@ -72,7 +72,7 @@ function Header() {
           </li>
         </ul>
       </div>
-      <div className="hidden mx-4 lg:inline">
+      <div className="hidden mx-4 lg:flex lg:items-center lg:justify-end">
         <div className="inline px-4">
           <FeedbackLink />
         </div>
