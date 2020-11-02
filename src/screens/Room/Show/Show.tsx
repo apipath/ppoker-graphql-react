@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { RouteComponentProps, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { useGetRoomQuery, User } from '../../../generated/graphql';
+import Loading from '../../../components/Loading';
 
-type Props = RouteComponentProps<{ id: string }>;
-
-const RoomShow: React.FC<Props> = ({ location }) => {
+const RoomShow: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
@@ -20,10 +19,10 @@ const RoomShow: React.FC<Props> = ({ location }) => {
   if (error) {
     throw error; // will be catched by error boundary
   }
-  // TODO: use a proper loading
-  if (loading || !data) return <p>Loading...</p>;
-  const { room } = data;
 
+  if (loading || !data) return <Loading />;
+
+  const { room } = data;
   if (!room) {
     return <div>Create that room</div>;
   }

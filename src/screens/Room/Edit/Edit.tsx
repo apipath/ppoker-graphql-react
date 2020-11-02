@@ -21,6 +21,7 @@ import {
 } from '../../../generated/graphql';
 import Button3D from '../../../components/Button3D';
 import Link3D from '../../../components/Link3D';
+import Loading from '../../../components/Loading';
 
 type Props = RouteComponentProps<{}>;
 
@@ -67,7 +68,7 @@ const RoomEdit: React.FC<Props> = () => {
     }
   }, [data]);
 
-  if (loading || !data || !data?.room?.name) return <>Loading...</>;
+  if (loading || !data || !data?.room?.name) return <Loading />;
 
   const handleNewRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRoomName(e.target.value);
