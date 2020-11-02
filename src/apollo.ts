@@ -36,7 +36,6 @@ const buildClient = (httpUri: string, wsUri: string) => {
 
   return new ApolloClient({
     link: from([
-      splitLink,
       onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors)
           graphQLErrors.forEach(({ message, locations, path }) =>
@@ -46,6 +45,7 @@ const buildClient = (httpUri: string, wsUri: string) => {
           );
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
+      splitLink,
     ]),
     cache: new InMemoryCache(),
   });
