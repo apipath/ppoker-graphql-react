@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import PointCard from '../PointCard';
 import Results from '../Results';
 import Button3D from '../../../../components/Button3D';
+import Loading from '../../../../components/Loading';
 import Participants from '../Participants';
 import {
   Room,
@@ -50,8 +51,8 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
   ] = useClearVotesMutation();
   const [voteMutation, { loading: voteLoading }] = useVoteMutation();
 
-  if (subscriptionLoading || !data || !data.joinRoom)
-    return <div>Loading...</div>;
+  // TODO: use react suspense to avoid flickering the screen
+  if (subscriptionLoading || !data || !data.joinRoom) return <Loading />;
 
   if (error) throw error; // Will be catched by error boundary
 
