@@ -39,7 +39,7 @@ function Header() {
       <div
         className={classnames(
           isOpen ? 'block' : 'hidden',
-          'lg:flex lg:items-center', // lg:w-2/4 lg:max-w-md',
+          'lg:flex lg:items-center',
         )}
       >
         <ul className="w-full border-t border-gray-300 lg:border-t-0 lg:flex lg:justify-around">
