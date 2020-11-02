@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
 import classnames from 'classnames';
+import ReactGA from 'react-ga';
 import {
   Draggable,
   Droppable,
@@ -42,6 +43,10 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
       if (!data.createRoom) return;
       const { id } = data.createRoom;
       history.push(`/room/${id}`);
+      ReactGA.event({
+        category: 'User',
+        action: 'Created a Room',
+      });
     },
     onError: (err) => {
       // Let react boundaries take care of this
