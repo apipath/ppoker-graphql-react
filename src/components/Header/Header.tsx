@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import HeaderLink from './Link';
 import { LogoSmallIcon, LogoBigIcon, MenuIcon } from '../Icons';
 import Link3D from '../Link3D';
+import FeedbackLink from '../FeedbackLink';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +53,9 @@ function Header() {
               About
             </HeaderLink>
           </li>
+          <li className="block mt-4 ml-4 lg:mt-0 lg:hidden">
+            <FeedbackLink />
+          </li>
           <li className="block mt-8 ml-4 lg:hidden">
             <Link3D onClick={closeMenu} to="/room" color="indigo">
               New Room
@@ -69,6 +73,9 @@ function Header() {
         </ul>
       </div>
       <div className="hidden mx-4 lg:inline">
+        <div className="inline px-4">
+          <FeedbackLink />
+        </div>
         <Link3D to="/room" color="indigo">
           New Room
         </Link3D>

@@ -5,3 +5,4 @@ export const WS_GRAPHQL_URI =
 export const GOOGLE_ANALYTICS = process.env.REACT_APP_GOOGLE_ANALYTICS || '';
 export const IS_DEV_ENV =
   !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+export const FEEDBACK_FISH = process.env.REACT_APP_FEEDBACK_FISH || '';
