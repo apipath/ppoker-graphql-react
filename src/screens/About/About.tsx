@@ -16,7 +16,7 @@ const About: React.FC = () => {
           </h2>
           <p className="max-w-4xl m-8 text-xl">
             We are a group of passionate developers who met over time and
-            decided to share what we have learned by building open source apps.
+            decided to share what we have learned by building apps.
           </p>
         </section>
 
