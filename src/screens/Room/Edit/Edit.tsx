@@ -145,13 +145,13 @@ const RoomEdit: React.FC<Props> = () => {
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
-      <header className="flex justify-between px-4 pb-2 mb-4 border-b-2 border-gray-200">
+      <header className="justify-between block px-4 pb-2 mb-4 border-b-2 border-gray-200 sm:flex">
         <h2 className="text-xl font-semibold tracking-wide text-gray-900">
           <div className="flex justify-center mr-0 sm:mr-2">
             <input
               ref={newRoomNameRef}
               className={classnames(
-                'p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
+                'p-2 sm:w-auto bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
                 {
                   [`border-red-400 focus:border-red-400`]:
                     newRoomName.length === 0,
@@ -165,7 +165,7 @@ const RoomEdit: React.FC<Props> = () => {
             />
           </div>
         </h2>
-        <div className="flex">
+        <div className="flex justify-around my-4 sm:my-0 sm:flex-start">
           <Button3D
             loading={loading}
             onClick={handleEditRoom}
