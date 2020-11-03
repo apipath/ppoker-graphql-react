@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
+import Loading from './components/Loading';
 import Home from './screens/Home';
-import About from './screens/About';
-import Room from './screens/Room';
+
+const About = React.lazy(() => import('./screens/About'));
+const Room = React.lazy(() => import('./screens/Room'));
 
 const App: React.FC = () => {
   const history = useHistory();
@@ -19,12 +21,13 @@ const App: React.FC = () => {
 
   return (
     <main className="flex flex-col w-full">
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Home} />
-        <Route path="/room" component={Room} />
-      </Switch>
+      <Suspense fallback={<Loading />}>
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/about" component={About} />
+          <Route path="/room" component={Room} />
+        </Switch>
+      </Suspense>
     </main>
   );
 };
