@@ -1,7 +1,11 @@
 import React from 'react';
 
-const ClockIcon: React.FC<{ className?: string }> = ({ className }) => (
+const ClockIcon: React.FC<{ className?: string }> = ({
+  className,
+  ...rest
+}) => (
   <svg
+    {...rest}
     className={className}
     viewBox="0 0 24 24"
     fill="none"

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import UseAnimations from 'react-useanimations';
-import trash2 from 'react-useanimations/lib/trash2';
+import cn from 'classnames';
+import ReactTooltip from 'react-tooltip';
 
 import { swalWithButtons } from '../../../../utils';
 import { ClockIcon, CheckIcon } from '../../../../components/Icons';
@@ -11,6 +11,8 @@ import {
   User,
   useKickUserMutation,
 } from '../../../../generated/graphql';
+import CogIcon from '../../../../components/Icons/CogIcon';
+import XCircleIcon from '../../../../components/Icons/XCircleIcon';
 
 const transition = { ease: 'easeOut', duration: 0.5 };
 const initial = { opacity: 0 };
@@ -29,21 +31,31 @@ const Participants: React.FC<Props> = ({
   participants,
   observers,
   showVotes,
-  user,
+  user: currentUser,
   roomId,
 }) => {
   const [kickUserMutation] = useKickUserMutation();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const getVoteOrIcon = (participant: Participant) => {
-    if (participant.id === user.id) {
+    if (participant.id === currentUser.id) {
       return participant.votedPoint?.label;
     }
 
-    return showVotes ? (
-      participant.votedPoint?.label
-    ) : participant.votedPoint ? (
+    if (showVotes) return participant.votedPoint?.label;
+
+    return participant.votedPoint ? (
       <CheckIcon className="w-6 text-green-400" />
     ) : (
-      <ClockIcon className="w-6 text-orange-500" />
+      <>
+        <ClockIcon
+          data-tip
+          data-for={`clock-${participant.id}`}
+          className="w-6 text-orange-500"
+        />
+        <ReactTooltip id={`clock-${participant.id}`} effect="solid">
+          Waiting for vote
+        </ReactTooltip>
+      </>
     );
   };
 
@@ -53,31 +65,35 @@ const Participants: React.FC<Props> = ({
     </span>
   );
 
-  const handleOnDelete = (userId: string) => {
+  const handleOnDelete = (user: Participant) => {
     swalWithButtons
       .fire({
         title: 'Are you sure?',
-        text:
-          "This participant will be kicked out from the session. You won't be able to revert this!",
+        text: `The participant "${user.name}" will be kicked out from the session. You won't be able to revert this!`,
         icon: 'warning',
         showCancelButton: true,
         showLoaderOnConfirm: true,
         confirmButtonText: "Yes, I'm sure!",
         preConfirm: () =>
           kickUserMutation({
-            variables: { exitRoomInput: { userId, roomId } },
+            variables: { exitRoomInput: { userId: user.id, roomId } },
           }),
       })
       .then((result) => {
         if (result.isConfirmed) {
-          swalWithButtons.fire(
-            'Done',
-            'Participant has been kicked out.',
-            'success',
-          );
+          swalWithButtons
+            .fire('Done', 'Participant has been kicked out.', 'success')
+            .then(() => {
+              setIsSettingsOpen(false);
+            });
         }
       });
   };
+
+  const handleSettingsClick = () => setIsSettingsOpen(!isSettingsOpen);
+  const thereIsAtLeastOneParticipantAndIsNotCurrentUser =
+    participants.length > 1 ||
+    (participants.length === 1 && currentUser.id !== participants[0].id);
 
   return (
     <div className="w-full bg-white rounded shadow">
@@ -90,13 +106,26 @@ const Participants: React.FC<Props> = ({
             exit={exit}
             transition={transition}
           >
-            <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 rounded-tl rounded-tr">
-              Participants
-            </h3>
+            <header className="relative">
+              <h3 className="py-2 font-semibold text-center text-indigo-100 bg-indigo-900 rounded-tl rounded-tr">
+                Participants
+              </h3>
+              {thereIsAtLeastOneParticipantAndIsNotCurrentUser && (
+                <CogIcon
+                  className={cn(
+                    'absolute top-0 right-0 w-6 py-2 mr-2 text-gray-300 cursor-pointer',
+                    {
+                      'animate-spin': isSettingsOpen,
+                    },
+                  )}
+                  onClick={handleSettingsClick}
+                />
+              )}
+            </header>
             <ul>
               <AnimatePresence>
                 {participants.map((participant) => {
-                  const isCurrentUser = participant.id === user.id;
+                  const isCurrentUser = participant.id === currentUser.id;
                   return (
                     <motion.li
                       className="flex justify-between p-4"
@@ -111,16 +140,18 @@ const Participants: React.FC<Props> = ({
                         <span>{participant.name}</span>
                       </div>
                       <div className="flex items-center font-bold">
-                        {!isCurrentUser && (
-                          <UseAnimations
-                            size={32}
-                            animation={trash2}
-                            disabled={isCurrentUser}
-                            onClick={() => handleOnDelete(participant.id)}
-                            className="flex items-center pb-1 mr-2 outline-none cursor-pointer"
-                          />
+                        {isSettingsOpen && !isCurrentUser && (
+                          <div
+                            className="flex items-center text-gray-600 cursor-pointer hover:text-gray-800"
+                            onClick={() => handleOnDelete(participant)}
+                          >
+                            <span className="mr-2 text-sm font-thin leading-normal">
+                              Kick Participant
+                            </span>
+                            <XCircleIcon className="w-6" />
+                          </div>
                         )}
-                        {getVoteOrIcon(participant)}
+                        {!isSettingsOpen && getVoteOrIcon(participant)}
                       </div>
                     </motion.li>
                   );
@@ -143,7 +174,7 @@ const Participants: React.FC<Props> = ({
             <ul>
               <AnimatePresence>
                 {observers.map((observer) => {
-                  const currentUser = observer.id === user.id;
+                  const isCurrentUser = observer.id === currentUser.id;
                   return (
                     <motion.li
                       className="flex items-center p-4"
@@ -154,7 +185,7 @@ const Participants: React.FC<Props> = ({
                       transition={transition}
                     >
                       <div>
-                        {currentUser && currentUserPill}
+                        {isCurrentUser && currentUserPill}
                         {observer.name}
                       </div>
                     </motion.li>
