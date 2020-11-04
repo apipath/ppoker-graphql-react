@@ -165,6 +165,7 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
               participants={participants}
               observers={observers}
               showVotes={showVotes}
+              roomId={room.id}
             />
           </div>
           <div className="w-full mt-6 md:mt-0">

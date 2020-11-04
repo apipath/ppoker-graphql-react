@@ -1,8 +1,16 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import UseAnimations from 'react-useanimations';
+import trash2 from 'react-useanimations/lib/trash2';
 
+import { swalWithButtons } from '../../../../utils';
 import { ClockIcon, CheckIcon } from '../../../../components/Icons';
-import { Participant, Observer, User } from '../../../../generated/graphql';
+import {
+  Participant,
+  Observer,
+  User,
+  useKickUserMutation,
+} from '../../../../generated/graphql';
 
 const transition = { ease: 'easeOut', duration: 0.5 };
 const initial = { opacity: 0 };
@@ -14,6 +22,7 @@ type Props = {
   observers: Array<Observer>;
   showVotes: boolean;
   user: User;
+  roomId: string;
 };
 
 const Participants: React.FC<Props> = ({
@@ -21,7 +30,21 @@ const Participants: React.FC<Props> = ({
   observers,
   showVotes,
   user,
+  roomId,
 }) => {
+  const [kickUserMutation] = useKickUserMutation({
+    onCompleted: (data) => {
+      if (!data.exitRoom) {
+        console.warn('User was kicked out but server returned an error');
+      }
+
+      swalWithButtons.fire(
+        'Done',
+        'Participant has been kicked out.',
+        'success',
+      );
+    },
+  });
   const getVoteOrIcon = (participant: Participant) => {
     if (participant.id === user.id) {
       return participant.votedPoint?.label;
@@ -35,11 +58,33 @@ const Participants: React.FC<Props> = ({
       <ClockIcon className="w-6 text-orange-500" />
     );
   };
+
   const currentUserPill = (
     <span className="px-3 py-2 mr-2 text-xs font-semibold bg-green-300 rounded-full">
       YOU
     </span>
   );
+
+  const handleOnDelete = (userId: string) => {
+    swalWithButtons
+      .fire({
+        title: 'Are you sure?',
+        text:
+          "This participant will be kicked out from the session. You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Yes, I'm sure!",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          swalWithButtons.showLoading();
+          kickUserMutation({
+            variables: { exitRoomInput: { userId, roomId } },
+          });
+        }
+      });
+  };
+
   return (
     <div className="w-full bg-white rounded shadow">
       <AnimatePresence>
@@ -57,7 +102,7 @@ const Participants: React.FC<Props> = ({
             <ul>
               <AnimatePresence>
                 {participants.map((participant) => {
-                  const currentUser = participant.id === user.id;
+                  const isCurrentUser = participant.id === user.id;
                   return (
                     <motion.li
                       className="flex justify-between p-4"
@@ -68,10 +113,19 @@ const Participants: React.FC<Props> = ({
                       transition={transition}
                     >
                       <div>
-                        {currentUser && currentUserPill}
+                        {isCurrentUser && currentUserPill}
                         <span>{participant.name}</span>
                       </div>
                       <div className="flex items-center font-bold">
+                        {!isCurrentUser && (
+                          <UseAnimations
+                            size={32}
+                            animation={trash2}
+                            disabled={isCurrentUser}
+                            onClick={() => handleOnDelete(participant.id)}
+                            className="flex items-center pb-1 mr-2 outline-none cursor-pointer"
+                          />
+                        )}
                         {getVoteOrIcon(participant)}
                       </div>
                     </motion.li>

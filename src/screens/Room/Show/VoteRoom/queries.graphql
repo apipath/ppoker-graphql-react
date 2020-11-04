@@ -10,6 +10,10 @@ mutation ClearVotes($clearVotesInput: ClearVotesInput!) {
   clearVotes(clearVotesInput: $clearVotesInput)
 }
 
+mutation KickUser($exitRoomInput: ExitRoomInput!) {
+  exitRoom(exitRoomInput: $exitRoomInput)
+}
+
 subscription JoinRoom(
   $roomId: ID!
   $userId: ID!

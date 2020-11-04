@@ -1,1 +1,2 @@
 src/generated/graphql.tsx     -diff
+graphql.schema.json           -diff
