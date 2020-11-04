@@ -32,19 +32,7 @@ const Participants: React.FC<Props> = ({
   user,
   roomId,
 }) => {
-  const [kickUserMutation] = useKickUserMutation({
-    onCompleted: (data) => {
-      if (!data.exitRoom) {
-        console.warn('User was kicked out but server returned an error');
-      }
-
-      swalWithButtons.fire(
-        'Done',
-        'Participant has been kicked out.',
-        'success',
-      );
-    },
-  });
+  const [kickUserMutation] = useKickUserMutation();
   const getVoteOrIcon = (participant: Participant) => {
     if (participant.id === user.id) {
       return participant.votedPoint?.label;
@@ -73,14 +61,20 @@ const Participants: React.FC<Props> = ({
           "This participant will be kicked out from the session. You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
+        showLoaderOnConfirm: true,
         confirmButtonText: "Yes, I'm sure!",
+        preConfirm: () =>
+          kickUserMutation({
+            variables: { exitRoomInput: { userId, roomId } },
+          }),
       })
       .then((result) => {
         if (result.isConfirmed) {
-          swalWithButtons.showLoading();
-          kickUserMutation({
-            variables: { exitRoomInput: { userId, roomId } },
-          });
+          swalWithButtons.fire(
+            'Done',
+            'Participant has been kicked out.',
+            'success',
+          );
         }
       });
   };
