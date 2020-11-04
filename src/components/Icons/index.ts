@@ -12,3 +12,4 @@ export { default as BugFix } from './BugFix';
 export { default as NotFound } from './NotFound';
 export { default as CogIcon } from './CogIcon';
 export { default as XCircleIcon } from './XCircleIcon';
+export { default as ClipboardIcon } from './ClipboardIcon';

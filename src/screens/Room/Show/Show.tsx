@@ -8,6 +8,7 @@ import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { useGetRoomQuery, User } from '../../../generated/graphql';
 import Loading from '../../../components/Loading';
+import { ClipboardIcon } from '../../../components/Icons';
 
 const RoomShow: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,20 +66,7 @@ const RoomShow: React.FC = () => {
               className="mx-2 text-gray-700 cursor-pointer hover:text-gray-800"
               ref={copyButtonEl}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                />
-              </svg>
+              <ClipboardIcon className="w-5" />
             </button>
           </div>
           <ReactTooltip id="copy" effect="solid">
