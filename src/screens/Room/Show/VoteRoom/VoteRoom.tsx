@@ -130,23 +130,23 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
     <div className="flex flex-col flex-col-reverse lg:flex-row">
       <div className="flex flex-col-reverse lg:flex-col lg:w-1/2">
         <ul className="w-full grid gap-2 grid-cols-fill-40">
-          {room.points.map((point) => (
-            <li
-              onClick={() =>
-                user.role === Role.Participant &&
-                !voteLoading &&
-                handleClick(point)
-              }
-              className="flex justify-center"
-              key={point.label}
-            >
-              <PointCard
-                point={point}
-                disabled={user.role === Role.Observer || voteLoading}
-                selected={point.label === selectedPoint}
-              />
-            </li>
-          ))}
+          {room.points.map((point) => {
+            const isDisabled =
+              user.role === Role.Observer || voteLoading || showVotes;
+            return (
+              <li
+                onClick={() => isDisabled || handleClick(point)}
+                className="flex justify-center"
+                key={point.label}
+              >
+                <PointCard
+                  point={point}
+                  disabled={isDisabled}
+                  selected={point.label === selectedPoint}
+                />
+              </li>
+            );
+          })}
         </ul>
         {user.role === Role.Observer && (
           <div className="block mb-8 lg:mt-8">
