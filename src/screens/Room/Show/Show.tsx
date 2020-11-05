@@ -63,7 +63,7 @@ const RoomShow: React.FC = () => {
             <button
               data-tip
               data-for="copy"
-              className="mx-2 text-gray-700 cursor-pointer hover:text-gray-800"
+              className="px-2 text-gray-700 cursor-pointer hover:text-gray-800"
               ref={copyButtonEl}
             >
               <ClipboardIcon className="w-5" />
