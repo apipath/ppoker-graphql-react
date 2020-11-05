@@ -13,6 +13,32 @@ export type Scalars = {
   Float: number;
 };
 
+export type Point = {
+  __typename?: 'Point';
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type Observer = {
+  __typename?: 'Observer';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ExitRoomInput = {
+  roomId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  room?: Maybe<Room>;
+};
+
+export type QueryRoomArgs = {
+  id: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createRoom?: Maybe<Room>;
@@ -54,64 +80,6 @@ export type MutationExitRoomArgs = {
   exitRoomInput: ExitRoomInput;
 };
 
-export enum Role {
-  Participant = 'PARTICIPANT',
-  Observer = 'OBSERVER',
-}
-
-export type Point = {
-  __typename?: 'Point';
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type ExitRoomInput = {
-  roomId: Scalars['ID'];
-  userId: Scalars['ID'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  room?: Maybe<Room>;
-};
-
-export type QueryRoomArgs = {
-  id: Scalars['ID'];
-};
-
-export type EditRoomInput = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-};
-
-export type PointInput = {
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type VoteInput = {
-  roomId: Scalars['ID'];
-  pointLabel: Scalars['String'];
-  userId: Scalars['ID'];
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  role: Role;
-};
-
-export type CreateUserInput = {
-  userName: Scalars['String'];
-  role: Role;
-};
-
-export type CreateRoomInput = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   joinRoom?: Maybe<OnlineRoom>;
@@ -124,16 +92,48 @@ export type SubscriptionJoinRoomArgs = {
   role: Role;
 };
 
-export type ShowVotesInput = {
-  roomId: Scalars['ID'];
-};
-
 export type OnlineRoom = {
   __typename?: 'OnlineRoom';
   showVotes: Scalars['Boolean'];
   participants: Array<Participant>;
   observers: Array<Observer>;
 };
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  role: Role;
+};
+
+export type EditRoomInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type ClearVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type CreateRoomInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type VoteInput = {
+  roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export enum Role {
+  Participant = 'PARTICIPANT',
+  Observer = 'OBSERVER',
+}
 
 export type Participant = {
   __typename?: 'Participant';
@@ -142,22 +142,22 @@ export type Participant = {
   votedPoint?: Maybe<Point>;
 };
 
-export type Observer = {
-  __typename?: 'Observer';
-  id: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type ClearVotesInput = {
-  roomId: Scalars['ID'];
-};
-
 export type Room = {
   __typename?: 'Room';
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   points: Array<Point>;
+};
+
+export type PointInput = {
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type CreateUserInput = {
+  userName: Scalars['String'];
+  role: Role;
 };
 
 export type CreateRoomMutationVariables = Exact<{
@@ -662,7 +662,7 @@ export const JoinRoomDocument = gql`
  * });
  */
 export function useJoinRoomSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
+  baseOptions: Apollo.SubscriptionHookOptions<
     JoinRoomSubscription,
     JoinRoomSubscriptionVariables
   >,
@@ -708,7 +708,7 @@ export const GetRoomDocument = gql`
  * });
  */
 export function useGetRoomQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetRoomQuery, GetRoomQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<GetRoomQuery, GetRoomQueryVariables>,
 ) {
   return Apollo.useQuery<GetRoomQuery, GetRoomQueryVariables>(
     GetRoomDocument,
