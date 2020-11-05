@@ -13,20 +13,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  role: Role;
-};
-
-export type Participant = {
-  __typename?: 'Participant';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  votedPoint?: Maybe<Point>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   createRoom?: Maybe<Room>;
@@ -35,6 +21,7 @@ export type Mutation = {
   showVotes: Scalars['Boolean'];
   clearVotes: Scalars['Boolean'];
   createUser: User;
+  exitRoom: Scalars['Boolean'];
 };
 
 export type MutationCreateRoomArgs = {
@@ -63,24 +50,8 @@ export type MutationCreateUserArgs = {
   createUserInput?: Maybe<CreateUserInput>;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  room?: Maybe<Room>;
-};
-
-export type QueryRoomArgs = {
-  id: Scalars['ID'];
-};
-
-export type VoteInput = {
-  roomId: Scalars['ID'];
-  pointLabel: Scalars['String'];
-  userId: Scalars['ID'];
-};
-
-export type CreateUserInput = {
-  userName: Scalars['String'];
-  role: Role;
+export type MutationExitRoomArgs = {
+  exitRoomInput: ExitRoomInput;
 };
 
 export enum Role {
@@ -88,33 +59,24 @@ export enum Role {
   Observer = 'OBSERVER',
 }
 
-export type ShowVotesInput = {
-  roomId: Scalars['ID'];
-};
-
 export type Point = {
   __typename?: 'Point';
   label: Scalars['String'];
   description?: Maybe<Scalars['String']>;
 };
 
-export type CreateRoomInput = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+export type ExitRoomInput = {
+  roomId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
-export type Observer = {
-  __typename?: 'Observer';
-  id: Scalars['String'];
-  name: Scalars['String'];
+export type Query = {
+  __typename?: 'Query';
+  room?: Maybe<Room>;
 };
 
-export type Room = {
-  __typename?: 'Room';
+export type QueryRoomArgs = {
   id: Scalars['ID'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  points: Array<Point>;
 };
 
 export type EditRoomInput = {
@@ -127,8 +89,27 @@ export type PointInput = {
   description?: Maybe<Scalars['String']>;
 };
 
-export type ClearVotesInput = {
+export type VoteInput = {
   roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  role: Role;
+};
+
+export type CreateUserInput = {
+  userName: Scalars['String'];
+  role: Role;
+};
+
+export type CreateRoomInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
 };
 
 export type Subscription = {
@@ -143,11 +124,40 @@ export type SubscriptionJoinRoomArgs = {
   role: Role;
 };
 
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
 export type OnlineRoom = {
   __typename?: 'OnlineRoom';
   showVotes: Scalars['Boolean'];
   participants: Array<Participant>;
   observers: Array<Observer>;
+};
+
+export type Participant = {
+  __typename?: 'Participant';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  votedPoint?: Maybe<Point>;
+};
+
+export type Observer = {
+  __typename?: 'Observer';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ClearVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type Room = {
+  __typename?: 'Room';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  points: Array<Point>;
 };
 
 export type CreateRoomMutationVariables = Exact<{
@@ -210,6 +220,15 @@ export type ClearVotesMutationVariables = Exact<{
 export type ClearVotesMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'clearVotes'
+>;
+
+export type KickUserMutationVariables = Exact<{
+  exitRoomInput: ExitRoomInput;
+}>;
+
+export type KickUserMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'exitRoom'
 >;
 
 export type JoinRoomSubscriptionVariables = Exact<{
@@ -548,6 +567,50 @@ export type ClearVotesMutationResult = Apollo.MutationResult<
 export type ClearVotesMutationOptions = Apollo.BaseMutationOptions<
   ClearVotesMutation,
   ClearVotesMutationVariables
+>;
+export const KickUserDocument = gql`
+  mutation KickUser($exitRoomInput: ExitRoomInput!) {
+    exitRoom(exitRoomInput: $exitRoomInput)
+  }
+`;
+export type KickUserMutationFn = Apollo.MutationFunction<
+  KickUserMutation,
+  KickUserMutationVariables
+>;
+
+/**
+ * __useKickUserMutation__
+ *
+ * To run a mutation, you first call `useKickUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useKickUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [kickUserMutation, { data, loading, error }] = useKickUserMutation({
+ *   variables: {
+ *      exitRoomInput: // value for 'exitRoomInput'
+ *   },
+ * });
+ */
+export function useKickUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    KickUserMutation,
+    KickUserMutationVariables
+  >,
+) {
+  return Apollo.useMutation<KickUserMutation, KickUserMutationVariables>(
+    KickUserDocument,
+    baseOptions,
+  );
+}
+export type KickUserMutationHookResult = ReturnType<typeof useKickUserMutation>;
+export type KickUserMutationResult = Apollo.MutationResult<KickUserMutation>;
+export type KickUserMutationOptions = Apollo.BaseMutationOptions<
+  KickUserMutation,
+  KickUserMutationVariables
 >;
 export const JoinRoomDocument = gql`
   subscription JoinRoom(
