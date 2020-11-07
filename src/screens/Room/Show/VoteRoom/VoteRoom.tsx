@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -30,6 +30,7 @@ type Props = {
 
 const VoteRoom: React.FC<Props> = ({ room, user }) => {
   const { addToast } = useToasts();
+  const [gotKickedOut, setGotKickedOut] = useState(false);
   const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
     {
       variables: {
@@ -50,6 +51,28 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
     { loading: clearVotesLoading },
   ] = useClearVotesMutation();
   const [voteMutation, { loading: voteLoading }] = useVoteMutation();
+
+  useEffect(() => {
+    if (!data || !data.joinRoom || user.role === Role.Observer) return;
+    const { participants } = data.joinRoom;
+    if (participants.map(({ id }) => id).includes(user.id)) return;
+
+    // User got kicked out
+    addToast(
+      <span>
+        You got disconnected from the room. Click{' '}
+        <button
+          className="font-bold cursor-pointer"
+          onClick={() => window.location.reload()}
+        >
+          here
+        </button>{' '}
+        to re-join.
+      </span>,
+      { appearance: 'warning' },
+    );
+    setGotKickedOut(true);
+  }, [data, user.role, user.id, addToast]);
 
   // TODO: use react suspense to avoid flickering the screen
   if (subscriptionLoading || !data || !data.joinRoom) return <Loading />;
@@ -135,13 +158,13 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
               user.role === Role.Observer || voteLoading || showVotes;
             return (
               <li
-                onClick={() => isDisabled || handleClick(point)}
+                onClick={() => isDisabled || gotKickedOut || handleClick(point)}
                 className="flex justify-center"
                 key={point.label}
               >
                 <PointCard
                   point={point}
-                  disabled={isDisabled}
+                  disabled={isDisabled || gotKickedOut}
                   selected={point.label === selectedPoint}
                 />
               </li>
@@ -173,14 +196,14 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
               <Button3D
                 color="teal"
                 onClick={handleShowVotes}
-                disabled={showVotesLoading || showVotes}
+                disabled={showVotesLoading || showVotes || gotKickedOut}
               >
                 Show Votes
               </Button3D>
               <Button3D
                 color="teal"
                 onClick={handleClearVotes}
-                disabled={clearVotesLoading}
+                disabled={clearVotesLoading || gotKickedOut}
               >
                 Clear Votes
               </Button3D>
