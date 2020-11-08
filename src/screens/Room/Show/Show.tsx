@@ -1,47 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import Clipboard from 'clipboard';
 import ReactTooltip from 'react-tooltip';
-import { useToasts } from 'react-toast-notifications';
 
 import JoinRoom from './JoinRoom';
 import VoteRoom from './VoteRoom';
 import { useGetRoomQuery, User } from '../../../generated/graphql';
 import Loading from '../../../components/Loading';
 import { ClipboardIcon } from '../../../components/Icons';
+import useClipboard from '../../../hooks/useClipboard';
 
 const RoomShow: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const copyButtonEl = useRef<HTMLButtonElement>(null);
-  const { addToast } = useToasts();
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
   const [user, setUser] = useState<User | null>(null);
   const handleLogin = ({ user }: { user: User }) => {
     setUser(user);
   };
-
-  useEffect(() => {
-    if (!copyButtonEl.current || !data) return;
-
-    const clipboard = new Clipboard(copyButtonEl.current, {
-      text: () => `${window.location.href}room/${id}`,
-    });
-    clipboard.on('success', () => {
-      addToast('URL copied to clipboard!', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    });
-    clipboard.on('error', (e) => {
-      addToast('Error when copying URL to clipboard!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      console.error(e);
-    });
-
-    return () => clipboard.destroy();
-  }, [id, data, addToast]);
+  const textToCopy = useCallback(() => `${window.location.origin}/room/${id}`, [
+    id,
+  ]);
+  useClipboard({ ref: copyButtonEl, mounted: Boolean(data), text: textToCopy });
 
   if (error) {
     throw error; // will be catched by error boundary
