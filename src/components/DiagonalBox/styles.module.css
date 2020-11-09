@@ -1,0 +1,64 @@
+/* https://9elements.com/blog/pure-css-diagonal-layouts/ */
+:root {
+  --width: 100vw;
+
+  --angle: -11deg;
+  /*-----------------
+  Magic Number Alert:
+  
+  the 0.09719 is calculated by this formula:
+  tan(11°) / 2
+  11° is the current skewY value.
+  ------------------*/
+  --magic-number: 0.09719;
+  --skew-padding: calc(var(--width) * var(--magic-number));
+}
+
+.diagonalBox {
+  position: relative;
+  padding: var(--skew-padding) 0;
+  margin-top: -1px;
+}
+
+@media (min-width: 42em) {
+  .diagonalBox {
+    --width: 42em;
+  }
+}
+
+.diagonalBox:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transform: skewY(var(--angle));
+  transform-origin: 50% 0;
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+}
+
+.bgOne:before {
+  background-image: linear-gradient(45deg, #654ea3, #eaafc8);
+}
+
+.bgTwo:before {
+  background-image: linear-gradient(45deg, #7f7fd5, #91eae4);
+}
+
+.bgThree:before {
+  background-image: linear-gradient(45deg, #b794f4, #4fd1c5);
+}
+
+.content {
+  max-width: var(--width);
+  position: relative;
+
+  /* -----------
+  enable the border to see, that the content
+  perfectly fits into the section withou
+  bleeding into the adjecting areas:
+  ------------ */
+  /* border: 2px dashed #fff8; */
+}
