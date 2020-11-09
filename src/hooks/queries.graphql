@@ -1,0 +1,7 @@
+query GetRooms($ids: [ID!]!) {
+  rooms(ids: $ids) {
+    id
+    name
+    description
+  }
+}
