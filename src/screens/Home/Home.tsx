@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
+import { useToasts } from 'react-toast-notifications';
 
 import HomeInputCard from './InputCard';
 import { HeroIcon } from '../../components/Icons';
@@ -15,9 +16,15 @@ function Home() {
   const history = useHistory();
   const [newRoomName, setNewRoomName] = useState('');
   const [joinRoomName, setJoinRoomName] = useState('');
+  const { addToast } = useToasts();
 
   const goToCreateRoom = () => {
-    if (newRoomName.length === 0) return;
+    if (newRoomName.length === 0) {
+      addToast('You must type a name for your new room', {
+        appearance: 'info',
+      });
+      return;
+    }
 
     const currentSearch = qs.parse(history.location.search);
     history.push({
@@ -27,7 +34,12 @@ function Home() {
   };
 
   const goToRoom = () => {
-    if (joinRoomName.length === 0) return;
+    if (joinRoomName.length === 0) {
+      addToast('You must type a name for your new room', {
+        appearance: 'info',
+      });
+      return;
+    }
 
     history.push(`/room/${encodeURIComponent(joinRoomName)}`);
   };
