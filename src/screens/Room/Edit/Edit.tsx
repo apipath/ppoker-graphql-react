@@ -7,7 +7,6 @@ import {
   DragDropContext,
   DropResult,
 } from 'react-beautiful-dnd';
-import { nanoid } from 'nanoid';
 import UseAnimations from 'react-useanimations';
 import trash2 from 'react-useanimations/lib/trash2';
 import { useToasts } from 'react-toast-notifications';
@@ -22,6 +21,7 @@ import {
 import Button3D from '../../../components/Button3D';
 import Link3D from '../../../components/Link3D';
 import Loading from '../../../components/Loading';
+import usePoints from '../../../hooks/usePoints';
 
 type Props = RouteComponentProps<{}>;
 
@@ -31,54 +31,46 @@ const RoomEdit: React.FC<Props> = () => {
   const newRoomNameRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();
   const { data, loading } = useGetRoomQuery({ variables: { id } });
-  const [points, setPoints] = useState(
-    (data?.room?.points || []).map(({ label, description }) => ({
-      label,
-      description,
-      id: nanoid(),
-    })),
-  );
+  const {
+    points,
+    setPoints,
+    swapPoints,
+    deletePoint,
+    updateLabel,
+    addNewEmptyPoint,
+    updateDescription,
+    validatePointLabel,
+  } = usePoints(data?.room?.points);
 
   const [newRoomName, setNewRoomName] = useState(data?.room?.name || '');
 
-  const [editRoom, { loading: editRoomLoading }] = useEditRoomMutation({
+  const [editRoom, { loading: editRoomLoading, error }] = useEditRoomMutation({
     onCompleted: (data) => {
       if (!data.editRoom) return;
       addToast('Room updated!', { appearance: 'success', autoDismiss: true });
     },
-    onError: (err) => {
-      // Let react boundaries take care of this
-      throw err;
-    },
   });
+
+  if (error) {
+    // Let error boundary to catch this
+    throw error;
+  }
 
   useEffect(() => {
     if (data && data?.room && data?.room.points) {
-      setPoints(
-        data.room.points.map(({ label, description }) => ({
-          label,
-          description,
-          id: nanoid(),
-        })) || [],
-      );
+      setPoints(data.room.points);
       setNewRoomName(data.room.name);
       if (newRoomNameRef.current) {
         newRoomNameRef.current.focus();
       }
     }
-  }, [data]);
+  }, [data, setPoints]);
 
   if (loading || !data || !data?.room?.name) return <Loading />;
 
   const handleNewRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRoomName(e.target.value);
   };
-
-  const handleNewPoint = () =>
-    setPoints((opts) => [
-      ...opts,
-      { id: nanoid(), label: '', description: '' },
-    ]);
 
   const handleEditRoom = () => {
     if (!points) return;
@@ -91,57 +83,14 @@ const RoomEdit: React.FC<Props> = () => {
     });
   };
 
-  const handlePointLabelChange = (label: string, index: number) => {
-    if (label && new Set(points.map(({ label }) => label)).has(label)) {
-      addToast(`Value "${label}" is not unique`, {
-        autoDismiss: true,
-        appearance: 'error',
-      });
-    }
-
-    setPoints((currentPoints) => {
-      const points = currentPoints.map((point) => ({ ...point }));
-      points[index].label = label;
-
-      return points;
-    });
-  };
-
-  const handlePointDescriptionChange = (description: string, index: number) => {
-    setPoints((currentPoints) => {
-      const points = currentPoints.map((point) => ({ ...point }));
-      points[index].description = description;
-
-      return points;
-    });
-  };
-
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
-
     if (!destination) return;
-
-    const sourceIndex = source.index;
-    const destinationIndex = destination.index;
-    setPoints((currentPoints) => {
-      const points = currentPoints.map((point) => ({ ...point }));
-      const tmp = points[sourceIndex];
-      points.splice(sourceIndex, 1);
-      points.splice(destinationIndex, 0, tmp);
-      return points;
-    });
+    swapPoints(source.index, destination.index);
   };
 
-  const validLabels = new Set(points.map(({ label }) => label).filter(Boolean));
-  const updateEnabled = validLabels.size > 1 && newRoomName.length > 0;
-  const handleDelete = (index: number) => {
-    setPoints((currentPoints) => {
-      const points = currentPoints.map((point) => ({ ...point }));
-      points.splice(index, 1);
-      return points;
-    });
-  };
-  const pointsSet = new Set<string>();
+  const updateEnabled =
+    points.every(({ error }) => !error) && newRoomName.length > 0;
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
@@ -190,10 +139,8 @@ const RoomEdit: React.FC<Props> = () => {
                 className="flex flex-col items-center"
                 ref={provided.innerRef}
               >
-                {points.map(({ id, label, description }, index) => {
+                {points.map(({ id, label, description, error }, index) => {
                   const isDragDisabled = !label;
-                  const uniqueError = label && pointsSet.has(label);
-                  pointsSet.add(label);
 
                   return (
                     <Draggable key={id} draggableId={id} index={index}>
@@ -214,17 +161,15 @@ const RoomEdit: React.FC<Props> = () => {
                             label={label}
                             description={description || ''}
                             onLabelChange={(e) =>
-                              handlePointLabelChange(e.target.value, index)
+                              updateLabel(e.target.value, index)
                             }
                             onDescriptionChange={(e) =>
-                              handlePointDescriptionChange(
-                                e.target.value,
-                                index,
-                              )
+                              updateDescription(e.target.value, index)
                             }
-                            error={
-                              uniqueError ? 'Labels must be unique.' : undefined
+                            onLabelBlur={() =>
+                              validatePointLabel({ label, id })
                             }
+                            error={error ? 'Labels must be unique.' : undefined}
                           />
                           <DotsIcon
                             className={classnames(
@@ -239,7 +184,7 @@ const RoomEdit: React.FC<Props> = () => {
                             size={32}
                             animation={trash2}
                             disabled={editRoomLoading}
-                            onClick={() => handleDelete(index)}
+                            onClick={() => deletePoint(index)}
                             className="outline-none cursor-pointer"
                           />
                         </li>
@@ -253,7 +198,7 @@ const RoomEdit: React.FC<Props> = () => {
           </Droppable>
         </DragDropContext>
         <button
-          onClick={handleNewPoint}
+          onClick={() => addNewEmptyPoint()}
           disabled={editRoomLoading}
           className="flex items-center justify-center w-12 h-12 mx-auto my-4 text-blue-900 bg-white rounded-full shadow-md focus:outline-none hover:shadow-lg"
         >

@@ -6,7 +6,7 @@ import ErrorBoundary from '../../components/ErrorBoundary';
 import Loading from '../../components/Loading';
 
 const RoomCreate = React.lazy(() => import('./Create'));
-const RoomEdit = React.lazy(() => import('./Edit/Edit'));
+const RoomEdit = React.lazy(() => import('./Edit'));
 const RoomShow = React.lazy(() => import('./Show'));
 
 function Room() {
