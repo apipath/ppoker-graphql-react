@@ -1,10 +1,11 @@
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, FocusEventHandler } from 'react';
 import cn from 'classnames';
 
 type Props = {
   label: string;
   onDescriptionChange: ChangeEventHandler<HTMLInputElement>;
   onLabelChange: ChangeEventHandler<HTMLInputElement>;
+  onLabelBlur: FocusEventHandler<HTMLInputElement>;
   description: string;
   labelRef?: React.Ref<HTMLInputElement>;
   error?: string;
@@ -14,6 +15,7 @@ const Point: React.FC<Props> = ({
   onLabelChange: handleLabelChange,
   label,
   onDescriptionChange: handleDescriptionChange,
+  onLabelBlur,
   description,
   labelRef,
   error,
@@ -33,6 +35,7 @@ const Point: React.FC<Props> = ({
           placeholder="label"
           value={label}
           onChange={handleLabelChange}
+          onBlur={onLabelBlur}
         />
       </div>
       <div className="flex justify-center mt-4 sm:mt-0">
