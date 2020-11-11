@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import useRoomsStorage from '../../hooks/useRoomsStorage';
 import Loading from '../../components/Loading';
+import { HeroIcon } from '../../components/Icons';
 
 function Home() {
   const history = useHistory();
@@ -74,13 +75,16 @@ function Home() {
   return (
     <>
       <Header />
-      <section className="flex flex-col items-center mb-10">
-        <p className="w-full p-4 mt-8 font-sans text-4xl font-thin text-center text-gray-700 md:w-1/2">
-          Ppoker help teams during their planning sessions
-        </p>
-        <p className="w-1/2 mt-8 font-sans text-2xl font-thin text-center text-gray-700">
-          Create or join a room to get started
-        </p>
+      <section className="flex flex-col-reverse items-center justify-center py-12 md:flex-row">
+        <div className="flex flex-col items-center justify-center max-w-lg text-gray-700">
+          <p className="font-sans text-4xl font-thin text-center">
+            Ppoker help teams during their planning sessions
+          </p>
+          <p className="font-sans text-2xl font-thin text-center">
+            Create or join a room to get started
+          </p>
+        </div>
+        <HeroIcon className="mb-8 mr-8 lg:w-xxl w-96 lg:mb-0" />
       </section>
       <section className="text-gray-800 bg-gray-300">
         {(rooms.length > 0 || loading) && (
