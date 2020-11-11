@@ -16,9 +16,7 @@ const mapPointsWithId = (points: Array<Point> = []) =>
     error: false,
   }));
 
-// TODO: improve error validation with tests
-
-const usePoints = (defaultPoints: undefined | Array<Point>) => {
+const usePoints = (defaultPoints?: undefined | Array<Point>) => {
   const { addToast } = useToasts();
   const [points, setPoints] = useState(mapPointsWithId(defaultPoints));
 
@@ -83,36 +81,41 @@ const usePoints = (defaultPoints: undefined | Array<Point>) => {
 
   const validatePointLabel = useCallback(
     ({ id, label }: { id: string; label: string }) => {
-      const point = points.find((p) => p.id === id);
-      if (!point) {
+      const copyPoints = points.map((p) => ({ ...p }));
+      const pointBeingValidated = copyPoints.find((p) => p.id === id);
+      if (!pointBeingValidated) {
         console.warn(`Could not find point with id: '${id}' during validation`);
         return;
       }
+      pointBeingValidated.label = label;
+      const idsByLabel = copyPoints.reduce((acc, point) => {
+        acc[point.label] = acc[point.label] || [];
+        acc[point.label].push(point.id);
+        return acc;
+      }, {} as Record<string, string[]>);
 
-      const isNotUnique = points.some(
-        (point) => id !== point.id && label === point.label,
-      );
-      const isUnique = !isNotUnique;
+      const getIsUnique = (point: { label: string; id: string }) =>
+        label === '' ||
+        (idsByLabel[point.label].length === 1 &&
+          idsByLabel[point.label][0] === point.id);
 
-      if (point.error && isNotUnique) return;
-      if (!point.error && isUnique) return;
+      const isUnique = getIsUnique(pointBeingValidated);
+      pointBeingValidated.error = !isUnique;
 
-      setPoints((currentPoints) => {
-        const points = currentPoints.map((point) => ({ ...point }));
-        points.some((point) => {
-          if (point.id !== id) return false;
-          point.error = !point.error;
-          return true;
-        });
-        return points;
-      });
-
-      if (isNotUnique) {
+      if (pointBeingValidated.error) {
         addToast(`Value "${label}" is not unique`, {
           autoDismiss: true,
           appearance: 'error',
         });
       }
+
+      copyPoints.forEach((point) => {
+        if (point.id === pointBeingValidated.id) return;
+        if (!getIsUnique(point)) return;
+        point.error = false;
+      });
+
+      setPoints(copyPoints);
     },
     [setPoints, addToast, points],
   );

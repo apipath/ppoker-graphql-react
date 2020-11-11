@@ -89,7 +89,9 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   };
 
   const createEnabled =
-    points.length > 1 && points.every(({ error }) => !error);
+    newRoomName.length > 0 &&
+    points.filter((p) => p.label.length > 0).length > 1 &&
+    points.every(({ error }) => !error);
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
@@ -107,7 +109,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                     newRoomName.length > 0,
                 },
               )}
-              placeholder={newRoomName}
+              placeholder={newRoomName || "room's name"}
               value={newRoomName}
               onChange={handleNewRoomNameChange}
             />
