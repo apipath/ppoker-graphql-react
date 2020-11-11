@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useGetRoomsQuery } from '../generated/graphql';
 
 const Storage = window.localStorage;
@@ -16,12 +16,15 @@ const useRoomsStorage = () => {
     skip: ids.size === 0,
   });
 
-  function addRoomId(id: string) {
-    const ids = getVisitedRoomsIds();
-    ids.add(id);
-    Storage.setItem(key, JSON.stringify(Array.from(ids)));
-    setIds(ids);
-  }
+  const addRoomId = useCallback(
+    (id: string) => {
+      const ids = getVisitedRoomsIds();
+      ids.add(id);
+      Storage.setItem(key, JSON.stringify(Array.from(ids)));
+      setIds(ids);
+    },
+    [setIds],
+  );
 
   return { rooms: data?.rooms || [], loading, error, addRoomId };
 };

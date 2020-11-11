@@ -15,4 +15,7 @@ module.exports = {
   future: {
     purgeLayersByDefault: true,
   },
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+  },
 };

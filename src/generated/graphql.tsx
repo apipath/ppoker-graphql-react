@@ -13,15 +13,29 @@ export type Scalars = {
   Float: number;
 };
 
-export type CreateRoomInput = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
 export type Observer = {
   __typename?: 'Observer';
   id: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type EditRoomInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  room?: Maybe<Room>;
+  rooms: Array<Room>;
+};
+
+export type QueryRoomArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryRoomsArgs = {
+  ids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type Mutation = {
@@ -65,87 +79,14 @@ export type MutationExitRoomArgs = {
   exitRoomInput: ExitRoomInput;
 };
 
-export type OnlineRoom = {
-  __typename?: 'OnlineRoom';
-  showVotes: Scalars['Boolean'];
-  participants: Array<Participant>;
-  observers: Array<Observer>;
-};
-
 export type Point = {
   __typename?: 'Point';
   label: Scalars['String'];
   description?: Maybe<Scalars['String']>;
 };
 
-export enum Role {
-  Participant = 'PARTICIPANT',
-  Observer = 'OBSERVER',
-}
-
-export type Room = {
-  __typename?: 'Room';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  points: Array<Point>;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  role: Role;
-};
-
-export type Participant = {
-  __typename?: 'Participant';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  votedPoint?: Maybe<Point>;
-};
-
-export type PointInput = {
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type VoteInput = {
-  roomId: Scalars['ID'];
-  pointLabel: Scalars['String'];
-  userId: Scalars['ID'];
-};
-
-export type ExitRoomInput = {
-  roomId: Scalars['ID'];
-  userId: Scalars['ID'];
-};
-
-export type ShowVotesInput = {
-  roomId: Scalars['ID'];
-};
-
 export type ClearVotesInput = {
   roomId: Scalars['ID'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  room?: Maybe<Room>;
-  rooms: Array<Maybe<Room>>;
-};
-
-export type QueryRoomArgs = {
-  id: Scalars['ID'];
-};
-
-export type QueryRoomsArgs = {
-  ids?: Maybe<Array<Scalars['ID']>>;
-};
-
-export type EditRoomInput = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
 };
 
 export type Subscription = {
@@ -165,13 +106,72 @@ export type CreateUserInput = {
   role: Role;
 };
 
+export type PointInput = {
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type ExitRoomInput = {
+  roomId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  role: Role;
+};
+
+export enum Role {
+  Participant = 'PARTICIPANT',
+  Observer = 'OBSERVER',
+}
+
+export type Participant = {
+  __typename?: 'Participant';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  votedPoint?: Maybe<Point>;
+};
+
+export type Room = {
+  __typename?: 'Room';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  points: Array<Point>;
+};
+
+export type VoteInput = {
+  roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type OnlineRoom = {
+  __typename?: 'OnlineRoom';
+  showVotes: Scalars['Boolean'];
+  participants: Array<Participant>;
+  observers: Array<Observer>;
+};
+
+export type CreateRoomInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
 export type GetRoomsQueryVariables = Exact<{
   ids: Array<Scalars['ID']>;
 }>;
 
 export type GetRoomsQuery = { __typename?: 'Query' } & {
   rooms: Array<
-    Maybe<{ __typename?: 'Room' } & Pick<Room, 'id' | 'name' | 'description'>>
+    { __typename?: 'Room' } & Pick<Room, 'id' | 'name' | 'description'>
   >;
 };
 

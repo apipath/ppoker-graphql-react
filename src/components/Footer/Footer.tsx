@@ -7,14 +7,12 @@ const ORG_URL = 'https://github.com/apipath';
 
 function Footer() {
   return (
-    <footer className="p-4 text-center text-gray-700">
-      <h2 className="mt-4 text-4xl font-semibold tracking-wide text-gray-800">
-        Follow us
-      </h2>
+    <footer className="p-4 text-center text-white">
+      <h2 className="mt-4 text-4xl font-semibold tracking-wide">Follow us</h2>
       <a
         href={ORG_URL}
         aria-label="Follow us on github"
-        className="my-8 block w-32 mx-auto"
+        className="block w-32 mx-auto my-8"
       >
         <GithubIcon />
       </a>
