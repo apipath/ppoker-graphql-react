@@ -39,24 +39,24 @@ function Header() {
       <div
         className={classnames(
           isOpen ? 'block' : 'hidden',
-          'lg:flex lg:items-center',
+          'lg:flex lg:items-center mb-4',
         )}
       >
         <ul className="w-full border-t border-gray-300 lg:border-t-0 lg:flex lg:justify-around">
-          <li className="block mt-4 ml-4 lg:mt-0">
+          <li className="flex mt-4 ml-4 lg:mt-0">
             <HeaderLink to="/" exact onClick={closeMenu}>
               Home
             </HeaderLink>
           </li>
-          <li className="block mt-4 ml-4 lg:mt-0">
+          <li className="flex mt-4 ml-4 lg:mt-0">
             <HeaderLink to="/about" onClick={closeMenu}>
               About
             </HeaderLink>
           </li>
-          <li className="block mt-4 ml-4 lg:mt-0 lg:hidden">
+          <li className="flex mt-4 ml-4 lg:mt-0 lg:hidden">
             <FeedbackLink />
           </li>
-          <li className="block mt-8 ml-4 lg:hidden">
+          <li className="flex mt-4 ml-4 lg:hidden">
             <Link3D onClick={closeMenu} to="/room" color="indigo">
               New Room
             </Link3D>

@@ -13,30 +13,29 @@ export type Scalars = {
   Float: number;
 };
 
-export type Point = {
-  __typename?: 'Point';
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
 export type Observer = {
   __typename?: 'Observer';
   id: Scalars['String'];
   name: Scalars['String'];
 };
 
-export type ExitRoomInput = {
-  roomId: Scalars['ID'];
-  userId: Scalars['ID'];
+export type EditRoomInput = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   room?: Maybe<Room>;
+  rooms: Array<Room>;
 };
 
 export type QueryRoomArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryRoomsArgs = {
+  ids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type Mutation = {
@@ -80,6 +79,16 @@ export type MutationExitRoomArgs = {
   exitRoomInput: ExitRoomInput;
 };
 
+export type Point = {
+  __typename?: 'Point';
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type ClearVotesInput = {
+  roomId: Scalars['ID'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   joinRoom?: Maybe<OnlineRoom>;
@@ -92,11 +101,19 @@ export type SubscriptionJoinRoomArgs = {
   role: Role;
 };
 
-export type OnlineRoom = {
-  __typename?: 'OnlineRoom';
-  showVotes: Scalars['Boolean'];
-  participants: Array<Participant>;
-  observers: Array<Observer>;
+export type CreateUserInput = {
+  userName: Scalars['String'];
+  role: Role;
+};
+
+export type PointInput = {
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type ExitRoomInput = {
+  roomId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 export type User = {
@@ -104,30 +121,6 @@ export type User = {
   id: Scalars['ID'];
   name: Scalars['String'];
   role: Role;
-};
-
-export type EditRoomInput = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-};
-
-export type ShowVotesInput = {
-  roomId: Scalars['ID'];
-};
-
-export type ClearVotesInput = {
-  roomId: Scalars['ID'];
-};
-
-export type CreateRoomInput = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type VoteInput = {
-  roomId: Scalars['ID'];
-  pointLabel: Scalars['String'];
-  userId: Scalars['ID'];
 };
 
 export enum Role {
@@ -150,14 +143,36 @@ export type Room = {
   points: Array<Point>;
 };
 
-export type PointInput = {
-  label: Scalars['String'];
+export type VoteInput = {
+  roomId: Scalars['ID'];
+  pointLabel: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type ShowVotesInput = {
+  roomId: Scalars['ID'];
+};
+
+export type OnlineRoom = {
+  __typename?: 'OnlineRoom';
+  showVotes: Scalars['Boolean'];
+  participants: Array<Participant>;
+  observers: Array<Observer>;
+};
+
+export type CreateRoomInput = {
+  name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
 };
 
-export type CreateUserInput = {
-  userName: Scalars['String'];
-  role: Role;
+export type GetRoomsQueryVariables = Exact<{
+  ids: Array<Scalars['ID']>;
+}>;
+
+export type GetRoomsQuery = { __typename?: 'Query' } & {
+  rooms: Array<
+    { __typename?: 'Room' } & Pick<Room, 'id' | 'name' | 'description'>
+  >;
 };
 
 export type CreateRoomMutationVariables = Exact<{
@@ -269,6 +284,59 @@ export type GetRoomQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export const GetRoomsDocument = gql`
+  query GetRooms($ids: [ID!]!) {
+    rooms(ids: $ids) {
+      id
+      name
+      description
+    }
+  }
+`;
+
+/**
+ * __useGetRoomsQuery__
+ *
+ * To run a query within a React component, call `useGetRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRoomsQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetRoomsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetRoomsQuery, GetRoomsQueryVariables>,
+) {
+  return Apollo.useQuery<GetRoomsQuery, GetRoomsQueryVariables>(
+    GetRoomsDocument,
+    baseOptions,
+  );
+}
+export function useGetRoomsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRoomsQuery,
+    GetRoomsQueryVariables
+  >,
+) {
+  return Apollo.useLazyQuery<GetRoomsQuery, GetRoomsQueryVariables>(
+    GetRoomsDocument,
+    baseOptions,
+  );
+}
+export type GetRoomsQueryHookResult = ReturnType<typeof useGetRoomsQuery>;
+export type GetRoomsLazyQueryHookResult = ReturnType<
+  typeof useGetRoomsLazyQuery
+>;
+export type GetRoomsQueryResult = Apollo.QueryResult<
+  GetRoomsQuery,
+  GetRoomsQueryVariables
+>;
 export const CreateRoomDocument = gql`
   mutation CreateRoom(
     $roomInput: CreateRoomInput!

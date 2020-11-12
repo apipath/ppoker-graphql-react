@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
@@ -8,6 +8,7 @@ import { useGetRoomQuery, User } from '../../../generated/graphql';
 import Loading from '../../../components/Loading';
 import { ClipboardIcon } from '../../../components/Icons';
 import useClipboard from '../../../hooks/useClipboard';
+import useRoomsStorage from '../../../hooks/useRoomsStorage';
 
 const RoomShow: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,12 @@ const RoomShow: React.FC = () => {
     id,
   ]);
   useClipboard({ ref: copyButtonEl, mounted: Boolean(data), text: textToCopy });
+  const { addRoomId } = useRoomsStorage();
+
+  useEffect(() => {
+    if (!id) return;
+    addRoomId(id);
+  }, [id, addRoomId]);
 
   if (error) {
     throw error; // will be catched by error boundary
@@ -35,7 +42,7 @@ const RoomShow: React.FC = () => {
 
   return (
     <section className="p-4 lg:p-5">
-      <header className="p-4 grid grid-cols-3">
+      <header className="flex justify-center p-4">
         <h1 className="flex items-center justify-center text-2xl font-medium col-start-2">
           <div className="flex items-center border border-gray-400 rounded-md">
             <span className="px-4 text-gray-800 border-r">{room.name}</span>

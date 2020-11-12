@@ -9,9 +9,10 @@ type Props = {
 
 const AboutMember: React.FC<Props> = ({ name, login, location, htmlUrl }) => {
   return (
-    <div className="px-2 py-6 flex flex-col justify-center items-center leading-normal sm:w-64">
+    <div className="flex flex-col items-center justify-center px-2 py-6 leading-normal sm:w-64">
       <img
-        className="w-40 rounded-full"
+        loading="eager"
+        className="w-40 h-40 rounded-full"
         src={`https://github.com/${login}.png`}
         alt={`${name} Avatar`}
       />
