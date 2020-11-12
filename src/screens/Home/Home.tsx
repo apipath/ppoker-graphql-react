@@ -75,16 +75,16 @@ function Home() {
   return (
     <>
       <Header />
-      <section className="flex flex-col-reverse items-center justify-center py-12 md:flex-row">
-        <div className="flex flex-col items-center justify-center max-w-lg text-gray-700">
-          <p className="font-sans text-4xl font-thin text-center">
+      <section className="flex flex-col-reverse items-center justify-center pb-6 lg:py-12 md:flex-row">
+        <div className="flex flex-col items-center justify-center max-w-lg px-4 mt-4 text-gray-700 md:mt-0 lg:px-0">
+          <p className="font-sans text-2xl font-thin text-center lg:text-4xl">
             Ppoker help teams during their planning sessions
           </p>
-          <p className="font-sans text-2xl font-thin text-center">
+          <p className="font-sans text-xl font-thin text-center lg:text-2xl">
             Create or join a room to get started
           </p>
         </div>
-        <HeroIcon className="mb-8 mr-8 lg:w-xxl w-96 lg:mb-0" />
+        <HeroIcon className="w-full px-8 md:pr-8 md:pl-0 lg:w-xxl lg:mb-0" />
       </section>
       <section className="text-gray-800 bg-gray-300">
         {(rooms.length > 0 || loading) && (
