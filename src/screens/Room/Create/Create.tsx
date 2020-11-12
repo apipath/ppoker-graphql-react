@@ -74,7 +74,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   const handleCreateRoom = () => {
     const pointsInput = points
       .filter(({ label }) => label)
-      .map(({ id, ...rest }) => rest);
+      .map(({ id, error, ...rest }) => rest);
     const roomInput = { name: newRoomName };
     createRoom({
       variables: { roomInput, pointsInput },
