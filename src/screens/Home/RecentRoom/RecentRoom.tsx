@@ -39,7 +39,7 @@ const RecentRoom: React.FC<Props> = ({ name, id }) => (
         />
       </svg>
     </Link>
-    <ReactTooltip id={getTooltipId(id)} effect="solid">
+    <ReactTooltip id={getTooltipId(id)} effect="solid" place="bottom">
       Click to join the room
     </ReactTooltip>
   </>

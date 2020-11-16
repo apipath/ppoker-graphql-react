@@ -2,7 +2,26 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.2.5", "@apollo/client@latest":
+"@apollo/client@^3.2.6":
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.2.6.tgz#ab59d1a234a326a8e66293793952d85744921c92"
+  integrity sha512-JSwIhQzjdM9K8QLjbPsx0Eg4OoECpNrN3qavqJpw1ccg//yWim5yvqT8tUc3YVEuRq8tV5O8OEhCiBu3t+p2Cg==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.0.0"
+    "@types/zen-observable" "^0.8.0"
+    "@wry/context" "^0.5.2"
+    "@wry/equality" "^0.2.0"
+    fast-json-stable-stringify "^2.0.0"
+    graphql-tag "^2.11.0"
+    hoist-non-react-statics "^3.3.2"
+    optimism "^0.13.0"
+    prop-types "^15.7.2"
+    symbol-observable "^3.0.0"
+    ts-invariant "^0.5.0"
+    tslib "^1.10.0"
+    zen-observable "^0.8.14"
+
+"@apollo/client@latest":
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.2.5.tgz#24e0a6faa1d231ab44807af237c6227410c75c4d"
   integrity sha512-zpruxnFMz6K94gs2pqc3sidzFDbQpKT5D6P/J/I9s8ekHZ5eczgnRp6pqXC86Bh7+44j/btpmOT0kwiboyqTnA==
@@ -2061,10 +2080,10 @@
     lz-string "^1.4.4"
     pretty-format "^26.6.2"
 
-"@testing-library/jest-dom@^5.11.5":
-  version "5.11.5"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.11.5.tgz#44010f37f4b1e15f9d433963b515db0b05182fc8"
-  integrity sha512-XI+ClHR864i6p2kRCEyhvpVejuer+ObVUF4cjCvRSF88eOMIfqw7RoS9+qoRhyigGswMfT64L6Nt0Ufotxbwtg==
+"@testing-library/jest-dom@^5.11.6":
+  version "5.11.6"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.11.6.tgz#782940e82e5cd17bc0a36f15156ba16f3570ac81"
+  integrity sha512-cVZyUNRWwUKI0++yepYpYX7uhrP398I+tGz4zOlLVlUYnZS+Svuxv4fwLeCIy7TnBYKXUaOlQr3vopxL8ZfEnA==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@types/testing-library__jest-dom" "^5.9.1"
@@ -11097,10 +11116,10 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-useanimations@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/react-useanimations/-/react-useanimations-2.0.5.tgz#11fa3e8db5768ea17c39bc5bcaa3058b45d3b051"
-  integrity sha512-CpUfCqnbl5CCrtXSerItVoTN0vX7gquuR+FKQRb0aHzpT/P7EdaXVVA9C7+NcyPoHV869ium8egXf2SBLGbxCA==
+react-useanimations@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/react-useanimations/-/react-useanimations-2.0.6.tgz#bb102da248363190ab7c629526237ae9dcdbc90b"
+  integrity sha512-sN7Wt3pcuo2hoptJnrdjL3/9bUvpqUBBwPK4FOgdKM3ht6ogmRY9Yi2lBymyNLWaVxf8vfnqzPTdN76cmNRGCA==
   dependencies:
     lottie-web "^5.5.7"
 
@@ -12579,10 +12598,10 @@ svgo@^1.0.0, svgo@^1.2.2:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-sweetalert2@^10.9.0:
-  version "10.10.0"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-10.10.0.tgz#84e8fe1c1c756059196fd89c49790d4bfb954b93"
-  integrity sha512-TnYWt1hnPw/jkK1IqPpFT4yMZGE9VsKJApzd0dcjsrE8biykeoECpIgV8DzRVvWufit/1Z2m5Zdyo2hjBfGzoQ==
+sweetalert2@^10.10.1:
+  version "10.10.1"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-10.10.1.tgz#47c46929eff4837c8296836aa169073bae418031"
+  integrity sha512-lUdjFEE3ZKJ9OIhIZ1v3yAMwC5gGsBz5N/+FvTVY0Ttw+ZVcoIIPX2K4V+p+PKnFChm0Pan1j8xwYLgcvt0O7g==
 
 symbol-observable@^1.0.4, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
   version "1.2.0"
@@ -12593,6 +12612,11 @@ symbol-observable@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-2.0.3.tgz#5b521d3d07a43c351055fa43b8355b62d33fd16a"
   integrity sha512-sQV7phh2WCYAn81oAkakC5qjq2Ml0g8ozqz03wOGnx9dDlG1de6yrF+0RAzSJD8fPUow3PTSMf2SAbOGxb93BA==
+
+symbol-observable@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-3.0.0.tgz#eea8f6478c651018e059044268375c408c15c533"
+  integrity sha512-6tDOXSHiVjuCaasQSWTmHUWn4PuG7qa3+1WT031yTc/swT7+rLiw3GOrFxaH1E3lLP09dH3bVuVDf2gK5rxG3Q==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
@@ -12893,6 +12917,13 @@ ts-invariant@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
   integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==
+  dependencies:
+    tslib "^1.9.3"
+
+ts-invariant@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.5.1.tgz#4171fdb85f72a40381c147afd97c12154ada2abc"
+  integrity sha512-k3UpDNrBZpqJFnAAkAHNmSHtNuCxcU6xLiziPgalHRKZHme6T6jnKC8CcXDmk1zbHLQM8pc+rNC1Q6FvXMAl+g==
   dependencies:
     tslib "^1.9.3"
 
