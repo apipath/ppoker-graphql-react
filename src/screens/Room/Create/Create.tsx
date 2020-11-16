@@ -29,6 +29,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   const [newRoomName, setNewRoomName] = useState(
     'newRoomName' in parsedQuery ? String(parsedQuery.newRoomName) : '',
   );
+  const [newRoomNameHasError, setNewRoomHasError] = useState(false);
   const {
     points,
     validatePointLabel,
@@ -61,6 +62,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   });
   const handleNewRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRoomName(e.target.value);
+    setNewRoomHasError(e.target.value.length === 0);
   };
 
   useEffect(() => {
@@ -103,10 +105,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
               className={classnames(
                 'w-4/5 p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
                 {
-                  [`border-red-400 focus:border-red-400`]:
-                    newRoomName.length === 0,
-                  [`border-gray-400 focus:border-purple-500`]:
-                    newRoomName.length > 0,
+                  [`border-red-400 focus:border-red-400`]: newRoomNameHasError,
+                  [`border-gray-400 focus:border-purple-500`]: !newRoomNameHasError,
                 },
               )}
               placeholder={newRoomName || "room's name"}
