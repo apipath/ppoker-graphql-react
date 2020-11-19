@@ -2,13 +2,13 @@ import { useState, useCallback } from 'react';
 import { nanoid } from 'nanoid';
 import { useToasts } from 'react-toast-notifications';
 
-type Point = {
+export type NewPoint = {
   label: string;
   description?: string | null;
   id?: string;
 };
 
-const mapPointsWithId = (points: Array<Point> = []) =>
+const mapPointsWithId = (points: Array<NewPoint> = []) =>
   points.map(({ label, description, id }) => ({
     label,
     description,
@@ -16,7 +16,7 @@ const mapPointsWithId = (points: Array<Point> = []) =>
     error: false,
   }));
 
-const usePoints = (defaultPoints?: undefined | Array<Point>) => {
+const usePoints = (defaultPoints?: undefined | Array<NewPoint>) => {
   const { addToast } = useToasts();
   const [points, setPoints] = useState(mapPointsWithId(defaultPoints));
 
@@ -51,7 +51,7 @@ const usePoints = (defaultPoints?: undefined | Array<Point>) => {
   );
 
   const updatePoints = useCallback(
-    (points: Array<Point>) => setPoints(mapPointsWithId(points)),
+    (points: Array<NewPoint>) => setPoints(mapPointsWithId(points)),
     [setPoints],
   );
 
@@ -78,6 +78,10 @@ const usePoints = (defaultPoints?: undefined | Array<Point>) => {
     },
     [setPoints],
   );
+
+  const clearPoints = useCallback(() => {
+    setPoints([]);
+  }, [setPoints]);
 
   const validatePointLabel = useCallback(
     ({ id, label }: { id: string; label: string }) => {
@@ -129,6 +133,7 @@ const usePoints = (defaultPoints?: undefined | Array<Point>) => {
     swapPoints,
     deletePoint,
     validatePointLabel,
+    clearPoints,
   };
 };
 

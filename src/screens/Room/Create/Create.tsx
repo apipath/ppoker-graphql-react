@@ -18,6 +18,7 @@ import Point from '../../../components/Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
 import { useCreateRoomMutation } from '../../../generated/graphql';
 import usePoints from '../../../hooks/usePoints';
+import defaultPoints from './default-points';
 
 type Props = RouteComponentProps<{}>;
 
@@ -38,13 +39,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
     updateLabel,
     addNewEmptyPoint,
     updateDescription,
-  } = usePoints(
-    Array.from({ length: 3 }).map(() => ({
-      label: '',
-      description: '',
-      error: false,
-    })),
-  );
+    clearPoints,
+  } = usePoints(defaultPoints);
   const [createRoom, { loading }] = useCreateRoomMutation({
     onCompleted: (data) => {
       if (!data.createRoom) return;
