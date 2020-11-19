@@ -38,7 +38,7 @@ const Button3D: React.FC<Props> = ({ loading, color = 'blue', ...props }) => {
     <button
       {...props}
       disabled={disabled}
-      className={getClassName({ color, disabled })}
+      className={cn(props.className, getClassName({ color, disabled }))}
     >
       {loading ? <UseAnimations animation={infinity} /> : props.children}
     </button>

@@ -79,6 +79,10 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
     });
   };
 
+  const handleDeleteAllPoints = () => {
+    clearPoints();
+  };
+
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
@@ -93,13 +97,13 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
 
   return (
     <section className="md:mx-auto md:w-2/3 lg:w-1/2">
-      <header className="flex justify-between px-4 pb-2 mb-4 border-b-2 border-gray-200">
-        <h2 className="text-xl font-semibold tracking-wide text-gray-900">
+      <header className="flex flex-wrap justify-between px-4 pb-2 mb-4 border-b-2 border-gray-200 md:px-0 sm:flex-no-wrap">
+        <h2 className="w-full text-xl font-semibold tracking-wide text-gray-900 sm:w-3/5">
           <div className="flex justify-center mr-0 sm:mr-2">
             <input
               ref={newRoomNameRef}
               className={classnames(
-                'w-4/5 p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
+                'w-full sm:w-auto p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
                 {
                   [`border-red-400 focus:border-red-400`]: newRoomNameHasError,
                   [`border-gray-400 focus:border-purple-500`]: !newRoomNameHasError,
@@ -111,13 +115,24 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
             />
           </div>
         </h2>
-        <Button3D
-          loading={loading}
-          onClick={handleCreateRoom}
-          disabled={!createEnabled}
-        >
-          Create
-        </Button3D>
+        <div className="flex justify-between w-full mt-2 sm:w-auto">
+          <Button3D
+            className="mr-2"
+            loading={loading}
+            onClick={handleDeleteAllPoints}
+            disabled={points.length === 0 || loading}
+            color="red"
+          >
+            Delete All
+          </Button3D>
+          <Button3D
+            loading={loading}
+            onClick={handleCreateRoom}
+            disabled={!createEnabled}
+          >
+            Create
+          </Button3D>
+        </div>
       </header>
       <ul>
         <DragDropContext onDragEnd={handleDragEnd}>
