@@ -19,6 +19,7 @@ import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
 import { useCreateRoomMutation } from '../../../generated/graphql';
 import usePoints from '../../../hooks/usePoints';
 import defaultPoints from './default-points';
+import { fireCanceleableConfirm } from '../../../utils';
 
 type Props = RouteComponentProps<{}>;
 
@@ -80,7 +81,10 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
   };
 
   const handleDeleteAllPoints = () => {
-    clearPoints();
+    fireCanceleableConfirm({
+      preConfirm: clearPoints,
+      text: `You will delete ${points.length} options`,
+    });
   };
 
   const handleDragEnd = (result: DropResult) => {

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import cn from 'classnames';
 import ReactTooltip from 'react-tooltip';
 
-import { swalWithButtons } from '../../../../utils';
+import { fireCanceleableConfirm, swalWithButtons } from '../../../../utils';
 import { ClockIcon, CheckIcon } from '../../../../components/Icons';
 import {
   Participant,
@@ -66,28 +66,19 @@ const Participants: React.FC<Props> = ({
   );
 
   const handleOnDelete = (user: Participant) => {
-    swalWithButtons
-      .fire({
-        title: 'Are you sure?',
-        text: `The participant "${user.name}" will be kicked out from the session. You won't be able to revert this!`,
-        icon: 'warning',
-        showCancelButton: true,
-        showLoaderOnConfirm: true,
-        confirmButtonText: "Yes, I'm sure!",
-        preConfirm: () =>
-          kickUserMutation({
-            variables: { exitRoomInput: { userId: user.id, roomId } },
-          }),
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          swalWithButtons
-            .fire('Done', 'Participant has been kicked out.', 'success')
-            .then(() => {
-              setIsSettingsOpen(false);
-            });
-        }
-      });
+    fireCanceleableConfirm({
+      title: 'Are you sure?',
+      text: `The participant "${user.name}" will be kicked out from the session. You won't be able to revert this!`,
+      icon: 'warning',
+      preConfirm: () =>
+        kickUserMutation({
+          variables: { exitRoomInput: { userId: user.id, roomId } },
+        }),
+      doneText: 'Participant has been kicked out.',
+      doneTitle: 'Done',
+      confirmButtonText: "Yes, I'm sure!",
+      doneCallback: () => setIsSettingsOpen(false),
+    });
   };
 
   const handleSettingsClick = () => setIsSettingsOpen(!isSettingsOpen);
