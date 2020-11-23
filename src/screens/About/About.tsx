@@ -24,7 +24,7 @@ const About: React.FC = () => {
           <ul
             className={cn(
               'flex flex-wrap items-center justify-around',
-              'max-w-3xl gap-12',
+              'max-w-3xl',
             )}
           >
             {members.map((props, index) => (
@@ -35,10 +35,10 @@ const About: React.FC = () => {
                   'transform motion-reduce:transform-none ease-out duration-300',
                   'hover:rotate-0 hover:scale-110',
                   {
-                    'rotate-3': index === 0,
-                    '-rotate-6': index === 1,
-                    'rotate-6 sm:-rotate-3': index === 2,
-                    '-rotate-3 sm:rotate-6': index === 3,
+                    'rotate-3 mx-8': index === 0,
+                    '-rotate-3 mt-8 sm:mt-2 sm:ml-8': index === 1,
+                    'rotate-3 mt-8 sm:-rotate-3 sm:mt-8': index === 2,
+                    '-rotate-3 mt-8 sm:rotate-6 sm:mt-12': index === 3,
                   },
                 )}
               >
