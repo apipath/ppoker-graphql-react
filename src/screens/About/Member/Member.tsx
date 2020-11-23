@@ -1,31 +1,57 @@
 import React from 'react';
+import UseAnimations from 'react-useanimations';
+import github from 'react-useanimations/lib/github';
+import cn from 'classnames';
 
 type Props = {
   name: string;
   login: string;
   location?: string | null;
   htmlUrl: string;
+  occupation: string;
+  company: string;
 };
 
-const AboutMember: React.FC<Props> = ({ name, login, location, htmlUrl }) => {
+const AboutMember: React.FC<Props> = ({
+  name,
+  login,
+  location,
+  htmlUrl,
+  occupation,
+  company,
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center px-2 py-6 leading-normal sm:w-64">
-      <img
-        loading="eager"
-        className="w-40 h-40 rounded-full"
-        src={`https://github.com/${login}.png`}
-        alt={`${name} Avatar`}
-      />
-      <h3 className="my-2 text-lg font-semibold leading-none">{name}</h3>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href={htmlUrl}
-        className="text-blue-600 hover:text-blue-500"
-      >
-        @{login}
-      </a>
-      <address className="text-sm text-gray-600">{location}</address>
+    <div
+      className={cn(
+        'w-64 leading-normal border rounded-xl shadow-sm group',
+        'divide-y divide-gray-300 ',
+        'flex flex-col items-center justify-center',
+        'hover:shadow-lg',
+      )}
+    >
+      <div className="flex flex-col items-center my-4 text-center group">
+        <img
+          loading="eager"
+          className="w-32 h-32 p-1 border-4 rounded-full group-hover:border-teal-300"
+          src={`https://github.com/${login}.png`}
+          alt={`${name} Avatar`}
+        />
+        <h3 className="mt-2 text-lg font-semibold leading-none">{name}</h3>
+        <p className="text-sm text-gray-600">
+          {occupation}
+          <span className="font-bold text-purple-500"> @ </span>
+          {company}
+        </p>
+        <address className="text-sm text-gray-600">{location}</address>
+      </div>
+      <div className="flex justify-center w-full py-2">
+        <a target="_blank" rel="noopener noreferrer" href={htmlUrl}>
+          <UseAnimations
+            className="text-blue-200 fill-current"
+            animation={github}
+          />
+        </a>
+      </div>
     </div>
   );
 };
