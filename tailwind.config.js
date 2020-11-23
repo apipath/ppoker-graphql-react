@@ -18,6 +18,21 @@ module.exports = {
   },
   variants: {
     textColor: ['responsive', 'hover', 'focus', 'group-hover'],
-    borderColor: ['responsive', 'hover', 'focus', 'group-hover'],
+    borderColor: [
+      'responsive',
+      'hover',
+      'focus',
+      'group-hover',
+      'motion-reduce',
+    ],
+    transform: ['responsive', 'hover', 'focus', 'motion-safe', 'motion-reduce'],
+    animation: [
+      'responsive',
+      'hover',
+      'focus',
+      'motion-safe',
+      'motion-reduce',
+      'group-hover',
+    ],
   },
 };

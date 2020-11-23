@@ -32,7 +32,10 @@ const AboutMember: React.FC<Props> = ({
       <div className="flex flex-col items-center my-4 text-center group">
         <img
           loading="eager"
-          className="w-32 h-32 p-1 border-4 rounded-full group-hover:border-teal-300"
+          className={cn(
+            'w-32 h-32 p-1 border-4 rounded-full',
+            'border-teal-300 sm:border-gray-300 transition-colors duration-300 ease-out group-hover:border-teal-300',
+          )}
           src={`https://github.com/${login}.png`}
           alt={`${name} Avatar`}
         />
@@ -46,10 +49,7 @@ const AboutMember: React.FC<Props> = ({
       </div>
       <div className="flex justify-center w-full py-2">
         <a target="_blank" rel="noopener noreferrer" href={htmlUrl}>
-          <UseAnimations
-            className="text-blue-200 fill-current"
-            animation={github}
-          />
+          <UseAnimations animation={github} size={32} />
         </a>
       </div>
     </div>
