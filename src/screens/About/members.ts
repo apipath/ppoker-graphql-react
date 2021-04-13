@@ -2,9 +2,9 @@ const members = [
   {
     login: 'sebastianvera',
     htmlUrl: 'https://github.com/sebastianvera',
-    company: 'Cision',
+    company: 'Google',
     name: 'Sebastian Vera',
-    location: 'Berlin, Germany',
+    location: 'Mountain View, CA',
     occupation: 'Software Developer',
   },
   {
