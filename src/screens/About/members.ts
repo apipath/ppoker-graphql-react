@@ -11,7 +11,7 @@ const members = [
     login: 'camiloei',
     htmlUrl: 'https://github.com/camiloei',
     name: 'Camilo',
-    company: 'Twitch',
+    company: 'Netflix',
     location: 'Seattle, WA',
     occupation: 'Software Developer',
   },

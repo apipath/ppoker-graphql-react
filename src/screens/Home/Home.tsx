@@ -26,6 +26,7 @@ function Home() {
     if (newRoomName.length === 0) {
       addToast('You must type a name for your new room', {
         appearance: 'info',
+        autoDismiss: true,
       });
       return;
     }
