@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import qs from 'query-string';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 import ReactGA from 'react-ga';
 import {
@@ -11,7 +10,6 @@ import {
 } from 'react-beautiful-dnd';
 import UseAnimations from 'react-useanimations';
 import trash2 from 'react-useanimations/lib/trash2';
-import { RouteComponentProps } from 'react-router';
 
 import Button3D from '../../../components/Button3D';
 import Point from '../../../components/Point';
@@ -19,15 +17,15 @@ import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
 import { useCreateRoomMutation } from '../../../generated/graphql';
 import usePoints from '../../../hooks/usePoints';
 
-type Props = RouteComponentProps<{}>;
-
-const RoomCreate: React.FC<Props> = ({ history }) => {
+const RoomCreate: React.FC = () => {
   const firstRowRef = useRef<HTMLInputElement>(null);
   const newRoomNameRef = useRef<HTMLInputElement>(null);
-  const location = useLocation();
-  const parsedQuery = qs.parse(location.search);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [newRoomName, setNewRoomName] = useState(
-    'newRoomName' in parsedQuery ? String(parsedQuery.newRoomName) : '',
+    searchParams.has('newRoomName')
+      ? String(searchParams.get('newRoomName'))
+      : '',
   );
   const [newRoomNameHasError, setNewRoomHasError] = useState(false);
   const {
@@ -49,7 +47,7 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
     onCompleted: (data) => {
       if (!data.createRoom) return;
       const { id } = data.createRoom;
-      history.push(`/room/${id}`);
+      navigate(`/room/${id}`);
       ReactGA.event({
         category: 'User',
         action: 'Created a Room',
@@ -106,7 +104,8 @@ const RoomCreate: React.FC<Props> = ({ history }) => {
                 'w-4/5 p-2 bg-transparent border-b-2 outline-none appearance-none font-semibold tracking-wide text-gray-900 text-xl',
                 {
                   [`border-red-400 focus:border-red-400`]: newRoomNameHasError,
-                  [`border-gray-400 focus:border-purple-500`]: !newRoomNameHasError,
+                  [`border-gray-400 focus:border-purple-500`]:
+                    !newRoomNameHasError,
                 },
               )}
               placeholder={newRoomName || "room's name"}

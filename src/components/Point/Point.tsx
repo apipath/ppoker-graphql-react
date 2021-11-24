@@ -29,7 +29,7 @@ const Point: React.FC<Props> = ({
             'p-2 bg-transparent border-b-2 outline-none appearance-none ',
             {
               [`border-red-400 focus:border-red-400`]: error,
-              [`border-gray-400 focus:border-teal-500`]: !error,
+              [`border-gray-400 focus:border-green-700`]: !error,
             },
           )}
           placeholder="label"

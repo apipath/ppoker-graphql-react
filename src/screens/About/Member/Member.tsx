@@ -34,7 +34,7 @@ const AboutMember: React.FC<Props> = ({
           loading="eager"
           className={cn(
             'w-32 h-32 p-1 border-4 rounded-full',
-            'border-teal-300 sm:border-gray-300 transition-colors duration-300 ease-out group-hover:border-teal-300',
+            'border-green-300 sm:border-gray-300 transition-colors duration-300 ease-out group-hover:border-green-300',
           )}
           src={`https://github.com/${login}.png`}
           alt={`${name} Avatar`}

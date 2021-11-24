@@ -31,25 +31,23 @@ type Props = {
 const VoteRoom: React.FC<Props> = ({ room, user }) => {
   const { addToast } = useToasts();
   const [gotKickedOut, setGotKickedOut] = useState(false);
-  const { data, loading: subscriptionLoading, error } = useJoinRoomSubscription(
-    {
-      variables: {
-        roomId: room.id,
-        userId: user.id,
-        userName: user.name,
-        role: user.role,
-      },
-      shouldResubscribe: true,
+  const {
+    data,
+    loading: subscriptionLoading,
+    error,
+  } = useJoinRoomSubscription({
+    variables: {
+      roomId: room.id,
+      userId: user.id,
+      userName: user.name,
+      role: user.role,
     },
-  );
-  const [
-    showVotesMutation,
-    { loading: showVotesLoading },
-  ] = useShowVotesMutation();
-  const [
-    clearVotesMutation,
-    { loading: clearVotesLoading },
-  ] = useClearVotesMutation();
+    shouldResubscribe: true,
+  });
+  const [showVotesMutation, { loading: showVotesLoading }] =
+    useShowVotesMutation();
+  const [clearVotesMutation, { loading: clearVotesLoading }] =
+    useClearVotesMutation();
   const [voteMutation, { loading: voteLoading }] = useVoteMutation();
 
   useEffect(() => {
@@ -194,14 +192,14 @@ const VoteRoom: React.FC<Props> = ({ room, user }) => {
           <div className="w-full mt-6 md:mt-0">
             <div className="flex justify-around">
               <Button3D
-                color="teal"
+                color="pink"
                 onClick={handleShowVotes}
                 disabled={showVotesLoading || showVotes || gotKickedOut}
               >
                 Show Votes
               </Button3D>
               <Button3D
-                color="teal"
+                color="pink"
                 onClick={handleClearVotes}
                 disabled={clearVotesLoading || gotKickedOut}
               >

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLocation, matchPath } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useMatch } from 'react-router-dom';
 import classnames from 'classnames';
 
 import HeaderLink from './Link';
@@ -12,10 +12,7 @@ function Header() {
   const toggleMenu = () => setIsOpen((val) => !val);
   const closeMenu = () => setIsOpen(false);
   const location = useLocation();
-  const enableEditButton = matchPath(location.pathname, {
-    path: '/room/:id',
-    exact: true,
-  });
+  const enableEditButton = Boolean(useMatch({ path: '/room/:id', end: true }));
 
   return (
     <nav className="grid grid-cols-1 lg:grid-cols-3">
@@ -44,7 +41,7 @@ function Header() {
       >
         <ul className="w-full border-t border-gray-300 lg:border-t-0 lg:flex lg:justify-around">
           <li className="flex mt-4 ml-4 lg:mt-0">
-            <HeaderLink to="/" exact onClick={closeMenu}>
+            <HeaderLink to="/" onClick={closeMenu}>
               Home
             </HeaderLink>
           </li>

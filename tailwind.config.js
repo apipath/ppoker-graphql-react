@@ -13,26 +13,31 @@ module.exports = {
       },
     },
   },
-  future: {
-    purgeLayersByDefault: true,
-  },
   variants: {
-    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
-    borderColor: [
-      'responsive',
-      'hover',
-      'focus',
-      'group-hover',
-      'motion-reduce',
-    ],
-    transform: ['responsive', 'hover', 'focus', 'motion-safe', 'motion-reduce'],
-    animation: [
-      'responsive',
-      'hover',
-      'focus',
-      'motion-safe',
-      'motion-reduce',
-      'group-hover',
-    ],
+    extend: {
+      textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+      borderColor: [
+        'responsive',
+        'hover',
+        'focus',
+        'group-hover',
+        'motion-reduce',
+      ],
+      transform: [
+        'responsive',
+        'hover',
+        'focus',
+        'motion-safe',
+        'motion-reduce',
+      ],
+      animation: [
+        'responsive',
+        'hover',
+        'focus',
+        'motion-safe',
+        'motion-reduce',
+        'group-hover',
+      ],
+    },
   },
 };
