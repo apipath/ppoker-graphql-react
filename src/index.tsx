@@ -1,13 +1,12 @@
 import 'react-app-polyfill/stable';
 
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { ToastProvider } from 'react-toast-notifications';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import ReactGA from 'react-ga';
 
-import './styles.css';
+import './tailwind.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import buildApolloClient from './apollo';
@@ -24,9 +23,9 @@ ReactGA.initialize(GOOGLE_ANALYTICS, { debug: IS_DEV_ENV });
 ReactDOM.render(
   <ApolloProvider client={client}>
     <ToastProvider placement="bottom-right">
-      <Router>
+      <BrowserRouter>
         <App />
-      </Router>
+      </BrowserRouter>
     </ToastProvider>
   </ApolloProvider>,
   document.getElementById('root'),

@@ -11,16 +11,17 @@ import useClipboard from '../../../hooks/useClipboard';
 import useRoomsStorage from '../../../hooks/useRoomsStorage';
 
 const RoomShow: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id = '' } = useParams();
   const copyButtonEl = useRef<HTMLButtonElement>(null);
   const { data, loading, error } = useGetRoomQuery({ variables: { id } });
   const [user, setUser] = useState<User | null>(null);
   const handleLogin = ({ user }: { user: User }) => {
     setUser(user);
   };
-  const textToCopy = useCallback(() => `${window.location.origin}/room/${id}`, [
-    id,
-  ]);
+  const textToCopy = useCallback(
+    () => `${window.location.origin}/room/${id}`,
+    [id],
+  );
   useClipboard({ ref: copyButtonEl, mounted: Boolean(data), text: textToCopy });
   const { addRoomId } = useRoomsStorage();
 

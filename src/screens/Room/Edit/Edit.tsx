@@ -10,7 +10,7 @@ import {
 import UseAnimations from 'react-useanimations';
 import trash2 from 'react-useanimations/lib/trash2';
 import { useToasts } from 'react-toast-notifications';
-import { RouteComponentProps, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 
 import Point from '../../../components/Point';
 import { DotsIcon, PlusIcon } from '../../../components/Icons/index';
@@ -23,10 +23,8 @@ import Link3D from '../../../components/Link3D';
 import Loading from '../../../components/Loading';
 import usePoints from '../../../hooks/usePoints';
 
-type Props = RouteComponentProps<{}>;
-
-const RoomEdit: React.FC<Props> = () => {
-  const { id } = useParams<{ id: string }>();
+const RoomEdit: React.FC = () => {
+  const { id = '' } = useParams();
   const location = useLocation();
   const newRoomNameRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();

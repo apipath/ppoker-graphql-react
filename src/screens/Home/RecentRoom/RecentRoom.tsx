@@ -25,7 +25,7 @@ const RecentRoom: React.FC<Props> = ({ name, id }) => (
     >
       <h3 className="mr-2">{name}</h3>
       <svg
-        className="w-6 text-gray-800 transition duration-300 ease-in-out transform group-hover:text-teal-400"
+        className="w-6 text-gray-800 transition duration-300 ease-in-out transform group-hover:text-green-700"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

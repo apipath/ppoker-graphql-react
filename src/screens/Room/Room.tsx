@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import ErrorBoundary from '../../components/ErrorBoundary';
@@ -10,18 +10,16 @@ const RoomEdit = React.lazy(() => import('./Edit'));
 const RoomShow = React.lazy(() => import('./Show'));
 
 function Room() {
-  const { path } = useRouteMatch();
-
   return (
     <>
       <Header />
       <Suspense fallback={<Loading />}>
         <ErrorBoundary>
-          <Switch>
-            <Route path={path} exact component={RoomCreate} />
-            <Route path={`${path}/:id/edit`} component={RoomEdit} />
-            <Route path={`${path}/:id`} component={RoomShow} />
-          </Switch>
+          <Routes>
+            <Route path="" element={<RoomCreate />} />
+            <Route path=":id/edit" element={<RoomEdit />} />
+            <Route path=":id" element={<RoomShow />} />
+          </Routes>
         </ErrorBoundary>
       </Suspense>
     </>

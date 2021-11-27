@@ -1,10 +1,5 @@
-import React, {
-  useState,
-  ChangeEventHandler,
-  KeyboardEventHandler,
-} from 'react';
-import { useHistory } from 'react-router-dom';
-import qs from 'query-string';
+import { useState, ChangeEventHandler, KeyboardEventHandler } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import HomeInputCard from './InputCard';
@@ -16,7 +11,8 @@ import Loading from '../../components/Loading';
 import { HeroIcon } from '../../components/Icons';
 
 function Home() {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [newRoomName, setNewRoomName] = useState('');
   const [joinRoomId, setJoinRoomId] = useState('');
   const { addToast } = useToasts();
@@ -31,10 +27,10 @@ function Home() {
       return;
     }
 
-    const currentSearch = qs.parse(history.location.search);
-    history.push({
+    searchParams.append('newRoomName', newRoomName);
+    navigate({
       pathname: '/room',
-      search: qs.stringify({ ...currentSearch, newRoomName }),
+      search: searchParams.toString(),
     });
   };
 
@@ -46,7 +42,7 @@ function Home() {
       return;
     }
 
-    history.push(`/room/${encodeURIComponent(joinRoomId)}`);
+    navigate(`/room/${encodeURIComponent(joinRoomId)}`);
   };
 
   const handleCreateRoomChange: ChangeEventHandler<HTMLInputElement> = (e) => {
