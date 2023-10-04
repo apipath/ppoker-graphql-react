@@ -96,7 +96,7 @@ function Home() {
                 </div>
               )}
               {!loading && (
-                <div className="flex justify-around px-24 lg:px-0">
+                <div className="flex justify-center gap-5 flex-wrap px-4 lg:px-0">
                   {rooms.map(({ name, id }) => (
                     <HomeRecentRoom key={id} id={id} name={name} />
                   ))}
